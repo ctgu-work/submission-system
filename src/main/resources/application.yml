@@ -1,0 +1,37 @@
+server:
+  port: 8080
+spring:
+  output:
+    ansi:
+      enabled: always #彩色日志
+  #创建数据库 navivat选择字符集 utf8 排序规则：utf8_general_ci
+  datasource:
+    druid:
+      #数据库访问配置
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://112.124.46.173:3307/issue?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+      username: root
+      password: 123456
+      db-type: com.alibaba.druid.pool.DruidDataSource
+      #连接池配置
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      max-wait: 30000
+  jpa:
+    show-sql: true
+  redis:
+    host: 112.124.46.173
+    port: 6380
+    jedis:
+      pool:
+        max-wait: 3000 #连接池最大阻塞等待时间
+        max-active: 100 #连接池最大连接数
+        max-idle: 20 #连接池中的最大空闲数
+        min-idle: 0 #连接池中的最小空闲数
+    timeout: 3000 #连接超时
+  rabbitmq:
+    host: 112.124.46.173
+    port: 5672
+    username: guest
+    password: guest
