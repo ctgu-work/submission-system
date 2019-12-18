@@ -3,17 +3,14 @@ server:
 spring:
   output:
     ansi:
-      enabled: always #²ÊÉ«ÈÕÖ¾
-  #´´½¨Êı¾İ¿â navivatÑ¡Ôñ×Ö·û¼¯ utf8 ÅÅĞò¹æÔò£ºutf8_general_ci
+      enabled: always #å½©è‰²æ—¥å¿—
+  #åˆ›å»ºæ•°æ®åº“ navivaté€‰æ‹©å­—ç¬¦é›† utf8 æ’åºè§„åˆ™ï¼šutf8_general_ci
   datasource:
     druid:
-      #Êı¾İ¿â·ÃÎÊÅäÖÃ
+      #æ•°æ®åº“è®¿é—®é…ç½®
       driver-class-name: com.mysql.jdbc.Driver
-      url: jdbc:mysql://112.124.46.173:3307/issue?useUnicode=true&characterEncoding=UTF-8&useSSL=false
-      username: root
-      password: 123456
       db-type: com.alibaba.druid.pool.DruidDataSource
-      #Á¬½Ó³ØÅäÖÃ
+      #è¿æ¥æ± é…ç½®
       initial-size: 5
       min-idle: 5
       max-active: 20
@@ -21,17 +18,10 @@ spring:
   jpa:
     show-sql: true
   redis:
-    host: 112.124.46.173
-    port: 6380
     jedis:
       pool:
-        max-wait: 3000 #Á¬½Ó³Ø×î´ó×èÈûµÈ´ıÊ±¼ä
-        max-active: 100 #Á¬½Ó³Ø×î´óÁ¬½ÓÊı
-        max-idle: 20 #Á¬½Ó³ØÖĞµÄ×î´ó¿ÕÏĞÊı
-        min-idle: 0 #Á¬½Ó³ØÖĞµÄ×îĞ¡¿ÕÏĞÊı
-    timeout: 3000 #Á¬½Ó³¬Ê±
-  rabbitmq:
-    host: 112.124.46.173
-    port: 5672
-    username: guest
-    password: guest
+        max-wait: 3000 #è¿æ¥æ± æœ€å¤§é˜»å¡ç­‰å¾…æ—¶é—´
+        max-active: 100 #è¿æ¥æ± æœ€å¤§è¿æ¥æ•°
+        max-idle: 20 #è¿æ¥æ± ä¸­çš„æœ€å¤§ç©ºé—²æ•°
+        min-idle: 0 #è¿æ¥æ± ä¸­çš„æœ€å°ç©ºé—²æ•°
+    timeout: 3000 #è¿æ¥è¶…æ—¶
