@@ -102,8 +102,9 @@ public class UploadUtil {
 		 */
 		public static String getFileExtension(MultipartFile file) {
 			String fileName = file.getOriginalFilename();
-			if(fileName.lastIndexOf(".") != -1)
+			if(fileName.lastIndexOf(".") != -1) {
 				return fileName.substring(fileName.lastIndexOf("."));
+			}
 			else {
 				return null;
 			}
