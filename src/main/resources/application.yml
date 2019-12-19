@@ -8,7 +8,7 @@ spring:
   datasource:
     druid:
       #数据库访问配置
-      driver-class-name: com.mysql.cj.jdbc.Driver
+      driver-class-name: com.mysql.jdbc.Driver
       db-type: com.alibaba.druid.pool.DruidDataSource
       #连接池配置
       initial-size: 5
