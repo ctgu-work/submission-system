@@ -9,12 +9,10 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.Date;
-
 
 /**
  * @author : kun
- * @date ： 2019/12/19
+ * @date ： 2019/12/20
  * @description ：this is a code
  **/
 
@@ -24,19 +22,21 @@ import java.util.Date;
 @DynamicInsert
 @Getter
 @Setter
-@Table(name = "paper")
-public class Paper implements Serializable {
+@Table(name = "submit_paper")
+public class SubmitPaper implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer submitPaperId;
+    @Column(name = "user_id")
+    private Integer userId;
+    @Column(name = "paper_id")
     private Integer paperId;
-    @Column(name = "title")
-    private String title;
-    @Column(name = "content")
-    private String content;
-    @Column(name = "author")
-    private String author;
-    @Column(name = "category")
-    private Integer category;
-    @Column(name = "click_rate")
-    private Integer clickRate;
+    @Column(name = "status")
+    private Integer status;
+    @Column(name = "invoice_id")
+    private Integer invoiceId;
+    @Column(name = "status_detail")
+    private Timestamp statusDetail;
+
 }
