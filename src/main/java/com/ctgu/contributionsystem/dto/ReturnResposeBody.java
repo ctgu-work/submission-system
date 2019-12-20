@@ -15,7 +15,7 @@ public class ReturnResposeBody implements Serializable {
     private String status;//响应吗
     private String msg;//信息
     private Object result;
-//    private String jwtToken;
+    private String jwtToken;
     public String getStatus() {
         return status;
     }
@@ -38,12 +38,12 @@ public class ReturnResposeBody implements Serializable {
         this.result = result;
     }
 
-//    public String getJwtToken() {
-//        return jwtToken;
-//    }
-//
-//    public void setJwtToken(String jwtToken) {
-//        this.jwtToken = jwtToken;
-//    }
+    public String getJwtToken() {
+        return jwtToken;
+    }
+
+    public void setJwtToken(String jwtToken) {
+        this.jwtToken = jwtToken;
+    }
 
 }

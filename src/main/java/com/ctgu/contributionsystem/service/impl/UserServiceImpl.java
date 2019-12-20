@@ -23,4 +23,21 @@ public class UserServiceImpl implements UserService {
     public User findByPhoneNumber(String phoneNumber) {
         return userDao.findByPhoneNumber(phoneNumber);
     }
+
+    @Override
+    public User updateUser(User user) {
+        return userDao.saveAndFlush(user);
+    }
+
+
+    @Override
+    public User addUser(User user) {
+        return userDao.save(user);
+    }
+
+
+//    @Override
+//    public User modifyPassword(User user) {
+//        return userDao.saveAndFlush(user);
+//    }
 }
