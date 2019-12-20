@@ -1,6 +1,9 @@
 package com.ctgu.contributionsystem.service;
 
 import com.ctgu.contributionsystem.model.User;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 /**
  * @Description TODO
@@ -11,4 +14,8 @@ import com.ctgu.contributionsystem.model.User;
  */
 public interface UserService {
     User findByPhoneNumber(String phoneNumber);
+//    User modifyPassword(User user);
+//    int modifyPasswordByUserId(@Param("password") String password, @Param("userId") Integer userId);
+    User updateUser(User user);
+    User addUser(User user);
 }
