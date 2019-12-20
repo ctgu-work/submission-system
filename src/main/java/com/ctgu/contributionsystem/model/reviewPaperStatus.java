@@ -27,7 +27,7 @@ import java.io.Serializable;
 public class reviewPaperStatus implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer statusId;
     @Column(name = "status_detail")
     private String status_detail;

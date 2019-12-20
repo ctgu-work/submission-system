@@ -26,7 +26,7 @@ import java.sql.Timestamp;
 public class ReviewPaper implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer reviewPaperId;
     @Column(name = "specialist_id")
     private Integer specialistId;

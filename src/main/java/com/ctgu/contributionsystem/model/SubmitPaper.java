@@ -26,7 +26,7 @@ import java.sql.Timestamp;
 public class SubmitPaper implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer submitPaperId;
     @Column(name = "user_id")
     private Integer userId;
