@@ -33,5 +33,4 @@ public class Specialist implements Serializable{
     private Integer category;
     @Column(name = "status")
     private Integer status;
-
 }
