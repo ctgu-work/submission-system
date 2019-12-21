@@ -24,7 +24,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @Table(name = "review_paper_status")
-public class reviewPaperStatus implements Serializable {
+public class ReviewPaperStatus implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

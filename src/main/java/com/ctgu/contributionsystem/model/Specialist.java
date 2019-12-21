@@ -27,22 +27,11 @@ public class Specialist implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer specialistId;
-    @Column(name = "name")
-    private String name;
-    @Column(name = "id_card")
-    private String idCard;
-    @Column(name = "age")
-    private Integer age;
-    @Column(name = "sex")
-    private Integer sex;
-    @Column(name = "nick_name")
-    private String nickName;
-    @Column(name = "phone_number")
-    private String phoneNumber;
-    @Column(name = "status")
-    private Integer status;
+    @Column(name = "user_id")
+    private Integer userId;
     @Column(name = "category")
     private Integer category;
-    @Column(name = "pass_word")
-    private String passWord;
+    @Column(name = "status")
+    private Integer status;
+
 }
