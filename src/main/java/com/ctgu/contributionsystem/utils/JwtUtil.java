@@ -18,8 +18,8 @@ import java.util.Date;
  */
 @Slf4j
 public class JwtUtil {
-    //token 过期时间
-    private static final long EXPIRE_TIME = 5 * 60 * 1000;
+    //token 过期时间 60分钟
+    private static final long EXPIRE_TIME = 60 * 60 * 1000;
 
     /**
      * @Author wh

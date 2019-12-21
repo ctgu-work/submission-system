@@ -45,4 +45,6 @@ public class User implements Serializable{
     private String email;
     @Column(name = "avatar_url")
     private String avatarUrl;
+    @Column(name = "description")
+    private String description;
 }
