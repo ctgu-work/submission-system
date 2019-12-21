@@ -17,3 +17,4 @@ import org.springframework.data.domain.Pageable;
 public interface PaperDao extends JpaRepository<Paper, Integer> {
     Page<Paper> findAllByUserId(Pageable pageable,@Param("userId")Integer userId);
 }
+

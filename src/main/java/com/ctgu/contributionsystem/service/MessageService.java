@@ -13,5 +13,16 @@ public interface MessageService {
      * @param message
      * @return
      */
-    boolean sendMessageToAllUser(String message);
+    boolean sendMessageToAllUser(Integer senderId,String message);
+
+    /**
+     * 发送消息给选中用户
+     * @param senderId
+     * @param acceptId
+     * @param message
+     * @return
+     */
+    boolean sendMessageToUserByUserId(Integer senderId, Integer acceptId, String message);
+
+
 }

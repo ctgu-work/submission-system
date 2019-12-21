@@ -45,8 +45,8 @@ public class User implements Serializable{
     private String email;
     @Column(name = "avatar_url")
     private String avatarUrl;
+    @Column(name = "money")
+    private Integer money;
     @Column(name = "description")
     private String description;
-    @Column(name = "money")
-    private String money;
 }

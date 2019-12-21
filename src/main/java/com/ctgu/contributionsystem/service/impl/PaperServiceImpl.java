@@ -22,6 +22,6 @@ public class PaperServiceImpl implements PaperService {
 
     @Override
     public Page<Paper> findAllByUserId(Pageable pageable, Integer userId) {
-        return paperDao.findAllByUserId(pageable,userId);
+        return paperDao.findAllByUserId(pageable, userId);
     }
 }

@@ -13,5 +13,6 @@ import org.springframework.data.repository.query.Param;
  * @Version 1.0.0
  */
 public interface PaperService {
-    Page<Paper> findAllByUserId(Pageable pageable, @Param("userId")Integer userId);
+    Page<Paper> findAllByUserId(Pageable pageable, @Param("userId") Integer userId);
+
 }
