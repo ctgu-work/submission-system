@@ -32,5 +32,6 @@ public class Message implements Serializable {
     private Integer status;
     @Column(name = "sender_id")
     private Integer senderId;
-
+    @Column(name = "accept_id")
+    private Integer acceptId;
 }

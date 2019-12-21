@@ -39,4 +39,8 @@ public class Paper implements Serializable {
     private Integer category;
     @Column(name = "click_rate")
     private Integer clickRate;
+    @Column(name = "like_count")
+    private Integer likeCount;
+    @Column(name = "status")
+    private Integer status;
 }
