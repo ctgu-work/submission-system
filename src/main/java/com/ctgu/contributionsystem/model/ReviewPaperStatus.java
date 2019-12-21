@@ -24,10 +24,10 @@ import java.io.Serializable;
 @Getter
 @Setter
 @Table(name = "review_paper_status")
-public class reviewPaperStatus implements Serializable {
+public class ReviewPaperStatus implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer statusId;
     @Column(name = "status_detail")
     private String status_detail;

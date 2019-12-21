@@ -6,8 +6,6 @@ import com.ctgu.contributionsystem.utils.JwtUtil;
 import com.ctgu.contributionsystem.utils.Md5Salt;
 import com.ctgu.contributionsystem.utils.RedisUtils;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.UsernamePasswordToken;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;

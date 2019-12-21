@@ -25,7 +25,7 @@ import java.io.Serializable;
 public class Admin implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer adminId;
     @Column(name = "nick_name")
     private String nickName;
