@@ -52,7 +52,7 @@ public class ToSpecialist {
         try{
             String token = request.getHeader("token");//从请求头中获取token
             Subject subject = SecurityUtils.getSubject();
-            if( subject.isAuthenticated() && redisUtils.get("token").equals(token)){
+            if( subject.isAuthenticated() && redisUtils.get(phoneNumber).equals(token)){
                 String tokenPhoneNumber = JwtUtil.getPhoneNumber(token);
                 User user = userService.findByPhoneNumber(tokenPhoneNumber);
                 if( user.getEmail().equals(email) && user.getPhoneNumber().equals(phoneNumber) && user.getName().equals(realName)){
@@ -83,7 +83,8 @@ public class ToSpecialist {
         try{
             String token = request.getHeader("token");//从请求头中获取token
             Subject subject = SecurityUtils.getSubject();
-            if( subject.isAuthenticated() && redisUtils.get("token").equals(token)){
+            String phoneNumber = JwtUtil.getPhoneNumber(token);
+            if( subject.isAuthenticated() && redisUtils.get(phoneNumber).equals(token)){
                 boolean flag = true;
                 //获取user
                 String tokenPhoneNumber = JwtUtil.getPhoneNumber(token);

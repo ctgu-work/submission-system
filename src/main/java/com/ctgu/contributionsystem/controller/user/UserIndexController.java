@@ -47,6 +47,13 @@ public class UserIndexController {
     @Autowired
     private ReviewPaperService reviewPaperService;
 
+    /**
+     * @Author wh
+     * @Description 刷新页面
+     * @Date 2019/12/21 20:40
+     * @Param [request]
+     * @return com.ctgu.contributionsystem.dto.ReturnResposeBody
+     **/
     @GetMapping("/")
     public ReturnResposeBody refresh(HttpServletRequest request){
         ReturnResposeBody returnResposeBody = new ReturnResposeBody();
@@ -72,19 +79,23 @@ public class UserIndexController {
         }
     }
 
-    //个人主页
+    /**
+     * @Author wh
+     * @Description 个人主页
+     * @Date 2019/12/21 20:41
+     * @Param [request]
+     * @return java.lang.String
+     **/
     @GetMapping("/index")
     public String index(HttpServletRequest request){
         try{
             String token = request.getHeader("token");//从请求头中获取token
             Subject subject = SecurityUtils.getSubject();
-            if( subject.isAuthenticated() && redisUtils.get("token").equals(token)){
-                String phoneNumber = JwtUtil.getPhoneNumber(token);
+            String phoneNumber = JwtUtil.getPhoneNumber(token);
+            if( subject.isAuthenticated() && redisUtils.get(phoneNumber).equals(token)){
                 User user = userService.findByPhoneNumber(phoneNumber);
                 Integer userId = user.getUserId();
             }
-//                redisUtils.del("token");//退出登录删除token
-//
             else{
                 return "0";
             }
@@ -116,8 +127,8 @@ public class UserIndexController {
         try{
             String token = request.getHeader("token");//从请求头中获取token
             Subject subject = SecurityUtils.getSubject();
-            if( subject.isAuthenticated() && redisUtils.get("token").equals(token)){
-                String phoneNumber = JwtUtil.getPhoneNumber(token);
+            String phoneNumber = JwtUtil.getPhoneNumber(token);
+            if( subject.isAuthenticated() && redisUtils.get(phoneNumber).equals(token)){
                 User user = userService.findByPhoneNumber(phoneNumber);
                 Integer userId = user.getUserId();
                 Page<Paper> papers = paperService.findAllByUserId(PageRequest.of(startPage - 1, pageSize) , userId);

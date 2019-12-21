@@ -42,7 +42,8 @@ public class UpdateController {
         try{
             String token = request.getHeader("token");//从请求头中获取token
             Subject subject = SecurityUtils.getSubject();
-            if( subject.isAuthenticated() && redisUtils.get("token").equals(token)){
+            String phoneNumber = JwtUtil.getPhoneNumber(token);
+            if( subject.isAuthenticated() && redisUtils.get(phoneNumber).equals(token)){
                 if( multipartFile != null ){
                     String avatarName = multipartFile.getName();
                     String extension = UploadUtil.getFileExtension(multipartFile);
@@ -93,8 +94,8 @@ public class UpdateController {
         try{
             String token = request.getHeader("token");//从请求头中获取token
             Subject subject = SecurityUtils.getSubject();
-            if( subject.isAuthenticated() && redisUtils.get("token").equals(token)){
-                String phoneNumber = JwtUtil.getPhoneNumber(token);
+            String phoneNumber = JwtUtil.getPhoneNumber(token);
+            if( subject.isAuthenticated() && redisUtils.get(phoneNumber).equals(token)){
                 User user = userService.findByPhoneNumber(phoneNumber);
                 String cryPassword = Md5Salt.Md5SaltCrypt(newPassword);
                 String newToken = JwtUtil.sign(phoneNumber, cryPassword);

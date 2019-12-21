@@ -15,9 +15,9 @@ import lombok.ToString;
 @Setter
 @ToString
 public class ArticleStatus {
-    private String title;
-    private String status;
-    private String reviewContent;
-    private String reviewSpecialist;
+    private String title;//标题
+    private String status;//状态
+    private String reviewContent;//评语
+    private String reviewSpecialist;//审核人
 
 }
