@@ -1,6 +1,7 @@
 package com.ctgu.contributionsystem.dao;
 
 import com.ctgu.contributionsystem.model.Paper;
+import com.ctgu.contributionsystem.model.ReviewPaper;
 import com.ctgu.contributionsystem.model.Specialist;
 import com.ctgu.contributionsystem.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
