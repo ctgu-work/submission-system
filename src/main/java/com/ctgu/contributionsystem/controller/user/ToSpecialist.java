@@ -4,6 +4,7 @@ import com.ctgu.contributionsystem.dto.ReturnResposeBody;
 import com.ctgu.contributionsystem.model.Specialist;
 import com.ctgu.contributionsystem.model.SpecialistCategory;
 import com.ctgu.contributionsystem.model.User;
+import com.ctgu.contributionsystem.service.SpecialService;
 import com.ctgu.contributionsystem.service.SpecialistCategoryService;
 import com.ctgu.contributionsystem.service.UserService;
 import com.ctgu.contributionsystem.utils.*;
@@ -32,12 +33,19 @@ public class ToSpecialist {
     @Autowired
     private SpecialistCategoryService specialistCategoryService;
 
-//    @Autowired
-//    private
+    @Autowired
+    private SpecialService specialService;
 
     @Autowired
     private RedisUtils redisUtils;
 
+    /**
+     * @Author wh
+     * @Description 实名认证
+     * @Date 2019/12/21 16:36
+     * @Param [realName, request, email, phoneNumber]
+     * @return java.lang.String
+     **/
     @PostMapping("/specialist/checkRealInfo")
     public String checkRealInfo(@RequestParam("realName")String realName, HttpServletRequest request,
                                           @RequestParam("email")String email, @RequestParam("phoneNumber")String phoneNumber){
@@ -62,6 +70,13 @@ public class ToSpecialist {
     }
 
 
+    /**
+     * @Author wh
+     * @Description 提交认证材料
+     * @Date 2019/12/21 16:36
+     * @Param [proveImages, request, category]
+     * @return java.lang.String
+     **/
     @PostMapping("/specialist/submitImage")
     public String toSpecialist(@RequestParam("proveImages") List<MultipartFile> proveImages , HttpServletRequest request
                 ,@RequestParam("category")Integer category){
@@ -100,9 +115,11 @@ public class ToSpecialist {
                     specialist.setStatus(1);
                     specialist.setUserId(user.getUserId());
                     specialist.setPhotoAddress(photeAddress);
-                    
-
-                    return "1";
+                    if( specialService.findByUserId(user.getUserId()) == null ){
+                        specialService.addSpecialist(specialist);
+                        return "1";
+                    }
+                    else return "0";
                 }
                 else return "0";
             }
@@ -116,6 +133,13 @@ public class ToSpecialist {
     }
 
 
+    /**
+     * @Author wh
+     * @Description 获取专家所有分类
+     * @Date 2019/12/21 16:36
+     * @Param []
+     * @return java.util.List<com.ctgu.contributionsystem.model.SpecialistCategory>
+     **/
     @GetMapping("/specialist/category")
     public List<SpecialistCategory> allCategory(){
         return specialistCategoryService.findAll();

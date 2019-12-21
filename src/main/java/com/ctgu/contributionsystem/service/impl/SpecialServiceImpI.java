@@ -31,6 +31,11 @@ public class SpecialServiceImpI implements SpecialService {
         return specialistDao.findByuserId(userId);
     }
 
+    @Override
+    public Specialist addSpecialist(Specialist specialist) {
+        return specialistDao.save(specialist);
+    }
+
 
     @Override
     public Page<Paper> findAll(Pageable pageable){

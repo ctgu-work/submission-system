@@ -8,6 +8,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,6 +30,26 @@ public class UserIndexController {
     @Autowired
     private RedisUtils redisUtils;
 
+    @GetMapping("/")
+    public User refresh(HttpServletRequest request){
+        try{
+            String token = request.getHeader("token");//从请求头中获取token
+            Subject subject = SecurityUtils.getSubject();
+            if( subject.isAuthenticated() && redisUtils.get("token").equals(token)){
+                String phoneNumber = JwtUtil.getPhoneNumber(token);
+                User user = userService.findByPhoneNumber(phoneNumber);
+                return user;
+            }
+            else{
+                return null;
+            }
+        }
+        catch (Exception e){
+            return null;
+        }
+    }
+
+    //个人主页
     @GetMapping("/index")
     public String index(HttpServletRequest request){
         try{
@@ -49,5 +70,32 @@ public class UserIndexController {
             return "0";
         }
         return "1";
+    }
+
+    @GetMapping("/show/{userId}")
+    public String articleList(@PathVariable Integer userId){
+        return "1";
+    }
+
+
+//    查看稿件状态
+    @GetMapping("/profile/article")
+    public String showArticleStatus(HttpServletRequest request){
+        try{
+            String token = request.getHeader("token");//从请求头中获取token
+            Subject subject = SecurityUtils.getSubject();
+            if( subject.isAuthenticated() && redisUtils.get("token").equals(token)){
+                String phoneNumber = JwtUtil.getPhoneNumber(token);
+                User user = userService.findByPhoneNumber(phoneNumber);
+                Integer userId = user.getUserId();
+                return "0";
+            }
+            else{
+                return "0";
+            }
+        }
+        catch (Exception e){
+            return "0";
+        }
     }
 }
