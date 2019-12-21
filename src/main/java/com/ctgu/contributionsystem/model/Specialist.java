@@ -35,5 +35,4 @@ public class Specialist implements Serializable{
     private Integer status;
     @Column(name = "photo_address")
     private String photoAddress;
-
 }
