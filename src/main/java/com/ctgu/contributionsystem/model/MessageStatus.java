@@ -25,7 +25,7 @@ import java.io.Serializable;
 public class MessageStatus implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer statusId;
     @Column(name = "status_detail")
     private String statusDetail;

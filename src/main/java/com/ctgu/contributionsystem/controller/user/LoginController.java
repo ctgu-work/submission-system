@@ -1,5 +1,6 @@
 package com.ctgu.contributionsystem.controller.user;
 
+import com.ctgu.contributionsystem.dto.ReturnResposeBody;
 import com.ctgu.contributionsystem.model.User;
 import com.ctgu.contributionsystem.service.UserService;
 import com.ctgu.contributionsystem.utils.JwtUtil;
@@ -38,7 +39,7 @@ public class LoginController {
      **/
     @PostMapping("/login")
     @ResponseBody
-    public String userLogin(@RequestParam("phoneNumber")String phoneNumber ,
+    public ReturnResposeBody userLogin(@RequestParam("phoneNumber")String phoneNumber ,
                             @RequestParam("password")String password){
 //        Subject subject = SecurityUtils.getSubject();
 //        UsernamePasswordToken token = new UsernamePasswordToken(phoneNumber , password);
@@ -53,9 +54,17 @@ public class LoginController {
         String token = JwtUtil.sign(phoneNumber,Md5Salt.Md5SaltCrypt(password));
         if(user.getPassword().equals(Md5Salt.Md5SaltCrypt(password))){
             redisUtils.set("token" , token);
-            return token;
+            ReturnResposeBody returnResposeBody = new ReturnResposeBody();
+            returnResposeBody.setMsg("success");
+            returnResposeBody.setResult(user);
+            returnResposeBody.setJwtToken(token);
+            returnResposeBody.setStatus("200");
+            return returnResposeBody;
         }
-        return "login";
+        ReturnResposeBody returnResposeBody = new ReturnResposeBody();
+        returnResposeBody.setMsg("error");
+        returnResposeBody.setStatus("200");
+        return returnResposeBody;
 
     }
 
@@ -78,14 +87,14 @@ public class LoginController {
 //                String newToken = JwtUtil.sign(phoneNumber,Md5Salt.Md5SaltCrypt(user.getPassword()));//退出登录刷新token
 //                redisUtils.set("token" , newToken);
                 redisUtils.del("token");//退出登录删除token
-                return "true";
+                return "1";
             }
             else{
-                return "false";
+                return "0";
             }
         }
         catch (Exception e){
-            return "false";
+            return "0";
         }
     }
 

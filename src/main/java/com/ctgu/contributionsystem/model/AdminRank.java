@@ -25,7 +25,7 @@ import java.io.Serializable;
 public class AdminRank implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer rankId;
     @Column(name = "rank_detail")
     private String rankDetail;

@@ -26,7 +26,7 @@ import java.io.Serializable;
 public class Photo implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer photoId;
     @Column(name = "category")
     private Integer category;

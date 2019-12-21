@@ -25,7 +25,7 @@ import java.io.Serializable;
 public class Specialist implements Serializable{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer specialistId;
     @Column(name = "user_id")
     private Integer userId;

@@ -27,7 +27,7 @@ import java.util.Date;
 @Table(name = "paper")
 public class Paper implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer paperId;
     @Column(name = "title")
     private String title;
