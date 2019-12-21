@@ -51,7 +51,7 @@ public class LoginController {
         User user = userService.findByPhoneNumber(phoneNumber);
         String token = JwtUtil.sign(phoneNumber,Md5Salt.Md5SaltCrypt(password));
         if(user.getPassword().equals(Md5Salt.Md5SaltCrypt(password))){
-            redisUtils.set("token" , token);
+            redisUtils.set("token" , token,60 * 60);
             ReturnResposeBody returnResposeBody = new ReturnResposeBody();
             returnResposeBody.setMsg("success");
             returnResposeBody.setResult(user);

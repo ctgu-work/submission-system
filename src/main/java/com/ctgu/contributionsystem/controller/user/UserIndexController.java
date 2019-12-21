@@ -1,5 +1,6 @@
 package com.ctgu.contributionsystem.controller.user;
 
+import com.ctgu.contributionsystem.dto.ReturnResposeBody;
 import com.ctgu.contributionsystem.model.User;
 import com.ctgu.contributionsystem.service.UserService;
 import com.ctgu.contributionsystem.utils.JwtUtil;
@@ -31,21 +32,27 @@ public class UserIndexController {
     private RedisUtils redisUtils;
 
     @GetMapping("/")
-    public User refresh(HttpServletRequest request){
+    public ReturnResposeBody refresh(HttpServletRequest request){
+        ReturnResposeBody returnResposeBody = new ReturnResposeBody();
         try{
             String token = request.getHeader("token");//从请求头中获取token
             Subject subject = SecurityUtils.getSubject();
             if( subject.isAuthenticated() && redisUtils.get("token").equals(token)){
                 String phoneNumber = JwtUtil.getPhoneNumber(token);
                 User user = userService.findByPhoneNumber(phoneNumber);
-                return user;
+                returnResposeBody.setMsg("success");
+                returnResposeBody.setResult(user);
+                returnResposeBody.setStatus("200");
+                return returnResposeBody;
             }
             else{
-                return null;
+                returnResposeBody.setMsg("error");
+                return returnResposeBody;
             }
         }
         catch (Exception e){
-            return null;
+            returnResposeBody.setMsg("error");
+            return returnResposeBody;
         }
     }
 

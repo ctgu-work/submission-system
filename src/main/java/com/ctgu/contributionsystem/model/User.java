@@ -47,4 +47,6 @@ public class User implements Serializable{
     private String avatarUrl;
     @Column(name = "description")
     private String description;
+    @Column(name = "money")
+    private String money;
 }
