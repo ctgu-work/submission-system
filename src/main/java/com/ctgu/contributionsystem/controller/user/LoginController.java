@@ -7,8 +7,6 @@ import com.ctgu.contributionsystem.utils.JwtUtil;
 import com.ctgu.contributionsystem.utils.Md5Salt;
 import com.ctgu.contributionsystem.utils.RedisUtils;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.UsernamePasswordToken;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +51,7 @@ public class LoginController {
         User user = userService.findByPhoneNumber(phoneNumber);
         String token = JwtUtil.sign(phoneNumber,Md5Salt.Md5SaltCrypt(password));
         if(user.getPassword().equals(Md5Salt.Md5SaltCrypt(password))){
-            redisUtils.set("token" , token);
+            redisUtils.set("token" , token,60 * 60);
             ReturnResposeBody returnResposeBody = new ReturnResposeBody();
             returnResposeBody.setMsg("success");
             returnResposeBody.setResult(user);

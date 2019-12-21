@@ -3,10 +3,7 @@ package com.ctgu.contributionsystem.controller.user;
 import com.ctgu.contributionsystem.dto.ReturnResposeBody;
 import com.ctgu.contributionsystem.model.User;
 import com.ctgu.contributionsystem.service.UserService;
-import com.ctgu.contributionsystem.utils.JwtUtil;
-import com.ctgu.contributionsystem.utils.Md5Salt;
-import com.ctgu.contributionsystem.utils.Oss;
-import com.ctgu.contributionsystem.utils.RedisUtils;
+import com.ctgu.contributionsystem.utils.*;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,9 +45,22 @@ public class UpdateController {
             if( subject.isAuthenticated() && redisUtils.get("token").equals(token)){
                 if( multipartFile != null ){
                     String avatarName = multipartFile.getName();
-                    String avatarUrl = Oss.upLoadFile(avatarName,multipartFile);
-                    System.out.println(avatarUrl);
-                    user.setAvatarUrl(avatarUrl);
+                    String extension = UploadUtil.getFileExtension(multipartFile);
+                    //判断是否是图片
+                    if( extension.equalsIgnoreCase(".jpg") || extension.equalsIgnoreCase(".png")
+                    || extension.equalsIgnoreCase(".jpeg")){
+                        String avatarUrl = Oss.upLoadFile(avatarName,multipartFile);
+                        System.out.println(avatarUrl);
+                        if( avatarUrl.equals("error") ) {
+                            returnResposeBody.setMsg("error");
+                            return returnResposeBody;
+                        }
+                        else user.setAvatarUrl(avatarUrl);
+                    }
+                    else{
+                        returnResposeBody.setMsg("error");
+                        return returnResposeBody;
+                    }
                 }
                 User user1 = userService.findByPhoneNumber(user.getPhoneNumber());
                 User updateUser = userService.updateUser(user1);
