@@ -42,4 +42,9 @@ public class SpecialServiceImpI implements SpecialService {
         return specialistAllDao.findAll(pageable);
 
     }
+
+    @Override
+    public String findNameBySpecialistId(Integer specialistId) {
+        return specialistDao.findNameBySpecialistId(specialistId);
+    }
 }

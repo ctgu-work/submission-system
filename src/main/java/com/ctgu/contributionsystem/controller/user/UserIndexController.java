@@ -1,19 +1,26 @@
 package com.ctgu.contributionsystem.controller.user;
 
+import com.ctgu.contributionsystem.dto.ArticleStatus;
 import com.ctgu.contributionsystem.dto.ReturnResposeBody;
+import com.ctgu.contributionsystem.model.Paper;
+import com.ctgu.contributionsystem.model.ReviewPaper;
 import com.ctgu.contributionsystem.model.User;
+import com.ctgu.contributionsystem.service.PaperService;
+import com.ctgu.contributionsystem.service.ReviewPaperService;
+import com.ctgu.contributionsystem.service.SpecialService;
 import com.ctgu.contributionsystem.service.UserService;
 import com.ctgu.contributionsystem.utils.JwtUtil;
 import com.ctgu.contributionsystem.utils.RedisUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @Description 个人信息主页
@@ -30,6 +37,15 @@ public class UserIndexController {
 
     @Autowired
     private RedisUtils redisUtils;
+
+    @Autowired
+    private PaperService paperService;
+
+    @Autowired
+    private SpecialService specialService;
+
+    @Autowired
+    private ReviewPaperService reviewPaperService;
 
     @GetMapping("/")
     public ReturnResposeBody refresh(HttpServletRequest request){
@@ -85,9 +101,18 @@ public class UserIndexController {
     }
 
 
-//    查看稿件状态
+    /**
+     * @Author wh
+     * @Description 查看稿件状态
+     * @Date 2019/12/21 19:48
+     * @Param [request]
+     * @return java.lang.String
+     **/
     @GetMapping("/profile/article")
-    public String showArticleStatus(HttpServletRequest request){
+    public List<ArticleStatus> showArticleStatus(HttpServletRequest request,
+                @RequestParam(value = "startPage", required = false, defaultValue = "1") Integer startPage,
+                @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize){
+        List<ArticleStatus>articleStatuses = new LinkedList<ArticleStatus>();
         try{
             String token = request.getHeader("token");//从请求头中获取token
             Subject subject = SecurityUtils.getSubject();
@@ -95,14 +120,31 @@ public class UserIndexController {
                 String phoneNumber = JwtUtil.getPhoneNumber(token);
                 User user = userService.findByPhoneNumber(phoneNumber);
                 Integer userId = user.getUserId();
-                return "0";
+                Page<Paper> papers = paperService.findAllByUserId(PageRequest.of(startPage - 1, pageSize) , userId);
+                List<Paper> paperList = papers.getContent();
+                for( Paper paper : paperList ){
+                    ArticleStatus articleStatus = new ArticleStatus();
+                    articleStatus.setTitle(paper.getTitle());
+                    if( paper.getStatus() == 1 ){
+                        articleStatus.setStatus("未审稿");
+                    }
+                    else{
+                        ReviewPaper reviewPaper = reviewPaperService.findByPaperId(paper.getPaperId());
+                        if( reviewPaper.getStatus() == 1 ) articleStatus.setStatus("通过");
+                        else articleStatus.setStatus("未通过");
+                        articleStatus.setReviewContent(reviewPaper.getComment());
+                        articleStatus.setReviewSpecialist(specialService.findNameBySpecialistId(reviewPaper.getSpecialistId()));
+                    }
+                    articleStatuses.add(articleStatus);
+                }
+                return articleStatuses;
             }
             else{
-                return "0";
+                return articleStatuses;
             }
         }
         catch (Exception e){
-            return "0";
+            return articleStatuses;
         }
     }
 }

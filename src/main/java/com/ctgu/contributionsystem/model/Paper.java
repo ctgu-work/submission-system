@@ -43,4 +43,8 @@ public class Paper implements Serializable {
     private Integer likeCount;
     @Column(name = "status")
     private Integer status;
+    @Column(name = "user_id")
+    private Integer userId;
+    @Column(name = "submit_time")
+    private Timestamp submitTime;
 }
