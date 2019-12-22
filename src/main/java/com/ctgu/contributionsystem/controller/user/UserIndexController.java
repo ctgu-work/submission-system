@@ -2,6 +2,7 @@ package com.ctgu.contributionsystem.controller.user;
 
 import com.ctgu.contributionsystem.dto.ArticleStatus;
 import com.ctgu.contributionsystem.dto.ReturnResposeBody;
+import com.ctgu.contributionsystem.dto.UserIndex;
 import com.ctgu.contributionsystem.model.Paper;
 import com.ctgu.contributionsystem.model.ReviewPaper;
 import com.ctgu.contributionsystem.model.User;
@@ -87,7 +88,7 @@ public class UserIndexController {
      * @return java.lang.String
      **/
     @GetMapping("/index")
-    public String index(HttpServletRequest request){
+    public UserIndex index(HttpServletRequest request){
         try{
             String token = request.getHeader("token");//从请求头中获取token
             Subject subject = SecurityUtils.getSubject();
@@ -95,15 +96,28 @@ public class UserIndexController {
             if( subject.isAuthenticated() && redisUtils.get(phoneNumber).equals(token)){
                 User user = userService.findByPhoneNumber(phoneNumber);
                 Integer userId = user.getUserId();
+                UserIndex userIndex = new UserIndex();
+                int countUserLike= paperService.countUserLike(userId);
+                int countUserClickRate= paperService.countUserClickRate(userId);
+                int countWaitAccept= paperService.countWaitAccept(userId);
+                int countUserMoney= userService.countUserMoney(userId);
+                int articleAcceptNumber= paperService.countArticleAcceptNumber(userId);
+                int articleNotAcceptNumber= paperService.countArticleNotAcceptNumber(userId);
+                userIndex.setUserLikeCount(Integer.valueOf(countUserLike));
+                userIndex.setUserClickCount(Integer.valueOf(countUserClickRate));
+                userIndex.setArticleWaitNumber(Integer.valueOf(countWaitAccept));
+                userIndex.setArticleMoney(Integer.valueOf(countUserMoney));
+                userIndex.setArticleAcceptNumber(Integer.valueOf(articleAcceptNumber));
+                userIndex.setArticleNotAcceptNumber(Integer.valueOf(articleNotAcceptNumber));
+                return userIndex;
             }
             else{
-                return "0";
+                return null;
             }
         }
         catch (Exception e){
-            return "0";
+            return null;
         }
-        return "1";
     }
 
     @GetMapping("/show/{userId}")

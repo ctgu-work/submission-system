@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @RestController
 @RequestMapping("/user")
-public class UpdateController {
+public class UpdateUserController {
     @Autowired
     private RedisUtils redisUtils;
 

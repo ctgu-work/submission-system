@@ -24,4 +24,29 @@ public class PaperServiceImpl implements PaperService {
     public Page<Paper> findAllByUserId(Pageable pageable, Integer userId) {
         return paperDao.findAllByUserId(pageable, userId);
     }
+
+    @Override
+    public int countUserClickRate(Integer userId) {
+        return paperDao.countUserClickRate(userId);
+    }
+
+    @Override
+    public int countUserLike(Integer userId) {
+        return paperDao.countUserLike(userId);
+    }
+
+    @Override
+    public int countWaitAccept(Integer userId) {
+        return paperDao.countWaitAccept(userId);
+    }
+
+    @Override
+    public int countArticleAcceptNumber(Integer userId) {
+        return paperDao.countArticleAcceptNumber(userId);
+    }
+
+    @Override
+    public int countArticleNotAcceptNumber(Integer userId) {
+        return paperDao.countArticleNotAcceptNumber(userId);
+    }
 }
