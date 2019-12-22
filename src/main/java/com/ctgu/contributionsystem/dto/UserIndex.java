@@ -15,10 +15,11 @@ import lombok.ToString;
 @Setter
 @ToString
 public class UserIndex {
-    private int articleWaitNumber;
-    private int articleAcceptNumber;
-    private int articleNotAcceptNumber;
-    private int articleMoney;
-
+    private int articleWaitNumber;//待审核的稿件数
+    private int articleAcceptNumber;//通过的稿件数
+    private int articleNotAcceptNumber;//没有通过的稿件数
+    private int articleMoney;//稿费
+    private int userLikeCount;//点赞数
+    private int userClickCount;//点击量
 
 }

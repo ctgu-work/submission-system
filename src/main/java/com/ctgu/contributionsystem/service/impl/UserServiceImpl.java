@@ -35,6 +35,11 @@ public class UserServiceImpl implements UserService {
         return userDao.save(user);
     }
 
+    @Override
+    public int countUserMoney(Integer userId) {
+        return userDao.countUserMoney(userId);
+    }
+
 
 //    @Override
 //    public User modifyPassword(User user) {

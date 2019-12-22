@@ -18,4 +18,5 @@ public interface UserService {
 //    int modifyPasswordByUserId(@Param("password") String password, @Param("userId") Integer userId);
     User updateUser(User user);
     User addUser(User user);
+    int countUserMoney(@Param("userId")Integer userId);
 }
