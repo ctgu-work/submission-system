@@ -45,5 +45,10 @@ public interface PaperDao extends JpaRepository<Paper, Integer> {
     @Query(nativeQuery = true,value = "SELECT b.tag_id as tagId FROM paper a , tag b , paper_tag c WHERE a.paper_id = c.paper_id and c.tag_id = b.tag_id and a.user_id = :userId GROUP BY b.tag_detail ORDER BY count(*) DESC LIMIT 10")
     List<Integer> getUserHotTagsId(@Param("userId")Integer userId);
 
+    @Query(nativeQuery = true,value = "SELECT tag_detail as tagDetail FROM paper a , tag b , paper_tag c WHERE a.paper_id = c.paper_id and c.tag_id = b.tag_id GROUP BY b.tag_detail ORDER BY count(*) DESC LIMIT 10")
+    List<String> getHotTagsName();
+    @Query(nativeQuery = true,value = "SELECT b.tag_id as tagId FROM paper a , tag b , paper_tag c WHERE a.paper_id = c.paper_id and c.tag_id = b.tag_id GROUP BY b.tag_detail ORDER BY count(*) DESC LIMIT 10")
+    List<Integer> getHotTagsId();
+
 }
 

@@ -62,4 +62,14 @@ public class PaperServiceImpl implements PaperService {
         return paperDao.getUserHotTagsId(userId);
     }
 
+    @Override
+    public List<String> getHotTagsName() {
+        return paperDao.getHotTagsName();
+    }
+
+    @Override
+    public List<Integer> getHotTagsId() {
+        return paperDao.getHotTagsId();
+    }
+
 }

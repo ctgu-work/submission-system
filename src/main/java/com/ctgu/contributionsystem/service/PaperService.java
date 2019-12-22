@@ -29,4 +29,7 @@ public interface PaperService {
     //用户热门标签
     List<String> getUserHotTagsName(@Param("userId")Integer userId);
     List<Integer> getUserHotTagsId(@Param("userId")Integer userId);
+    //首页热门标签
+    List<String> getHotTagsName();
+    List<Integer> getHotTagsId();
 }
