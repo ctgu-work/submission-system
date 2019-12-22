@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
  **/
 @Controller
 @RequestMapping("/paper")
-public class ShowController {
+public class ShowPaperController {
 
     @Autowired
     private PaperService paperService;
@@ -22,6 +22,15 @@ public class ShowController {
     @ResponseBody
     @RequestMapping("/get")
     public Paper getPaperById(@RequestParam("paperId") Integer paperId){
+        Paper paper = null;
+        /**
+         * 如果paperId
+         */
+        if(paperId == null){
+            return paper;
+        }else {
+
+        }
         return null;
     }
 

@@ -8,4 +8,10 @@ package com.ctgu.contributionsystem.service;
  **/
 
 public interface TagService {
+    /**
+     * 返回TagID
+     * @param tag
+     * @return
+     */
+    int getTagId(String tag);
 }
