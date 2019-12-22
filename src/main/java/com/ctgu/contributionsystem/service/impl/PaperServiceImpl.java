@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @Description TODO
  * @Author wh_lan
@@ -49,4 +51,15 @@ public class PaperServiceImpl implements PaperService {
     public int countArticleNotAcceptNumber(Integer userId) {
         return paperDao.countArticleNotAcceptNumber(userId);
     }
+
+    @Override
+    public List<String> getUserHotTagsName(Integer userId) {
+        return paperDao.getUserHotTagsName(userId);
+    }
+
+    @Override
+    public List<Integer> getUserHotTagsId(Integer userId) {
+        return paperDao.getUserHotTagsId(userId);
+    }
+
 }

@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface UserDao extends JpaRepository<User, Integer>{
     User findByPhoneNumber(String PhoneNumber);
-
+    User findByUserId(Integer userId);
 //    @Modifying
     @Query(nativeQuery = true,value = "select money from user where user_id = :userId")
     int countUserMoney(@Param("userId")Integer userId);

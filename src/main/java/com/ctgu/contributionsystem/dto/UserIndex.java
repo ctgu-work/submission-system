@@ -1,8 +1,11 @@
 package com.ctgu.contributionsystem.dto;
 
+import com.ctgu.contributionsystem.model.Tag;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.util.List;
 
 /**
  * @Description TODO
@@ -21,5 +24,5 @@ public class UserIndex {
     private int articleMoney;//稿费
     private int userLikeCount;//点赞数
     private int userClickCount;//点击量
-
+    List<Tag>uerHotTag;
 }

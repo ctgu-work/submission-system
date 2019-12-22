@@ -5,6 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 /**
  * @Description TODO
  * @Author wh_lan
@@ -20,7 +22,11 @@ public interface PaperService {
     int countUserLike(@Param("userId")Integer userId);
     //用户待审核稿件
     int countWaitAccept(@Param("userId")Integer userId);
-
+    //用户审核通过数量
     int countArticleAcceptNumber(@Param("userId")Integer userId);
+    //用户审核未通过数量
     int countArticleNotAcceptNumber(@Param("userId")Integer userId);
+    //用户热门标签
+    List<String> getUserHotTagsName(@Param("userId")Integer userId);
+    List<Integer> getUserHotTagsId(@Param("userId")Integer userId);
 }

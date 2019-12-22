@@ -5,6 +5,7 @@ import com.ctgu.contributionsystem.dto.ReturnResposeBody;
 import com.ctgu.contributionsystem.dto.UserIndex;
 import com.ctgu.contributionsystem.model.Paper;
 import com.ctgu.contributionsystem.model.ReviewPaper;
+import com.ctgu.contributionsystem.model.Tag;
 import com.ctgu.contributionsystem.model.User;
 import com.ctgu.contributionsystem.service.PaperService;
 import com.ctgu.contributionsystem.service.ReviewPaperService;
@@ -82,13 +83,14 @@ public class UserIndexController {
 
     /**
      * @Author wh
-     * @Description 个人主页
+     * @Description 查看个人主页
      * @Date 2019/12/21 20:41
      * @Param [request]
      * @return java.lang.String
      **/
     @GetMapping("/index")
-    public UserIndex index(HttpServletRequest request){
+    public ReturnResposeBody index(HttpServletRequest request){
+        ReturnResposeBody returnResposeBody = new ReturnResposeBody();
         try{
             String token = request.getHeader("token");//从请求头中获取token
             Subject subject = SecurityUtils.getSubject();
@@ -109,22 +111,99 @@ public class UserIndexController {
                 userIndex.setArticleMoney(Integer.valueOf(countUserMoney));
                 userIndex.setArticleAcceptNumber(Integer.valueOf(articleAcceptNumber));
                 userIndex.setArticleNotAcceptNumber(Integer.valueOf(articleNotAcceptNumber));
-                return userIndex;
+                List<String>list = paperService.getUserHotTagsName(userId);
+                List<Integer>list1 = paperService.getUserHotTagsId(userId);
+                List<Tag>list2 = new LinkedList<Tag>();
+                for( int i = 0 ; i < list.size() ; i++ ){
+                    Tag tag = new Tag();
+                    tag.setTagId(list1.get(i));
+                    tag.setTagDetail(list.get(i));
+                    list2.add(tag);
+                }
+                userIndex.setUerHotTag(list2);
+                returnResposeBody.setResult(userIndex);
+                returnResposeBody.setStatus("200");
+                returnResposeBody.setMsg("success");
+                returnResposeBody.setJwtToken(token);
+                return returnResposeBody;
             }
             else{
-                return null;
+                returnResposeBody.setMsg("error");
+                return returnResposeBody;
             }
         }
         catch (Exception e){
-            return null;
+            returnResposeBody.setMsg("error");
+            return returnResposeBody;
         }
     }
 
-    @GetMapping("/show/{userId}")
-    public String articleList(@PathVariable Integer userId){
-        return "1";
+    /**
+     * @Author wh
+     * @Description 查看他人信息
+     * @Date 2019/12/22 20:16
+     * @Param [userId]
+     * @return java.lang.String
+     **/
+    @GetMapping("/showInfo/{userId}")
+    public ReturnResposeBody userInfo(@PathVariable Integer userId){
+        ReturnResposeBody returnResposeBody = new ReturnResposeBody();
+        try{
+            User user = userService.findByUserId(userId);
+            returnResposeBody.setResult(user);
+            returnResposeBody.setStatus("200");
+            returnResposeBody.setMsg("success");
+        }
+        catch (Exception e){
+            returnResposeBody.setMsg("error");
+        }
+        return returnResposeBody;
     }
 
+    /**
+     * @Author wh
+     * @Description 查看别人主页
+     * @Date 2019/12/22 20:28
+     * @Param [userId]
+     * @return com.ctgu.contributionsystem.dto.ReturnResposeBody
+     **/
+    @GetMapping("/showIndex/{userId}")
+    public ReturnResposeBody userIndex(@PathVariable Integer userId){
+        ReturnResposeBody returnResposeBody = new ReturnResposeBody();
+        try{
+            UserIndex userIndex = new UserIndex();
+            int countUserLike= paperService.countUserLike(userId);
+            int countUserClickRate= paperService.countUserClickRate(userId);
+            int countWaitAccept= paperService.countWaitAccept(userId);
+            int countUserMoney= userService.countUserMoney(userId);
+            int articleAcceptNumber= paperService.countArticleAcceptNumber(userId);
+            int articleNotAcceptNumber= paperService.countArticleNotAcceptNumber(userId);
+            userIndex.setUserLikeCount(Integer.valueOf(countUserLike));
+            userIndex.setUserClickCount(Integer.valueOf(countUserClickRate));
+            userIndex.setArticleWaitNumber(Integer.valueOf(countWaitAccept));
+            userIndex.setArticleMoney(Integer.valueOf(countUserMoney));
+            userIndex.setArticleAcceptNumber(Integer.valueOf(articleAcceptNumber));
+            userIndex.setArticleNotAcceptNumber(Integer.valueOf(articleNotAcceptNumber));
+            List<String>list = paperService.getUserHotTagsName(userId);
+            List<Integer>list1 = paperService.getUserHotTagsId(userId);
+            List<Tag>list2 = new LinkedList<Tag>();
+            for( int i = 0 ; i < list.size() ; i++ ){
+                Tag tag = new Tag();
+                tag.setTagId(list1.get(i));
+                tag.setTagDetail(list.get(i));
+                list2.add(tag);
+            }
+            userIndex.setUerHotTag(list2);
+            returnResposeBody.setResult(userIndex);
+            returnResposeBody.setStatus("200");
+            returnResposeBody.setMsg("success");
+            return returnResposeBody;
+        }
+        catch (Exception e){
+            returnResposeBody.setMsg("error");
+            return returnResposeBody;
+        }
+    }
 
     /**
      * @Author wh
@@ -134,10 +213,11 @@ public class UserIndexController {
      * @return java.lang.String
      **/
     @GetMapping("/profile/article")
-    public List<ArticleStatus> showArticleStatus(HttpServletRequest request,
+    public ReturnResposeBody showArticleStatus(HttpServletRequest request,
                 @RequestParam(value = "startPage", required = false, defaultValue = "1") Integer startPage,
                 @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize){
         List<ArticleStatus>articleStatuses = new LinkedList<ArticleStatus>();
+        ReturnResposeBody returnResposeBody = new ReturnResposeBody();
         try{
             String token = request.getHeader("token");//从请求头中获取token
             Subject subject = SecurityUtils.getSubject();
@@ -162,14 +242,20 @@ public class UserIndexController {
                     }
                     articleStatuses.add(articleStatus);
                 }
-                return articleStatuses;
+                returnResposeBody.setResult(articleStatuses);
+                returnResposeBody.setStatus("200");
+                returnResposeBody.setMsg("success");
+                returnResposeBody.setJwtToken(token);
+                return returnResposeBody;
             }
             else{
-                return articleStatuses;
+                returnResposeBody.setMsg("error");
+                return returnResposeBody;
             }
         }
         catch (Exception e){
-            return articleStatuses;
+            returnResposeBody.setMsg("error");
+            return returnResposeBody;
         }
     }
 }

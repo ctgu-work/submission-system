@@ -25,6 +25,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User findByUserId(Integer userId) {
+        return userDao.findByUserId(userId);
+    }
+
+    @Override
     public User updateUser(User user) {
         return userDao.saveAndFlush(user);
     }

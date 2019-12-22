@@ -2,12 +2,14 @@ package com.ctgu.contributionsystem.dao;
 
 import com.ctgu.contributionsystem.model.Paper;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import java.util.List;
+
 /**
  * @Description TODO
  * @Author wh_lan
@@ -37,6 +39,11 @@ public interface PaperDao extends JpaRepository<Paper, Integer> {
 
     @Query(nativeQuery = true,value = "SELECT count(*) FROM paper , review_paper where paper.paper_id = review_paper.paper_id and review_paper.status = 2 and paper.user_id = :userId")
     int countArticleNotAcceptNumber(@Param("userId")Integer userId);
+
+    @Query(nativeQuery = true,value = "SELECT tag_detail as tagDetail FROM paper a , tag b , paper_tag c WHERE a.paper_id = c.paper_id and c.tag_id = b.tag_id and a.user_id = :userId GROUP BY b.tag_detail ORDER BY count(*) DESC LIMIT 10")
+    List<String> getUserHotTagsName(@Param("userId")Integer userId);
+    @Query(nativeQuery = true,value = "SELECT b.tag_id as tagId FROM paper a , tag b , paper_tag c WHERE a.paper_id = c.paper_id and c.tag_id = b.tag_id and a.user_id = :userId GROUP BY b.tag_detail ORDER BY count(*) DESC LIMIT 10")
+    List<Integer> getUserHotTagsId(@Param("userId")Integer userId);
 
 }
 
