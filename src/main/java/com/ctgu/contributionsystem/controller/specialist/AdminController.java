@@ -21,14 +21,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/admin")
 public class AdminController {
 
-
-    @Autowired
-    private AdminService adminService;
-
-
-    @GetMapping("/user/categorycout")
-    @ResponseBody
-    public Integer CategoryCount(HttpRequest request){
+//
+//    @Autowired
+//    private AdminService adminService;
+//
+//
+//    @GetMapping("/user/categorycout")
+//    @ResponseBody
+//    public Integer CategoryCount(HttpRequest request){
 
 //        //从请求头中获取token
 //        String token = request.getHeader("token");
@@ -38,9 +38,9 @@ public class AdminController {
 //        if(subject.isAuthenticated() && redisUtils.get("token").equals(token)) {
 //
 //        }
-        Integer countn = adminService.FindCount();
-        return countn;
-    }
+//        Integer countn = adminService.FindCount();
+//        return countn;
+//    }
 
 
 }

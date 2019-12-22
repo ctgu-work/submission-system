@@ -51,7 +51,7 @@ public class LoginController {
         User user = userService.findByPhoneNumber(phoneNumber);
         String token = JwtUtil.sign(phoneNumber,Md5Salt.Md5SaltCrypt(password));
         if(user.getPassword().equals(Md5Salt.Md5SaltCrypt(password))){
-            redisUtils.set("token" , token);
+            redisUtils.set(phoneNumber , token,60 * 60);
             ReturnResposeBody returnResposeBody = new ReturnResposeBody();
             returnResposeBody.setMsg("success");
             returnResposeBody.setResult(user);
@@ -79,12 +79,13 @@ public class LoginController {
         try{
             String token = request.getHeader("token");//从请求头中获取token
             Subject subject = SecurityUtils.getSubject();
-            if( subject.isAuthenticated() && redisUtils.get("token").equals(token)){
+            String phoneNumber = JwtUtil.getPhoneNumber(token);
+            if( subject.isAuthenticated() && redisUtils.get(phoneNumber).equals(token)){
 //                String phoneNumber = JwtUtil.getPhoneNumber(token);
 //                User user = userService.findByPhoneNumber(phoneNumber);
 //                String newToken = JwtUtil.sign(phoneNumber,Md5Salt.Md5SaltCrypt(user.getPassword()));//退出登录刷新token
 //                redisUtils.set("token" , newToken);
-                redisUtils.del("token");//退出登录删除token
+                redisUtils.del(phoneNumber);//退出登录删除token
                 return "1";
             }
             else{

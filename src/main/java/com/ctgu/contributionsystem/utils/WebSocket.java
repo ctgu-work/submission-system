@@ -19,19 +19,19 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @create: 2019-12-20 21:27
  **/
 @Component
-@ServerEndpoint("/websocket/{userName}")
+@ServerEndpoint("/message/{userId}")
 public class WebSocket {
 
     private Session session;
 
     private static CopyOnWriteArrayList<WebSocket> webSockets = new CopyOnWriteArrayList<>();
-    private static Map<String,Session> sessionPool = new HashMap<>();
+    private static Map<Integer,Session> sessionPool = new HashMap<>();
 
-    public void OnOpen(Session session, @PathVariable(value = "userName")String userName){
+    public void OnOpen(Session session, @PathVariable(value = "userId")Integer userId){
         this.session = session;
         webSockets.add(this);
-        sessionPool.put(userName,session);
-        System.out.println(userName+"【websocket消息】有新的连接，总数为:"+webSockets.size());
+        sessionPool.put(userId,session);
+        System.out.println("【websocket消息】有新的连接，消息总数为:"+webSockets.size());
     }
 
     @OnClose
@@ -60,15 +60,17 @@ public class WebSocket {
     }
 
     // 此为单点消息
-    public void sendOneMessage(String userName, String message) {
+    public boolean sendOneMessage(Integer userId, String message) {
         System.out.println("【websocket消息】单点消息:"+message);
-        Session session = sessionPool.get(userName);
+        Session session = sessionPool.get(userId);
         if (session != null) {
             try {
                 session.getAsyncRemote().sendText(message);
             } catch (Exception e) {
                 e.printStackTrace();
+                return false;
             }
         }
+        return true;
     }
 }

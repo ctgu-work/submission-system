@@ -37,16 +37,31 @@ public class SpecialServiceImpI implements SpecialService {
         return specialistDao.findByuserId(userId);
     }
 
-
     @Override
-    public List<Paper> findAll(Integer category){
-        return specialistAllDao.findAll(category);
-
+    public Specialist addSpecialist(Specialist specialist) {
+        return specialistDao.save(specialist);
     }
 
 
     @Override
+    public List<Paper> findAll(Integer Category){
+        return specialistAllDao.findAllByCategory(Category);
+
+    }
+
+    @Override
+    public Page<Paper> findAll(Pageable pageable){
+        return specialistAllDao.findAll(pageable);
+
+    }
+
+    @Override
     public ReviewPaper addReviewPaper1(ReviewPaper reviewPaper) {
         return paperReviewDao.save(reviewPaper);
+    }
+
+    @Override
+    public String findNameBySpecialistId(Integer specialistId) {
+        return specialistDao.findNameBySpecialistId(specialistId);
     }
 }

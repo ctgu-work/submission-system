@@ -14,12 +14,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class AdminServiceImpI implements AdminService {
 
-    @Autowired
-    private AdminDao adminDao;
-
-    @Override
-    public Integer FindCount(){
-        return 1;
-//        return adminDao.findCount();
-    }
+//    @Autowired
+//    private AdminDao adminDao;
+//
+//    @Override
+//    public Integer FindCount(){
+//        return 1;
+////        return adminDao.findCount();
+//    }
 }

@@ -53,7 +53,7 @@ public class SpecialistController {
             try {
                 Specialist specialist = specialService.findByUserId(user.getUserId());
                 if (specialist.getStatus() == 2) {
-                    redisUtils.set("token", token);
+                    redisUtils.set(phoneNumber , token,60 * 60);
                     ReturnResposeBody returnResposeBody = new ReturnResposeBody();
                     returnResposeBody.setMsg("success");
                     returnResposeBody.setResult(user);
@@ -79,10 +79,11 @@ public class SpecialistController {
              System.out.println(token);
             //中介储存
             Subject subject = SecurityUtils.getSubject();
+            String phoneNumber = JwtUtil.getPhoneNumber(token);
             //shiro登录判断
-            if( subject.isAuthenticated() && redisUtils.get("token").equals(token)){
+            if( subject.isAuthenticated() && redisUtils.get(phoneNumber).equals(token)){
                 //删除token
-                redisUtils.del("token");
+                redisUtils.del(phoneNumber);
                 return "1";
             }
             else{
@@ -98,19 +99,19 @@ public class SpecialistController {
         //中介储存
         Subject subject = SecurityUtils.getSubject();
         //shiro登录判断
-        if(subject.isAuthenticated() && redisUtils.get("token").equals(token)){
-         String phoneNumber = JwtUtil.getPhoneNumber(token);
+        String phoneNumber = JwtUtil.getPhoneNumber(token);
+        if(subject.isAuthenticated() && redisUtils.get(phoneNumber).equals(token)){
          try {
              User user = userService.findByPhoneNumber(phoneNumber);
              try {
                  Specialist specialist = specialService.findByUserId(user.getUserId());
                  System.out.println(specialist);
-//        System.out.println(pageNum);
-//        System.out.println(size);
-//        PageHelper.startPage(pageNum,size);
 //        List<Paper> list = specialService.findAll();
 //        PageInfo<Paper> pageInfo = new PageInfo<Paper>(list);
 //        System.out.println(pageInfo.getPageNum());
+//                 System.out.println(specialist.getCategory());
+//                 int a = specialist.getCategory().intValue();
+//                 System.out.println(a);
                  List<Paper> allPicturesPage = specialService.findAll(specialist.getCategory());
                  JpaPageHelper jpaPageHelper = new JpaPageHelper();
                  List<PageInfo> pageInfos = jpaPageHelper.SetStartPage(allPicturesPage,pageNum,size);
@@ -139,7 +140,8 @@ public class SpecialistController {
         returnResposeBody1.setMsg("error");
         returnResposeBody1.setStatus("200");
         System.out.println(reviewPaper);
-        if(subject.isAuthenticated() && redisUtils.get("token").equals(token)) {
+        String phoneNumber = JwtUtil.getPhoneNumber(token);
+        if(subject.isAuthenticated() && redisUtils.get(phoneNumber).equals(token)) {
             try {
                 ReviewPaper reviewPaper1 = new ReviewPaper();
                 reviewPaper1.setSpecialistId(reviewPaper.getSpecialistId());
