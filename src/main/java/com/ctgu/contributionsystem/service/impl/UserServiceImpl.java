@@ -25,6 +25,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User findByUserId(Integer userId) {
+        return userDao.findByUserId(userId);
+    }
+
+    @Override
     public User updateUser(User user) {
         return userDao.saveAndFlush(user);
     }
@@ -33,6 +38,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User addUser(User user) {
         return userDao.save(user);
+    }
+
+    @Override
+    public int countUserMoney(Integer userId) {
+        return userDao.countUserMoney(userId);
     }
 
 

@@ -35,7 +35,7 @@ public class RegisterController {
      **/
     @PostMapping("/register")
     public ReturnResposeBody UserRegister(User user, @RequestParam("verify")String verify){
-        String sendVerify = (String) redisUtils.get("verify");
+        String sendVerify = (String) redisUtils.get(user.getEmail());
         ReturnResposeBody returnResposeBody = new ReturnResposeBody();
         if( !verify.equalsIgnoreCase(sendVerify) ){
             returnResposeBody.setMsg("error");
@@ -71,7 +71,7 @@ public class RegisterController {
         }
         //300秒
         try{
-            redisUtils.set("verify",verify,300);
+            redisUtils.set(email,verify,300);
             return "1";
         }
         catch (Exception e){

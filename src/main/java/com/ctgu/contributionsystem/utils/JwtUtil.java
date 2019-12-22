@@ -63,6 +63,15 @@ public class JwtUtil {
         }
     }
 
+    public static Integer getCategory (String token){
+        try {
+            DecodedJWT jwt = JWT.decode(token);
+            return jwt.getClaim("category").asInt();
+        } catch (JWTDecodeException e) {
+            return null;
+        }
+    }
+
 
     /**
      * @Author wh

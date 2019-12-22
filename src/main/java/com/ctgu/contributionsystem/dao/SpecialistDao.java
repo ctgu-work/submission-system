@@ -1,10 +1,13 @@
 package com.ctgu.contributionsystem.dao;
 
 import com.ctgu.contributionsystem.model.Paper;
+import com.ctgu.contributionsystem.model.ReviewPaper;
 import com.ctgu.contributionsystem.model.Specialist;
 import com.ctgu.contributionsystem.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -20,5 +23,8 @@ import java.util.List;
 public interface SpecialistDao extends JpaRepository<Specialist, Integer>{
 
     Specialist findByuserId(Integer userId);
+    @Modifying
+    @Query(nativeQuery = true,value = "select user.name from user , specialist where user.user_id = specialist.user_id  and specialist.specialist_id = :specialistId")
+    String findNameBySpecialistId(@Param("specialistId") Integer specialistId);
 
 }

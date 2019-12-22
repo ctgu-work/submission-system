@@ -11,7 +11,7 @@ import java.io.Serializable;
 
 /**
  * @author : kun
- * @date ： 2019/12/19
+ * @date ： 2019/12/20
  * @description ：this is a code
  **/
 
@@ -21,20 +21,14 @@ import java.io.Serializable;
 @DynamicInsert
 @Getter
 @Setter
-@Table(name = "specialist")
-public class Specialist implements Serializable{
+@Table(name = "specialist_prohibit")
+public class SpecialistProhibit implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer specialistId;
-    @Column(name = "user_id")
-    private Integer userId;
-    @Column(name = "category")
-    private Integer category;
-    @Column(name = "status")
-    private Integer status;
-    @Column(name = "photo_address")
-    private String photoAddress;
-    @Column(name = "prohibit")
-    private Integer prohibit;
+    private Integer prohibitId;
+    @Column(name = "prohibit_details")
+    private String ProhibitDetails;
+
+
 }

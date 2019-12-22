@@ -15,5 +15,6 @@ import java.util.List;
  */
 @Transactional
 public interface SpecialistCategoryDao extends JpaRepository<SpecialistCategory, Integer> {
+    @Override
     List<SpecialistCategory> findAll();
 }

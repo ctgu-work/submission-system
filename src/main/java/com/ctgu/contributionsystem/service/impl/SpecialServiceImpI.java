@@ -1,9 +1,12 @@
 package com.ctgu.contributionsystem.service.impl;
 
+import com.ctgu.contributionsystem.dao.PaperReviewDao;
 import com.ctgu.contributionsystem.dao.SpecialistAllDao;
 import com.ctgu.contributionsystem.dao.SpecialistDao;
 import com.ctgu.contributionsystem.model.Paper;
+import com.ctgu.contributionsystem.model.ReviewPaper;
 import com.ctgu.contributionsystem.model.Specialist;
+import com.ctgu.contributionsystem.model.User;
 import com.ctgu.contributionsystem.service.SpecialService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,6 +27,9 @@ public class SpecialServiceImpI implements SpecialService {
     private SpecialistAllDao specialistAllDao;
 
     @Autowired
+    private PaperReviewDao paperReviewDao;
+
+    @Autowired
     private SpecialistDao specialistDao;
 
     @Override
@@ -38,8 +44,24 @@ public class SpecialServiceImpI implements SpecialService {
 
 
     @Override
+    public List<Paper> findAll(Integer Category){
+        return specialistAllDao.findAllByCategory(Category);
+
+    }
+
+    @Override
     public Page<Paper> findAll(Pageable pageable){
         return specialistAllDao.findAll(pageable);
 
+    }
+
+    @Override
+    public ReviewPaper addReviewPaper1(ReviewPaper reviewPaper) {
+        return paperReviewDao.save(reviewPaper);
+    }
+
+    @Override
+    public String findNameBySpecialistId(Integer specialistId) {
+        return specialistDao.findNameBySpecialistId(specialistId);
     }
 }
