@@ -1,5 +1,6 @@
 package com.ctgu.contributionsystem.dao;
 
+import com.ctgu.contributionsystem.model.Tag;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -9,6 +10,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @create: 2019-12-21 18:21
  **/
 
-public interface TagDao extends JpaRepository {
+public interface TagDao extends JpaRepository <Tag,Integer>{
 
 }

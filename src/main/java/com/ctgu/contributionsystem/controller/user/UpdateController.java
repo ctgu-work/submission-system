@@ -56,7 +56,9 @@ public class UpdateController {
                             returnResposeBody.setMsg("error");
                             return returnResposeBody;
                         }
-                        else user.setAvatarUrl(avatarUrl);
+                        else {
+                            user.setAvatarUrl(avatarUrl);
+                        }
                     }
                     else{
                         returnResposeBody.setMsg("error");

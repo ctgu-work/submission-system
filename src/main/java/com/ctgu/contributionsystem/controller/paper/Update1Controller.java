@@ -11,5 +11,5 @@ import org.springframework.web.bind.annotation.RequestMapping;
  **/
 @Controller
 @RequestMapping("/paper")
-public class UpdateController {
+public class Update1Controller {
 }
