@@ -47,19 +47,30 @@ public class SpecialistController {
         ReturnResposeBody returnResposeBody1 = new ReturnResposeBody();
         returnResposeBody1.setMsg("error");
         returnResposeBody1.setStatus("200");
+
+        ReturnResposeBody returnResposeBody2 = new ReturnResposeBody();
+        returnResposeBody2.setMsg("您已被禁用");
+        returnResposeBody2.setStatus("200");
+
         User user = userService.findByPhoneNumber(phoneNumber);
         String token = JwtUtil.sign(phoneNumber, Md5Salt.Md5SaltCrypt(password));
         if(user.getPassword().equals(Md5Salt.Md5SaltCrypt(password))){
             try {
                 Specialist specialist = specialService.findByUserId(user.getUserId());
                 if (specialist.getStatus() == 2) {
-                    redisUtils.set(phoneNumber , token,60 * 60);
-                    ReturnResposeBody returnResposeBody = new ReturnResposeBody();
-                    returnResposeBody.setMsg("success");
-                    returnResposeBody.setResult(user);
-                    returnResposeBody.setJwtToken(token);
-                    returnResposeBody.setStatus("200");
-                    return returnResposeBody;
+                    System.out.println(specialist);
+                    if(specialist.getProhibit() == 1){
+                        redisUtils.set(phoneNumber, token, 60 * 60);
+                        ReturnResposeBody returnResposeBody = new ReturnResposeBody();
+                        returnResposeBody.setMsg("success");
+                        returnResposeBody.setResult(user);
+                        returnResposeBody.setJwtToken(token);
+                        returnResposeBody.setStatus("200");
+                        return returnResposeBody;
+                    }
+                    else{
+                        return returnResposeBody2;
+                    }
                 } else {
                     return returnResposeBody1;
                 }
