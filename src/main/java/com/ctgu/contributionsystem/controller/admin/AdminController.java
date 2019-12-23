@@ -125,13 +125,13 @@ public class AdminController {
     //专家列表
     @GetMapping("/specialist")
     @ResponseBody
-    public List<PageInfo> SpecialistFindAll(HttpServletRequest request, @RequestParam(defaultValue = "1",name = "pageNum") Integer pageNum, @RequestParam(defaultValue = "1",name = "size") Integer size){
+    public List<Specialist> SpecialistFindAll(HttpServletRequest request, @RequestParam(defaultValue = "1",name = "pageNum") Integer pageNum, @RequestParam(defaultValue = "1",name = "size") Integer size){
 
         try{
             List<Specialist> allSpecialistPage = adminService.findAll();
-            JpaPageHelper jpaPageHelper = new JpaPageHelper();
-            List<PageInfo> pageInfos = jpaPageHelper.SetStartPage(allSpecialistPage,pageNum,size);
-            return pageInfos;
+//            JpaPageHelper jpaPageHelper = new JpaPageHelper();
+//            List<PageInfo> pageInfos = jpaPageHelper.SetStartPage(allSpecialistPage,pageNum,size);
+            return allSpecialistPage;
         } catch (Exception e){
             return null;
         }

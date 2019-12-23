@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,9 +35,14 @@ public class DtoImpI implements DtoService {
             orderGoods.setUserId((int) cells[0]);
             System.out.println(cells[0]);
             orderGoods.setName((String) cells[1]);
-            System.out.println(cells[1]);
-            String s = cells[2].toString();
+            orderGoods.setNickName((String) cells[2]);
+            orderGoods.setIdCard((String) cells[3]);
+            orderGoods.setPhoneNumber((String) cells[4]);
+            orderGoods.setPassWord((String) cells[5]);
+            orderGoods.setEmail((String) cells[6]);
+            String s = cells[7].toString();
             orderGoods.setCount(Long.parseLong(s));
+            orderGoods.setMoney((BigInteger) cells[8]);
             list.add(orderGoods);
         }
         return list;

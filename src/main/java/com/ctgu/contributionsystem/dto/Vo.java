@@ -15,11 +15,19 @@ public class Vo {
 
     private Integer specialistId;
     private String name;
+    private Integer category;
+    private String phoneNumber;
+    private Integer userId;
     private Long count;
+    private Integer status;
 
     public Vo() {
         this.specialistId = specialistId;
         this.name = name;
+        this.category = category;
+        this.phoneNumber = phoneNumber;
+        this.userId = userId;
         this.count = count;
+        this.status = status;
     }
 }
