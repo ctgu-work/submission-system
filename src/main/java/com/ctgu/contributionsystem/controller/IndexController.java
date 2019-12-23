@@ -1,5 +1,6 @@
 package com.ctgu.contributionsystem.controller;
 
+import com.ctgu.contributionsystem.dto.HotArtcle;
 import com.ctgu.contributionsystem.dto.ReturnResposeBody;
 import com.ctgu.contributionsystem.model.Paper;
 import com.ctgu.contributionsystem.model.Tag;
@@ -11,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.LinkedList;
@@ -63,6 +67,29 @@ public class IndexController {
         }
     }
 
+
+    @RequestMapping("/hotartcle")
+    public ReturnResposeBody hotArtcle(){
+        ReturnResposeBody returnResposeBody = new ReturnResposeBody();
+        try {
+            List<Paper>paperList = paperService.findTop10ByOrderByClickRateDesc();
+            List<HotArtcle>list = new LinkedList<>();
+            for( Paper paper:paperList ){
+                SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String sd = sdf.format(paper.getSubmitTime());
+                HotArtcle artcle = new HotArtcle(paper.getPaperId() ,sd, paper.getTitle(),paper.getClickRate(),paper.getLikeCount());
+                list.add(artcle);
+            }
+            returnResposeBody.setResult(list);
+            returnResposeBody.setStatus("200");
+            returnResposeBody.setMsg("success");
+            return returnResposeBody;
+        }
+        catch (Exception e){
+            returnResposeBody.setMsg("error");
+            return returnResposeBody;
+        }
+    }
     //主页搜索
     @RequestMapping("/find")
     public List<Paper> FindPaper(HttpRequest request,@Param("name") String name){

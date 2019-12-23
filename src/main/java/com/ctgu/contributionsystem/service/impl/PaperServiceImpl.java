@@ -77,4 +77,9 @@ public class PaperServiceImpl implements PaperService {
         return paperDao.findAllByName(name);
     }
 
+    @Override
+    public List<Paper> findTop10ByOrderByClickRateDesc() {
+        return paperDao.findTop10ByOrderByClickRateDesc();
+    }
+
 }
