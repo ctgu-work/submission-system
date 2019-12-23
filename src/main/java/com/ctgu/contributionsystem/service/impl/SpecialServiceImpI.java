@@ -1,5 +1,6 @@
 package com.ctgu.contributionsystem.service.impl;
 
+import com.ctgu.contributionsystem.dao.PaperDao;
 import com.ctgu.contributionsystem.dao.PaperReviewDao;
 import com.ctgu.contributionsystem.dao.SpecialistAllDao;
 import com.ctgu.contributionsystem.dao.SpecialistDao;
@@ -32,6 +33,9 @@ public class SpecialServiceImpI implements SpecialService {
     @Autowired
     private SpecialistDao specialistDao;
 
+    @Autowired
+    private PaperDao paperDao;
+
     @Override
     public Specialist findByUserId(Integer userId) {
         return specialistDao.findByuserId(userId);
@@ -42,6 +46,10 @@ public class SpecialServiceImpI implements SpecialService {
         return specialistDao.save(specialist);
     }
 
+    @Override
+     public Integer Updatestatus(Integer paperId, Integer status){
+        return paperDao.UpdateStatus(paperId,status);
+    }
 
     @Override
     public List<Paper> findAll(Integer Category){

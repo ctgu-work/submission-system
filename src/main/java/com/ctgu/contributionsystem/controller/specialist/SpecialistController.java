@@ -18,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.stream.events.Comment;
 import java.util.List;
 
 /**
@@ -40,6 +41,7 @@ public class SpecialistController {
     private RedisUtils redisUtils;
 
 
+    //专家登录
     @PostMapping("/login")
     @ResponseBody
     public ReturnResposeBody SpecialistLogin(@RequestParam("phoneNumber")String phoneNumber ,
@@ -82,6 +84,7 @@ public class SpecialistController {
 
     }
 
+    //登出
     @GetMapping("/logout")
     @ResponseBody
     public String SpecialistLogout(HttpServletRequest request){
@@ -102,6 +105,7 @@ public class SpecialistController {
             }
         }
 
+    //全部稿件
     @GetMapping("/paperlist")
     @ResponseBody
     public List<PageInfo> SpecialistFindAll(HttpServletRequest request, @RequestParam(defaultValue = "1",name = "pageNum") Integer pageNum, @RequestParam(defaultValue = "1",name = "size") Integer size){
@@ -139,9 +143,12 @@ public class SpecialistController {
     }
 
 
+    //审稿
     @PostMapping("/PeerReview")
     @ResponseBody
-   public ReturnResposeBody PeerReview(@RequestBody ReviewPaper reviewPaper,HttpServletRequest request){
+   public String PeerReview(@RequestParam("paperId") Integer paperId,
+                            @RequestParam("comment") String comment,
+                            @RequestParam("status") Integer status,HttpServletRequest request){
         //从请求头中获取token
         String token = request.getHeader("token");
         //中介储存
@@ -150,28 +157,33 @@ public class SpecialistController {
         ReturnResposeBody returnResposeBody1 = new ReturnResposeBody();
         returnResposeBody1.setMsg("error");
         returnResposeBody1.setStatus("200");
-        System.out.println(reviewPaper);
         String phoneNumber = JwtUtil.getPhoneNumber(token);
+        User user = userService.findByPhoneNumber(phoneNumber);
         if(subject.isAuthenticated() && redisUtils.get(phoneNumber).equals(token)) {
             try {
-                ReviewPaper reviewPaper1 = new ReviewPaper();
-                reviewPaper1.setSpecialistId(reviewPaper.getSpecialistId());
-                reviewPaper1.setStatus(reviewPaper.getStatus());
-                reviewPaper1.setComment(reviewPaper.getComment());
-                reviewPaper1.setPaperId(reviewPaper.getPaperId());
+                Specialist specialist = specialService.findByUserId(user.getUserId());
+                try {
+                    ReviewPaper reviewPaper1 = new ReviewPaper();
+                    reviewPaper1.setSpecialistId(specialist.getSpecialistId());
+                    reviewPaper1.setStatus(status);
+                    reviewPaper1.setComment(comment);
+                    reviewPaper1.setPaperId(paperId);
+                    specialService.addReviewPaper1(reviewPaper1);
+                    Integer s = specialService.Updatestatus(paperId, status);
+                    if (s != null) {
+                        return "1";
+                    } else {
+                        return "0";
+                    }
 
-                specialService.addReviewPaper1(reviewPaper1);
-                ReturnResposeBody returnResposeBody = new ReturnResposeBody();
-                returnResposeBody.setMsg("success");
-                returnResposeBody.setResult(reviewPaper1);
-                returnResposeBody.setJwtToken(token);
-                returnResposeBody.setStatus("200");
-                return returnResposeBody;
-            } catch (Exception e){
-                return returnResposeBody1;
+                } catch (Exception e) {
+                    return "0";
+                }
+            }catch (Exception e){
+                return "0";
             }
 
         }
-        return returnResposeBody1;
+        return "0";
    }
 }
