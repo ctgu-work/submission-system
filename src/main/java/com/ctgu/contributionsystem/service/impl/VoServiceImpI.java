@@ -29,11 +29,13 @@ public class VoServiceImpI implements VoService {
             Object[] cells = (Object[]) row;
             Vo vo = new Vo();
             vo.setSpecialistId((int) cells[0]);
-            System.out.println(cells[0]);
             vo.setName((String) cells[1]);
-            System.out.println(cells[1]);
-            String s = cells[2].toString();
+            vo.setCategory((Integer) cells[2]);
+            vo.setPhoneNumber((String) cells[3]);
+            vo.setUserId((Integer) cells[4]);
+            String s = cells[5].toString();
             vo.setCount(Long.parseLong(s));
+            vo.setStatus((Integer) cells[6]);
             list.add(vo);
         }
         return list;

@@ -50,4 +50,14 @@ public class UserServiceImpl implements UserService {
 //    public User modifyPassword(User user) {
 //        return userDao.saveAndFlush(user);
 //    }
+
+    @Override
+    public void delete(Integer userId){
+        userDao.deleteById(userId);
+    }
+
+    @Override
+    public User updateUserById(User user) {
+        return userDao.save(user);
+    }
 }

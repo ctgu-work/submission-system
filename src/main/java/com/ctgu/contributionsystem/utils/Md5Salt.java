@@ -55,8 +55,10 @@ public class Md5Salt {
         return Md5Crypt(str);
     }
 //
-    public static void main(String[] args){
-        String s = "1234";
-        System.out.println(Md5SaltCrypt(s));
-    }
+
+
+//    public static void main(String[] args){
+//        String s = "1234";
+//        System.out.println(Md5SaltCrypt(s));
+//    }
 }

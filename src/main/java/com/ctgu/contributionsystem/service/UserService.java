@@ -20,4 +20,8 @@ public interface UserService {
     User updateUser(User user);
     User addUser(User user);
     int countUserMoney(@Param("userId")Integer userId);
+
+    void delete(Integer userId);
+
+    User updateUserById(User user);
 }

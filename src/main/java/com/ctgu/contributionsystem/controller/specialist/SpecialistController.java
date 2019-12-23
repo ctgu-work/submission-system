@@ -55,6 +55,7 @@ public class SpecialistController {
         returnResposeBody2.setStatus("200");
 
         User user = userService.findByPhoneNumber(phoneNumber);
+
         String token = JwtUtil.sign(phoneNumber, Md5Salt.Md5SaltCrypt(password));
         if(user.getPassword().equals(Md5Salt.Md5SaltCrypt(password))){
             try {

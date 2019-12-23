@@ -7,6 +7,7 @@ import lombok.Value;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigInteger;
 
 /**
  * @author : kun
@@ -20,12 +21,23 @@ public class SpecialCount{
 
     private Integer userId;
     private String name;
+    private String nickName;
+    private String idCard;
+    private String phoneNumber;
+    private String passWord;
+    private String email;
     private Long count;
+    private BigInteger money;
 
     public SpecialCount() {
-        super();
         this.userId = userId;
         this.name = name;
+        this.nickName = nickName;
+        this.idCard = idCard;
+        this.phoneNumber = phoneNumber;
+        this.passWord = passWord;
+        this.email = email;
         this.count = count;
+        this.money = money;
     }
 }
