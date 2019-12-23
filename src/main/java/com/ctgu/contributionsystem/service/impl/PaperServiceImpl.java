@@ -175,4 +175,24 @@ public class PaperServiceImpl implements PaperService {
         Paper p = paperDao.save(paper);
         return p.getPaperId();
     }
+
+    public List<String> getHotTagsName() {
+        return paperDao.getHotTagsName();
+    }
+
+    @Override
+    public List<Integer> getHotTagsId() {
+        return paperDao.getHotTagsId();
+    }
+
+    @Override
+    public List<Paper> findAllByName(String name){
+        return paperDao.findAllByName(name);
+    }
+
+    @Override
+    public List<Paper> findTop10ByOrderByClickRateDesc() {
+        return paperDao.findTop10ByOrderByClickRateDesc();
+    }
+
 }

@@ -34,5 +34,5 @@ public class Admin implements Serializable {
     @Column(name = "rank")
     private Integer rank;
     @Column(name = "pass_word")
-    private String passWord;
+    private String password;
 }

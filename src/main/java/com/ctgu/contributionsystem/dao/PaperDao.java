@@ -72,5 +72,23 @@ public interface PaperDao extends JpaRepository<Paper, Integer> {
     @Modifying
     @Query(nativeQuery = true,value = "UPDATE paper SET like_count = like_count + :likeCount WHERE paper_id = :paperId")
     void updateLikeCountByPaperId(@RequestParam("paperId") Integer paperId,@RequestParam("likeCount") Integer likeCount);
+
+    @Query(nativeQuery = true,value = "SELECT tag_detail as tagDetail FROM paper a , tag b , paper_tag c WHERE a.paper_id = c.paper_id and c.tag_id = b.tag_id GROUP BY b.tag_detail ORDER BY count(*) DESC LIMIT 10")
+    List<String> getHotTagsName();
+    @Query(nativeQuery = true,value = "SELECT b.tag_id as tagId FROM paper a , tag b , paper_tag c WHERE a.paper_id = c.paper_id and c.tag_id = b.tag_id GROUP BY b.tag_detail ORDER BY count(*) DESC LIMIT 10")
+    List<Integer> getHotTagsId();
+
+    @Modifying
+    @Query(value = "update paper set status = :status where paper_id = :paperId",nativeQuery = true)
+    Integer UpdateStatus(@Param("paperId") Integer paperId,@Param("status") Integer status);
+
+    @Modifying
+    @Query(value = "SELECT * FROM paper\n" +
+            "WHERE CONCAT(IFNULL(title,''),IFNULL(content,''),IFNULL(category,'')) \n" +
+            "LIKE CONCAT('%',:name,'%')",nativeQuery = true)
+    List<Paper> findAllByName(@Param("name") String name);
+
+    List<Paper> findTop10ByOrderByClickRateDesc();
+
 }
 

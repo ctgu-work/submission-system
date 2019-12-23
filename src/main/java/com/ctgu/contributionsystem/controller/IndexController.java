@@ -1,9 +1,24 @@
 package com.ctgu.contributionsystem.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import com.ctgu.contributionsystem.dto.HotArtcle;
+import com.ctgu.contributionsystem.dto.ReturnResposeBody;
+import com.ctgu.contributionsystem.model.Paper;
+import com.ctgu.contributionsystem.model.Tag;
+import com.ctgu.contributionsystem.service.PaperService;
+import com.ctgu.contributionsystem.service.UserService;
+import com.ctgu.contributionsystem.utils.RedisUtils;
+import org.apache.http.HttpRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @Description TODO
@@ -15,7 +30,76 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/index")
 @RestController
 public class IndexController {
+    @Autowired
+    private UserService userService;
 
+    @Autowired
+    private PaperService paperService;
+
+    /**
+     * @Author wh
+     * @Description 首页最热话题
+     * @Date 2019/12/22 20:53
+     * @Param []
+     * @return com.ctgu.contributionsystem.dto.ReturnResposeBody
+     **/
+    @RequestMapping("/hottag")
+    public ReturnResposeBody hotTags(){
+        ReturnResposeBody returnResposeBody = new ReturnResposeBody();
+        try {
+            List<String> list = paperService.getHotTagsName();
+            List<Integer> list1 = paperService.getHotTagsId();
+            List<Tag> list2 = new LinkedList<Tag>();
+            for (int i = 0; i < list.size(); i++) {
+                Tag tag = new Tag();
+                tag.setTagId(list1.get(i));
+                tag.setTagDetail(list.get(i));
+                list2.add(tag);
+            }
+            returnResposeBody.setResult(list2);
+            returnResposeBody.setStatus("200");
+            returnResposeBody.setMsg("success");
+            return returnResposeBody;
+        }
+        catch (Exception e){
+            returnResposeBody.setMsg("error");
+            return returnResposeBody;
+        }
+    }
+
+
+    @RequestMapping("/hotartcle")
+    public ReturnResposeBody hotArtcle(){
+        ReturnResposeBody returnResposeBody = new ReturnResposeBody();
+        try {
+            List<Paper>paperList = paperService.findTop10ByOrderByClickRateDesc();
+            List<HotArtcle>list = new LinkedList<>();
+            for( Paper paper:paperList ){
+                SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String sd = sdf.format(paper.getSubmitTime());
+                HotArtcle artcle = new HotArtcle(paper.getPaperId() ,sd, paper.getTitle(),paper.getClickRate(),paper.getLikeCount());
+                list.add(artcle);
+            }
+            returnResposeBody.setResult(list);
+            returnResposeBody.setStatus("200");
+            returnResposeBody.setMsg("success");
+            return returnResposeBody;
+        }
+        catch (Exception e){
+            returnResposeBody.setMsg("error");
+            return returnResposeBody;
+        }
+    }
+    //主页搜索
+    @RequestMapping("/find")
+    public List<Paper> FindPaper(HttpRequest request,@Param("name") String name){
+        try {
+            List<Paper> papers = paperService.findAllByName(name);
+            return papers;
+        } catch (Exception e){
+            return null;
+        }
+    }
 
 
 }
