@@ -19,4 +19,6 @@ public interface SpecialService {
     Specialist addSpecialist(Specialist specialist);
     Page<Paper> findAll(Pageable pageable);
     String findNameBySpecialistId(@Param("specialistId") Integer specialistId);
+
+    Integer Updatestatus(@Param("paperId") Integer paperId,@Param("status") Integer status);
 }

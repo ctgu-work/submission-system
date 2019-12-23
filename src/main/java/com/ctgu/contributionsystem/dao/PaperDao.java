@@ -2,6 +2,7 @@ package com.ctgu.contributionsystem.dao;
 
 import com.ctgu.contributionsystem.model.Paper;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,7 @@ import java.util.List;
 public interface PaperDao extends JpaRepository<Paper, Integer> {
     Page<Paper> findAllByUserId(Pageable pageable,@Param("userId")Integer userId);
 
+//<<<<<<< HEAD
     //用户点击量
 //    @Modifying
     @Query(nativeQuery = true,value = "SELECT sum(click_rate) FROM paper where paper.user_id = :userId")
@@ -50,5 +52,8 @@ public interface PaperDao extends JpaRepository<Paper, Integer> {
     @Query(nativeQuery = true,value = "SELECT b.tag_id as tagId FROM paper a , tag b , paper_tag c WHERE a.paper_id = c.paper_id and c.tag_id = b.tag_id GROUP BY b.tag_detail ORDER BY count(*) DESC LIMIT 10")
     List<Integer> getHotTagsId();
 
+    @Modifying
+    @Query(value = "update paper set status = :status where paper_id = :paperId",nativeQuery = true)
+    Integer UpdateStatus(@Param("paperId") Integer paperId,@Param("status") Integer status);
 }
 
