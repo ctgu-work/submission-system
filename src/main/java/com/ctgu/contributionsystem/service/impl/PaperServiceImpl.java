@@ -72,4 +72,9 @@ public class PaperServiceImpl implements PaperService {
         return paperDao.getHotTagsId();
     }
 
+    @Override
+    public List<Paper> findAllByName(String name){
+        return paperDao.findAllByName(name);
+    }
+
 }

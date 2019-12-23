@@ -43,6 +43,7 @@ public class AdminController {
     @Autowired
     private VoService voService;
 
+    //管理员毒登录
     @PostMapping("/login")
     @ResponseBody
     public ReturnResposeBody userLogin(@RequestParam("phoneNumber")String phoneNumber ,
@@ -66,6 +67,7 @@ public class AdminController {
 
     }
 
+    //管理员登出
     @GetMapping("/logout")
     @ResponseBody
     public String AdminLogout(HttpServletRequest request){
@@ -87,7 +89,7 @@ public class AdminController {
         }
     }
 
-
+    //统计投稿
     @GetMapping("/user/categorycout")
     @ResponseBody
     public List<SpecialCount> CategoryCount(HttpRequest request){
@@ -103,7 +105,7 @@ public class AdminController {
         List<SpecialCount> countn = dtoService.FindCount();
         return countn;
     }
-
+    //统计审稿数
     @GetMapping("/user/categoryo")
     @ResponseBody
     public List<Vo> CategoryCountVo(HttpRequest request){
@@ -120,6 +122,7 @@ public class AdminController {
         return countVO;
     }
 
+    //专家列表
     @GetMapping("/specialist")
     @ResponseBody
     public List<PageInfo> SpecialistFindAll(HttpServletRequest request, @RequestParam(defaultValue = "1",name = "pageNum") Integer pageNum, @RequestParam(defaultValue = "1",name = "size") Integer size){
@@ -134,6 +137,7 @@ public class AdminController {
         }
     }
 
+    //专家禁用
     @GetMapping("/specialist/prohibit")
     @ResponseBody
     public String SpecialistStatus(HttpServletRequest request,@RequestParam("specialist_id") Integer specialistId){
@@ -154,6 +158,7 @@ public class AdminController {
 
     }
 
+    //专家取消禁用
     @GetMapping("/specialist/cancelprohibit")
     @ResponseBody
     public String SpecialistStatusCancel(HttpServletRequest request,@RequestParam("specialist_id") Integer specialistId){
@@ -174,6 +179,7 @@ public class AdminController {
 
     }
 
+    //专家修改分类
     @GetMapping("/specialist/category")
     @ResponseBody
     public String UpdateCategory(@RequestParam("specialist_Id") Integer specialistId,@RequestParam("category") Integer category){
@@ -189,6 +195,7 @@ public class AdminController {
         }
     }
 
+    //专家修改状态
     @GetMapping("/specialist/status")
     @ResponseBody
     public String UpdateStatus(@RequestParam("specialist_Id") Integer specialistId,@RequestParam("status") Integer status){
@@ -204,6 +211,7 @@ public class AdminController {
         }
     }
 
+    //专家删除
     @GetMapping("/specialist/delete")
     @ResponseBody
     public String SpecialistDelete(@RequestParam("specialist_id") Integer specialistId){

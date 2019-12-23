@@ -55,5 +55,11 @@ public interface PaperDao extends JpaRepository<Paper, Integer> {
     @Modifying
     @Query(value = "update paper set status = :status where paper_id = :paperId",nativeQuery = true)
     Integer UpdateStatus(@Param("paperId") Integer paperId,@Param("status") Integer status);
+
+    @Modifying
+    @Query(value = "SELECT * FROM paper\n" +
+            "WHERE CONCAT(IFNULL(title,''),IFNULL(content,''),IFNULL(category,'')) \n" +
+            "LIKE CONCAT('%',:name,'%')",nativeQuery = true)
+    List<Paper> findAllByName(@Param("name") String name);
 }
 

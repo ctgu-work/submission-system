@@ -120,13 +120,6 @@ public class SpecialistController {
              User user = userService.findByPhoneNumber(phoneNumber);
              try {
                  Specialist specialist = specialService.findByUserId(user.getUserId());
-                 System.out.println(specialist);
-//        List<Paper> list = specialService.findAll();
-//        PageInfo<Paper> pageInfo = new PageInfo<Paper>(list);
-//        System.out.println(pageInfo.getPageNum());
-//                 System.out.println(specialist.getCategory());
-//                 int a = specialist.getCategory().intValue();
-//                 System.out.println(a);
                  List<Paper> allPicturesPage = specialService.findAll(specialist.getCategory());
                  JpaPageHelper jpaPageHelper = new JpaPageHelper();
                  List<PageInfo> pageInfos = jpaPageHelper.SetStartPage(allPicturesPage,pageNum,size);

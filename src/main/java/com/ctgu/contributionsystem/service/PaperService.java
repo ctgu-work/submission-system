@@ -32,4 +32,6 @@ public interface PaperService {
     //首页热门标签
     List<String> getHotTagsName();
     List<Integer> getHotTagsId();
+
+    List<Paper> findAllByName(@Param("name") String name);
 }

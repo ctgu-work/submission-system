@@ -1,14 +1,18 @@
 package com.ctgu.contributionsystem.controller;
 
 import com.ctgu.contributionsystem.dto.ReturnResposeBody;
+import com.ctgu.contributionsystem.model.Paper;
 import com.ctgu.contributionsystem.model.Tag;
 import com.ctgu.contributionsystem.service.PaperService;
 import com.ctgu.contributionsystem.service.UserService;
 import com.ctgu.contributionsystem.utils.RedisUtils;
+import org.apache.http.HttpRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -59,7 +63,16 @@ public class IndexController {
         }
     }
 
-
+    //主页搜索
+    @RequestMapping("/find")
+    public List<Paper> FindPaper(HttpRequest request,@Param("name") String name){
+        try {
+            List<Paper> papers = paperService.findAllByName(name);
+            return papers;
+        } catch (Exception e){
+            return null;
+        }
+    }
 
 
 }
