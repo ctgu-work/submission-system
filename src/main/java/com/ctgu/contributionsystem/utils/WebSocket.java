@@ -27,6 +27,7 @@ public class WebSocket {
     private static CopyOnWriteArrayList<WebSocket> webSockets = new CopyOnWriteArrayList<>();
     private static Map<Integer,Session> sessionPool = new HashMap<>();
 
+
     public void OnOpen(Session session, @PathVariable(value = "userId")Integer userId){
         this.session = session;
         webSockets.add(this);

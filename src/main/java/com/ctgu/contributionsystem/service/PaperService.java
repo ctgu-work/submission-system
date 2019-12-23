@@ -36,4 +36,38 @@ public interface PaperService {
     //用户热门标签
     List<String> getUserHotTagsName(@Param("userId")Integer userId);
     List<Integer> getUserHotTagsId(@Param("userId")Integer userId);
+
+    /**
+     * 通过paperId得到paper
+     * @param paperId
+     * @return
+     */
+    Paper getPaperByPaperId(Integer paperId);
+
+    /**
+     * 返回点赞数
+     * @param paperId
+     * @return
+     */
+    Integer getLikeCountByPaperId(Integer paperId);
+
+    /**
+     * 增加点赞数
+     * @param paperId
+     * @return
+     */
+    Integer addLikeCountByPaperId(Integer paperId);
+
+    /**
+     * 修改稿件
+     * @param paper
+     * @return
+     */
+    int updatePaper(Paper paper);
+
+    /**
+     * 得到Paper
+     * @return
+     */
+    Paper getPaper(Integer paperId);
 }

@@ -2,11 +2,13 @@ package com.ctgu.contributionsystem.dao;
 
 import com.ctgu.contributionsystem.model.Paper;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -45,5 +47,30 @@ public interface PaperDao extends JpaRepository<Paper, Integer> {
     @Query(nativeQuery = true,value = "SELECT b.tag_id as tagId FROM paper a , tag b , paper_tag c WHERE a.paper_id = c.paper_id and c.tag_id = b.tag_id and a.user_id = :userId GROUP BY b.tag_detail ORDER BY count(*) DESC LIMIT 10")
     List<Integer> getUserHotTagsId(@Param("userId")Integer userId);
 
+    /**
+     * 返回点赞数
+     * @return
+     */
+    @Query(nativeQuery = true,value = "SELECT like_count FROM paper WHERE paper_id = :paperId")
+    int getLikeCountByPaperId(@RequestParam("paperId") Integer paperId);
+
+    /**
+     * 修改访问量
+     * @param paperId
+     * @param clickRate
+     * @return
+     */
+    @Modifying
+    @Query(nativeQuery = true,value = "UPDATE paper SET click_rate = click_rate + :clickRate WHERE paper_id = :paperId")
+    void updateClickRateByPaperId(@RequestParam("paperId") Integer paperId,@RequestParam("clickRate") Integer clickRate);
+
+    /**
+     * 修改点赞数
+     * @param paperId
+     * @param likeCount
+     */
+    @Modifying
+    @Query(nativeQuery = true,value = "UPDATE paper SET like_count = like_count + :likeCount WHERE paper_id = :paperId")
+    void updateLikeCountByPaperId(@RequestParam("paperId") Integer paperId,@RequestParam("likeCount") Integer likeCount);
 }
 
