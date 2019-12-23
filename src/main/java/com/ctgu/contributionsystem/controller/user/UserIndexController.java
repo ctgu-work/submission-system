@@ -233,6 +233,9 @@ public class UserIndexController {
                     if( paper.getStatus() == 1 ){
                         articleStatus.setStatus("未审稿");
                     }
+                    else if( paper.getStatus() == 3 ){
+                        articleStatus.setStatus("未审稿");
+                    }
                     else{
                         ReviewPaper reviewPaper = reviewPaperService.findByPaperId(paper.getPaperId());
                         if( reviewPaper.getStatus() == 1 ) articleStatus.setStatus("通过");

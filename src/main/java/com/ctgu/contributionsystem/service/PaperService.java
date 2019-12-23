@@ -34,4 +34,5 @@ public interface PaperService {
     List<Integer> getHotTagsId();
 
     List<Paper> findAllByName(@Param("name") String name);
+    List<Paper> findTop10ByOrderByClickRateDesc();
 }

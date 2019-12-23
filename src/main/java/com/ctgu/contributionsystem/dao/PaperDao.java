@@ -22,7 +22,6 @@ import java.util.List;
 public interface PaperDao extends JpaRepository<Paper, Integer> {
     Page<Paper> findAllByUserId(Pageable pageable,@Param("userId")Integer userId);
 
-//<<<<<<< HEAD
     //用户点击量
 //    @Modifying
     @Query(nativeQuery = true,value = "SELECT sum(click_rate) FROM paper where paper.user_id = :userId")
@@ -61,5 +60,7 @@ public interface PaperDao extends JpaRepository<Paper, Integer> {
             "WHERE CONCAT(IFNULL(title,''),IFNULL(content,''),IFNULL(category,'')) \n" +
             "LIKE CONCAT('%',:name,'%')",nativeQuery = true)
     List<Paper> findAllByName(@Param("name") String name);
+
+    List<Paper> findTop10ByOrderByClickRateDesc();
 }
 
