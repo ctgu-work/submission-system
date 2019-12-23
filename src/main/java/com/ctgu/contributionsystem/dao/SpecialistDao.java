@@ -28,7 +28,6 @@ public interface SpecialistDao extends JpaRepository<Specialist, Integer>{
 
 
 
-    @Modifying
     @Query(nativeQuery = true,value = "select user.name from user , specialist where user.user_id = specialist.user_id  and specialist.specialist_id = :specialistId")
     String findNameBySpecialistId(@Param("specialistId") Integer specialistId);
 

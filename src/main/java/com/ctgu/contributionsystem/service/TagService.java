@@ -1,5 +1,10 @@
 package com.ctgu.contributionsystem.service;
 
+import com.ctgu.contributionsystem.model.Tag;
+import org.springframework.data.repository.query.Param;
+
+import java.util.List;
+
 /**
  * @program: contribution-system *
  * @classname: TagService *
@@ -8,4 +13,5 @@ package com.ctgu.contributionsystem.service;
  **/
 
 public interface TagService {
+    List<Tag> findByPaperId(@Param("PaperId")Integer PaperId);
 }

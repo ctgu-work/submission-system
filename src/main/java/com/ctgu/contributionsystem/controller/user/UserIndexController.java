@@ -62,8 +62,8 @@ public class UserIndexController {
         try{
             String token = request.getHeader("token");//从请求头中获取token
             Subject subject = SecurityUtils.getSubject();
-            if( subject.isAuthenticated() && redisUtils.get("token").equals(token)){
-                String phoneNumber = JwtUtil.getPhoneNumber(token);
+            String phoneNumber = JwtUtil.getPhoneNumber(token);
+            if( subject.isAuthenticated() && redisUtils.get(phoneNumber).equals(token)){
                 User user = userService.findByPhoneNumber(phoneNumber);
                 returnResposeBody.setMsg("success");
                 returnResposeBody.setResult(user);
@@ -234,7 +234,7 @@ public class UserIndexController {
                         articleStatus.setStatus("未审稿");
                     }
                     else if( paper.getStatus() == 3 ){
-                        articleStatus.setStatus("未审稿");
+                        articleStatus.setStatus("过期");
                     }
                     else{
                         ReviewPaper reviewPaper = reviewPaperService.findByPaperId(paper.getPaperId());

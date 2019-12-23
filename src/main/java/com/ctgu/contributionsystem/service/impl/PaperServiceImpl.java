@@ -1,6 +1,7 @@
 package com.ctgu.contributionsystem.service.impl;
 
 import com.ctgu.contributionsystem.dao.PaperDao;
+import com.ctgu.contributionsystem.dto.ArticleTemp;
 import com.ctgu.contributionsystem.model.Paper;
 import com.ctgu.contributionsystem.service.PaperService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.Tuple;
 import java.util.List;
 
 /**
@@ -80,6 +82,11 @@ public class PaperServiceImpl implements PaperService {
     @Override
     public List<Paper> findTop10ByOrderByClickRateDesc() {
         return paperDao.findTop10ByOrderByClickRateDesc();
+    }
+
+    @Override
+    public Page<ArticleTemp> findIndexArticles(Pageable pageable) {
+        return paperDao.findIndexArticles(pageable);
     }
 
 }

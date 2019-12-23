@@ -1,5 +1,6 @@
 package com.ctgu.contributionsystem.service.impl;
 
+import com.ctgu.contributionsystem.dao.ReviewPaperDao;
 import com.ctgu.contributionsystem.model.Paper;
 import com.ctgu.contributionsystem.model.ReviewPaper;
 import com.ctgu.contributionsystem.service.PaperService;
@@ -19,10 +20,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class ReviewPaperServiceImpl implements ReviewPaperService {
     @Autowired
-    private ReviewPaperService reviewPaperService;
+    private ReviewPaperDao reviewPaperDao;
 
     @Override
     public ReviewPaper findByPaperId(Integer paperId) {
-        return reviewPaperService.findByPaperId(paperId);
+        return reviewPaperDao.findByPaperId(paperId);
     }
 }

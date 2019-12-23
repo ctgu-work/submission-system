@@ -1,5 +1,6 @@
 package com.ctgu.contributionsystem.dao;
 
+import com.ctgu.contributionsystem.dto.ArticleTemp;
 import com.ctgu.contributionsystem.model.Paper;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -9,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import javax.persistence.Tuple;
 import java.util.List;
 
 /**
@@ -61,6 +63,14 @@ public interface PaperDao extends JpaRepository<Paper, Integer> {
             "LIKE CONCAT('%',:name,'%')",nativeQuery = true)
     List<Paper> findAllByName(@Param("name") String name);
 
+//    List<Paper> findTop10ByOrderByClickRateDesc();
+    //增加状态判断
+    @Query(value = "select * from paper where paper.paper_id in(\n" +
+            "\tSELECT review_paper.paper_id from review_paper where review_paper.status = 1\n" +
+            ") order by paper.click_rate desc limit 10",nativeQuery = true)
     List<Paper> findTop10ByOrderByClickRateDesc();
+
+    @Query(value = "SELECT DISTINCT a.paper_id as id , a.title as title , a.content as content ,b.avatar_url ,a.author , a.submit_time as data , c.category_detail as classify , a.click_rate as click , a.like_count as likeCount FROM paper a , user b , paper_category c , paper_status d , review_paper e where a.user_id = b.user_id and a.category = c.category_id and a.paper_id = e.paper_id and e.status = 1 order by a.submit_time desc",nativeQuery = true)
+    Page<ArticleTemp> findIndexArticles(Pageable pageable);
 }
 

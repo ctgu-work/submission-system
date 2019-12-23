@@ -1,10 +1,12 @@
 package com.ctgu.contributionsystem.service;
 
+import com.ctgu.contributionsystem.dto.ArticleTemp;
 import com.ctgu.contributionsystem.model.Paper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 
+import javax.persistence.Tuple;
 import java.util.List;
 
 /**
@@ -35,4 +37,5 @@ public interface PaperService {
 
     List<Paper> findAllByName(@Param("name") String name);
     List<Paper> findTop10ByOrderByClickRateDesc();
+    Page<ArticleTemp> findIndexArticles(Pageable pageable);
 }
