@@ -1,5 +1,6 @@
 package com.ctgu.contributionsystem.controller.admin;
 
+import com.ctgu.contributionsystem.dto.ReturnResposeBody;
 import com.ctgu.contributionsystem.model.User;
 import com.ctgu.contributionsystem.service.UserService;
 import com.ctgu.contributionsystem.utils.Md5Salt;
@@ -27,20 +28,11 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    //所有用户
-    @RequestMapping("/findall")
-    public List<User> FindAll(HttpRequest request){
-        try {
-            List<User> list = userService.findAll();
-            return list;
-        }catch (Exception e){
-            return null;
-        }
-    }
 
     //添加用户
     @RequestMapping("/addUser")
-    public String addUser(@RequestBody User user, HttpRequest request){
+    public ReturnResposeBody addUser(@RequestBody User user, HttpRequest request){
+        ReturnResposeBody returnResposeBody = new ReturnResposeBody();
         try {
             User user1 = new User();
             user1.setName(user.getName());
@@ -56,31 +48,45 @@ public class UserController {
             user1.setDescription(user.getDescription());
             user1.setMoney(user.getMoney());
             userService.addUser(user1);
-            return "1";
+            returnResposeBody.setMsg("success");
+            returnResposeBody.setStatus("200");
+            return returnResposeBody;
         }catch(Exception e){
-           return "0";
+            returnResposeBody.setMsg("error");
+            returnResposeBody.setStatus("200");
+           return returnResposeBody;
         }
     }
 
     //更新用户
     @RequestMapping("/updateUser")
-    public String updateUser(@RequestBody User user ,HttpRequest request){
+    public ReturnResposeBody updateUser(@RequestBody User user ,HttpRequest request){
+        ReturnResposeBody returnResposeBody = new ReturnResposeBody();
         try{
             userService.updateUserById(user);
-            return "1";
+            returnResposeBody.setMsg("success");
+            returnResposeBody.setStatus("200");
+            return returnResposeBody;
         } catch (Exception e){
-            return "0";
+            returnResposeBody.setMsg("error");
+            returnResposeBody.setStatus("200");
+            return returnResposeBody;
         }
     }
 
     //删除用户
     @RequestMapping("/deleteUser")
-    public String deleteUser(@Param("userId") Integer userId){
+    public ReturnResposeBody deleteUser(@Param("userId") Integer userId){
+        ReturnResposeBody returnResposeBody = new ReturnResposeBody();
         try{
             userService.delete(userId);
-            return "1";
+            returnResposeBody.setMsg("success");
+            returnResposeBody.setStatus("200");
+            return returnResposeBody;
         } catch (Exception e){
-            return "0";
+            returnResposeBody.setMsg("error");
+            returnResposeBody.setStatus("200");
+            return returnResposeBody;
         }
 
     }

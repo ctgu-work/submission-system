@@ -28,4 +28,6 @@ public interface UserService {
     User updateUserById(User user);
 
     List<User> findAll();
+
+    Integer findByUserIdCount(@Param("userId") Integer userId);
 }

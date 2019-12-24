@@ -1,5 +1,6 @@
 package com.ctgu.contributionsystem.controller.specialist;
 
+import com.ctgu.contributionsystem.dto.PaperVo;
 import com.ctgu.contributionsystem.dto.ReturnResposeBody;
 import com.ctgu.contributionsystem.model.Paper;
 import com.ctgu.contributionsystem.model.ReviewPaper;
@@ -192,26 +193,27 @@ public class SpecialistController {
     @ResponseBody
     public ReturnResposeBody FindPaper(@Param("paperId") Integer paperId,HttpServletRequest request){
         ReturnResposeBody returnResposeBody = new ReturnResposeBody();
-        //从请求头中获取token
-        String token = request.getHeader("token");
-        //中介储存
-        Subject subject = SecurityUtils.getSubject();
-        //shiro登录判断
-        String phoneNumber = JwtUtil.getPhoneNumber(token);
-        if(subject.isAuthenticated() && redisUtils.get(phoneNumber).equals(token)) {
+//        //从请求头中获取token
+//        String token = request.getHeader("token");
+//        //中介储存
+//        Subject subject = SecurityUtils.getSubject();
+//        //shiro登录判断
+//        String phoneNumber = JwtUtil.getPhoneNumber(token);
+//        if(subject.isAuthenticated() && redisUtils.get(phoneNumber).equals(token)) {
             try {
                 returnResposeBody.setMsg("success");
                 returnResposeBody.setStatus("200");
-                Paper paper = specialService.findByPaperId(paperId);
+                PaperVo paper = specialService.findByPaperId(paperId);
+                System.out.println(paper);
                 returnResposeBody.setResult(paper);
                 return returnResposeBody;
             } catch (Exception e) {
                 returnResposeBody.setMsg("未找到");
                 return returnResposeBody;
             }
-        }
-        returnResposeBody.setMsg("error");
-        return returnResposeBody;
+//        }
+////        returnResposeBody.setMsg("error");
+////        return returnResposeBody;
     }
 
     //审稿

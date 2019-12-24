@@ -26,8 +26,8 @@ public class SpecialCount{
     private String phoneNumber;
     private String passWord;
     private String email;
-    private Long count;
-    private BigInteger money;
+    private Integer count;
+    private Integer money;
 
     public SpecialCount() {
         this.userId = userId;

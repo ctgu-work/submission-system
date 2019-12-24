@@ -1,6 +1,7 @@
 package com.ctgu.contributionsystem.dao;
 
 import com.ctgu.contributionsystem.dto.ArticleTemp;
+import com.ctgu.contributionsystem.dto.PaperVo;
 import com.ctgu.contributionsystem.model.Paper;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -97,7 +98,6 @@ public interface PaperDao extends JpaRepository<Paper, Integer> {
             ") order by paper.click_rate desc limit 10",nativeQuery = true)
     List<Paper> findTop10ByOrderByClickRateDesc();
 
-
     @Query(value = "SELECT DISTINCT a.paper_id as id , a.title as title , a.content as content ,b.avatar_url as avatarUrl ,a.author , a.submit_time as submitTime , c.category_detail as classify , a.click_rate as click , a.like_count as likeCount FROM paper a , user b , paper_category c , paper_status d , review_paper e where a.user_id = b.user_id and a.category = c.category_id and a.paper_id = e.paper_id and e.status = 1 order by a.submit_time desc",nativeQuery = true)
     List<Object[]> findIndexArticles();
 
@@ -113,5 +113,7 @@ public interface PaperDao extends JpaRepository<Paper, Integer> {
     @Query(value = "SELECT paper.* FROM paper,review_paper where paper.paper_id = review_paper.paper_id and review_paper.specialist_id = 1",nativeQuery = true)
     List<Paper> findAllPaperById(Integer specialistId);
 
+    @Query(value = "select count(*) from paper where user_id = :userId",nativeQuery = true)
+    Integer findByUserIdCount(@Param("userId") Integer userId);
 }
 

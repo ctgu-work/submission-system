@@ -180,6 +180,7 @@ public class PaperServiceImpl implements PaperService {
         return p.getPaperId();
     }
 
+    @Override
     public List<String> getHotTagsName() {
         return paperDao.getHotTagsName();
     }
