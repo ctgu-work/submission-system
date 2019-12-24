@@ -6,9 +6,11 @@ import com.ctgu.contributionsystem.dto.JwtToken;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
+import org.apache.shiro.web.servlet.ShiroHttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMethod;
+
 import javax.servlet.Filter;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -27,11 +29,11 @@ import javax.servlet.http.HttpServletResponse;
 public class JwtFilter extends BasicHttpAuthenticationFilter implements Filter {
 
     /**
+     * @return boolean
      * @Author wh
      * @Description 登录认证
      * @Date 2019/12/18 16:58
      * @Param [request, response, mappedValue]
-     * @return boolean
      **/
     @Override
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
@@ -39,41 +41,48 @@ public class JwtFilter extends BasicHttpAuthenticationFilter implements Filter {
             executeLogin(request, response);
             return true;
         } catch (Exception e) {
+            e.getMessage();
             return false;
         }
     }
 
     /**
-    * @Author wh
-    * @Description TODO
-    * @Date 2019/12/18 16:59
-    * @Param [request, response]
-    * @return boolean
-    **/
+     * @return boolean
+     * @Author wh
+     * @Description TODO
+     * @Date 2019/12/18 16:59
+     * @Param [request, response]
+     **/
     @Override
     protected boolean executeLogin(ServletRequest request, ServletResponse response) throws Exception {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         String token = httpServletRequest.getHeader("Token");
-        JwtToken jwtToken = new JwtToken(token);
+        String url = ((ShiroHttpServletRequest) request).getRequestURL().toString();
+        JwtToken jwtToken = null;
+        if (url.contains("admin")) {
+            jwtToken = new JwtToken(token, "AdminRealm");
+        } else {
+            jwtToken = new JwtToken(token);
+        }
+
         // 提交给realm进行登入，如果错误他会抛出异常并被捕获
         try {
             getSubject(request, response).login(jwtToken);
             // 如果没有抛出异常则代表登入成功，返回true
             return true;
         } catch (AuthenticationException e) {
+            e.getMessage();
             return false;
         }
     }
 
 
-
-
     /**
+     * @return boolean
      * @Author wh
      * @Description 对跨域提供支持
      * @Date 2019/12/18 16:59
      * @Param [request, response]
-     * @return boolean
      **/
     @Override
     protected boolean preHandle(ServletRequest request, ServletResponse response) throws Exception {

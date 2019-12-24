@@ -23,4 +23,5 @@ public interface TagService {
      */
     int getTagId(String tag);
 
+    List<Tag> findAll();
 }

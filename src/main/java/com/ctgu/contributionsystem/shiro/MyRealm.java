@@ -25,7 +25,6 @@ import org.springframework.stereotype.Component;
  * @ClassName MyRealm
  * @Version 1.0.0
  */
-@Component
 public class MyRealm extends AuthorizingRealm {
 
     @Autowired

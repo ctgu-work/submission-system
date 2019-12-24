@@ -82,5 +82,6 @@ public interface PaperService {
     List<Object[]> findIndexArticlesByTagId(@Param("tagId")Integer tagId);
 
     Integer countAllPaper();
+    List<Object[]> findIndexArticlesIn(@Param("name") String name);
 }
 

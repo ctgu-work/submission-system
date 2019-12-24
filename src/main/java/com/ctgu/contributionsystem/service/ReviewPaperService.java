@@ -12,4 +12,6 @@ import org.springframework.data.repository.query.Param;
  */
 public interface ReviewPaperService {
     ReviewPaper findByPaperId(@Param("paperId")Integer paperId);
+
+    Integer findBySpecailistIdCount(@Param("specialistId") Integer specialistId);
 }

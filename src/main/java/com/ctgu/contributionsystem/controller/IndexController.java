@@ -53,14 +53,14 @@ public class IndexController {
     private TagService tagService;
 
     /**
+     * @return com.ctgu.contributionsystem.dto.ReturnResposeBody
      * @Author wh
      * @Description 首页最热话题
      * @Date 2019/12/22 20:53
      * @Param []
-     * @return com.ctgu.contributionsystem.dto.ReturnResposeBody
      **/
     @GetMapping("/hottag")
-    public ReturnResposeBody hotTags(){
+    public ReturnResposeBody hotTags() {
         ReturnResposeBody returnResposeBody = new ReturnResposeBody();
         try {
             List<String> list = paperService.getHotTagsName();
@@ -76,8 +76,7 @@ public class IndexController {
             returnResposeBody.setStatus("200");
             returnResposeBody.setMsg("success");
             return returnResposeBody;
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             returnResposeBody.setMsg("error");
             return returnResposeBody;
         }
@@ -85,30 +84,29 @@ public class IndexController {
 
 
     /**
+     * @return com.ctgu.contributionsystem.dto.ReturnResposeBody
      * @Author wh
      * @Description 主页最热文章
      * @Date 2019/12/23 19:16
      * @Param []
-     * @return com.ctgu.contributionsystem.dto.ReturnResposeBody
      **/
     @GetMapping("/hotartcle")
-    public ReturnResposeBody hotArtcle(){
+    public ReturnResposeBody hotArtcle() {
         ReturnResposeBody returnResposeBody = new ReturnResposeBody();
         try {
-            List<Paper>paperList = paperService.findTop10ByOrderByClickRateDesc();
-            List<HotArtcle>list = new LinkedList<>();
-            for( Paper paper:paperList ){
-                SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            List<Paper> paperList = paperService.findTop10ByOrderByClickRateDesc();
+            List<HotArtcle> list = new LinkedList<>();
+            for (Paper paper : paperList) {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String sd = sdf.format(paper.getSubmitTime());
-                HotArtcle artcle = new HotArtcle(paper.getPaperId() ,sd, paper.getTitle(),paper.getClickRate(),paper.getLikeCount());
+                HotArtcle artcle = new HotArtcle(paper.getPaperId(), sd, paper.getTitle(), paper.getClickRate(), paper.getLikeCount());
                 list.add(artcle);
             }
             returnResposeBody.setResult(list);
             returnResposeBody.setStatus("200");
             returnResposeBody.setMsg("success");
             return returnResposeBody;
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             returnResposeBody.setMsg("error");
             return returnResposeBody;
         }
@@ -116,11 +114,11 @@ public class IndexController {
 
 
     /**
+     * @return com.ctgu.contributionsystem.dto.ReturnResposeBody
      * @Author wh
      * @Description 首页文章列表
      * @Date 2019/12/24 16:04
      * @Param [request, startPage, pageSize]
-     * @return com.ctgu.contributionsystem.dto.ReturnResposeBody
      **/
     @GetMapping("/articlelist")
     public ReturnResposeBody articlelist(HttpServletRequest request,
@@ -128,32 +126,31 @@ public class IndexController {
                                          @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize) {
         ReturnResposeBody returnResposeBody = new ReturnResposeBody();
         List<Object[]> articleTemps = paperService.findIndexArticles();
-        List<Article>articles = new ArrayList<>();
-        for( Object[] object:articleTemps ){
+        List<Article> articles = new ArrayList<>();
+        for (Object[] object : articleTemps) {
             Article article = new Article();
             try {
-                article.setId((Integer)object[0]);
-                article.setTitle((String)object[1]);
-                article.setContent((String)object[2]);
-                article.setAvatarUrl((String)object[3]);
-                article.setAuthor((String)object[4]);
-                SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                String sd = sdf.format((Timestamp)object[5]);
+                article.setId((Integer) object[0]);
+                article.setTitle((String) object[1]);
+                article.setContent((String) object[2]);
+                article.setAvatarUrl((String) object[3]);
+                article.setAuthor((String) object[4]);
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String sd = sdf.format((Timestamp) object[5]);
                 article.setDate(sd);
                 article.setClassify((String) object[6]);
-                article.setClick((Integer)object[7]);
-                article.setLikeCount((Integer)object[8]);
-                List<Tag>tags = tagService.findByPaperId(article.getId());
+                article.setClick((Integer) object[7]);
+                article.setLikeCount((Integer) object[8]);
+                List<Tag> tags = tagService.findByPaperId(article.getId());
                 article.setTags(tags);
                 articles.add(article);
-            }
-            catch (Exception e){
+            } catch (Exception e) {
                 returnResposeBody.setMsg("error");
                 return returnResposeBody;
             }
         }
         JpaPageHelper jpaPageHelper = new JpaPageHelper();
-        List<PageInfo> pageInfos = jpaPageHelper.SetStartPage(articles,startPage,pageSize);
+        List<PageInfo> pageInfos = jpaPageHelper.SetStartPage(articles, startPage, pageSize);
         returnResposeBody.setResult(pageInfos);
         returnResposeBody.setStatus("200");
         returnResposeBody.setMsg("success");
@@ -161,44 +158,43 @@ public class IndexController {
     }
 
     /**
+     * @return com.ctgu.contributionsystem.dto.ReturnResposeBody
      * @Author wh
      * @Description 根据分类查询文章
      * @Date 2019/12/24 16:12
      * @Param [request, category, startPage, pageSize]
-     * @return com.ctgu.contributionsystem.dto.ReturnResposeBody
      **/
     @GetMapping("/categoryArticlelist")
-    public ReturnResposeBody getArticlelistByCategory(HttpServletRequest request,@RequestParam("category")Integer category,
-                                         @RequestParam(value = "startPage", required = false, defaultValue = "1") Integer startPage,
-                                         @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize) {
+    public ReturnResposeBody getArticlelistByCategory(HttpServletRequest request, @RequestParam("category") Integer category,
+                                                      @RequestParam(value = "startPage", required = false, defaultValue = "1") Integer startPage,
+                                                      @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize) {
         ReturnResposeBody returnResposeBody = new ReturnResposeBody();
         List<Object[]> articleTemps = paperService.findIndexArticlesByCategory(category);
-        List<Article>articles = new ArrayList<>();
-        for( Object[] object:articleTemps ){
+        List<Article> articles = new ArrayList<>();
+        for (Object[] object : articleTemps) {
             Article article = new Article();
             try {
-                article.setId((Integer)object[0]);
-                article.setTitle((String)object[1]);
-                article.setContent((String)object[2]);
-                article.setAvatarUrl((String)object[3]);
-                article.setAuthor((String)object[4]);
-                SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                String sd = sdf.format((Timestamp)object[5]);
+                article.setId((Integer) object[0]);
+                article.setTitle((String) object[1]);
+                article.setContent((String) object[2]);
+                article.setAvatarUrl((String) object[3]);
+                article.setAuthor((String) object[4]);
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String sd = sdf.format((Timestamp) object[5]);
                 article.setDate(sd);
                 article.setClassify((String) object[6]);
-                article.setClick((Integer)object[7]);
-                article.setLikeCount((Integer)object[8]);
-                List<Tag>tags = tagService.findByPaperId(article.getId());
+                article.setClick((Integer) object[7]);
+                article.setLikeCount((Integer) object[8]);
+                List<Tag> tags = tagService.findByPaperId(article.getId());
                 article.setTags(tags);
                 articles.add(article);
-            }
-            catch (Exception e){
+            } catch (Exception e) {
                 returnResposeBody.setMsg("error");
                 return returnResposeBody;
             }
         }
         JpaPageHelper jpaPageHelper = new JpaPageHelper();
-        List<PageInfo> pageInfos = jpaPageHelper.SetStartPage(articles,startPage,pageSize);
+        List<PageInfo> pageInfos = jpaPageHelper.SetStartPage(articles, startPage, pageSize);
         returnResposeBody.setResult(pageInfos);
         returnResposeBody.setStatus("200");
         returnResposeBody.setMsg("success");
@@ -207,44 +203,43 @@ public class IndexController {
 
 
     /**
+     * @return com.ctgu.contributionsystem.dto.ReturnResposeBody
      * @Author wh
      * @Description 根据标签查看文章
      * @Date 2019/12/24 16:24
      * @Param [request, tagId, startPage, pageSize]
-     * @return com.ctgu.contributionsystem.dto.ReturnResposeBody
      **/
     @GetMapping("/tagArticlelist")
-    public ReturnResposeBody getArticlelistByTagId(HttpServletRequest request,@RequestParam("tagId")Integer tagId,
-                                                      @RequestParam(value = "startPage", required = false, defaultValue = "1") Integer startPage,
-                                                      @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize) {
+    public ReturnResposeBody getArticlelistByTagId(HttpServletRequest request, @RequestParam("tagId") Integer tagId,
+                                                   @RequestParam(value = "startPage", required = false, defaultValue = "1") Integer startPage,
+                                                   @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize) {
         ReturnResposeBody returnResposeBody = new ReturnResposeBody();
         List<Object[]> articleTemps = paperService.findIndexArticlesByTagId(tagId);
-        List<Article>articles = new ArrayList<>();
-        for( Object[] object:articleTemps ){
+        List<Article> articles = new ArrayList<>();
+        for (Object[] object : articleTemps) {
             Article article = new Article();
             try {
-                article.setId((Integer)object[0]);
-                article.setTitle((String)object[1]);
-                article.setContent((String)object[2]);
-                article.setAvatarUrl((String)object[3]);
-                article.setAuthor((String)object[4]);
-                SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                String sd = sdf.format((Timestamp)object[5]);
+                article.setId((Integer) object[0]);
+                article.setTitle((String) object[1]);
+                article.setContent((String) object[2]);
+                article.setAvatarUrl((String) object[3]);
+                article.setAuthor((String) object[4]);
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String sd = sdf.format((Timestamp) object[5]);
                 article.setDate(sd);
                 article.setClassify((String) object[6]);
-                article.setClick((Integer)object[7]);
-                article.setLikeCount((Integer)object[8]);
-                List<Tag>tags = tagService.findByPaperId(article.getId());
+                article.setClick((Integer) object[7]);
+                article.setLikeCount((Integer) object[8]);
+                List<Tag> tags = tagService.findByPaperId(article.getId());
                 article.setTags(tags);
                 articles.add(article);
-            }
-            catch (Exception e){
+            } catch (Exception e) {
                 returnResposeBody.setMsg("error");
                 return returnResposeBody;
             }
         }
         JpaPageHelper jpaPageHelper = new JpaPageHelper();
-        List<PageInfo> pageInfos = jpaPageHelper.SetStartPage(articles,startPage,pageSize);
+        List<PageInfo> pageInfos = jpaPageHelper.SetStartPage(articles, startPage, pageSize);
         returnResposeBody.setResult(pageInfos);
         returnResposeBody.setStatus("200");
         returnResposeBody.setMsg("success");
@@ -253,14 +248,39 @@ public class IndexController {
 
     //主页搜索
     @GetMapping("/find")
-    public List<Paper> FindPaper(HttpRequest request,@Param("name") String name){
+    public ReturnResposeBody FindPaper(HttpRequest request, @Param("name") String name, @RequestParam(defaultValue = "1", name = "pageNum") Integer pageNum, @RequestParam(defaultValue = "10", name = "size") Integer size) {
+        ReturnResposeBody returnResposeBody = new ReturnResposeBody();
+        List<Article> articles = new ArrayList<>();
         try {
-            List<Paper> papers = paperService.findAllByName(name);
-            return papers;
-        } catch (Exception e){
-            return null;
+            List<Object[]> articleTemps = paperService.findIndexArticlesIn(name);
+            for (Object[] object : articleTemps) {
+                Article article = new Article();
+                article.setId((Integer) object[0]);
+                article.setTitle((String) object[1]);
+                article.setContent((String) object[2]);
+                article.setAvatarUrl((String) object[3]);
+                article.setAuthor((String) object[4]);
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String sd = sdf.format((Timestamp) object[5]);
+                article.setDate(sd);
+                article.setClassify((String) object[6]);
+                article.setClick((Integer) object[7]);
+                article.setLikeCount((Integer) object[8]);
+                List<Tag> tags = tagService.findByPaperId(article.getId());
+                article.setTags(tags);
+                articles.add(article);
+            }
+        } catch (Exception e) {
+            returnResposeBody.setMsg("error");
+            returnResposeBody.setStatus("200");
+            return returnResposeBody;
         }
+        JpaPageHelper jpaPageHelper = new JpaPageHelper();
+        List<PageInfo> pageInfos = jpaPageHelper.SetStartPage(articles, pageNum, size);
+        returnResposeBody.setMsg("error");
+        returnResposeBody.setStatus("200");
+        returnResposeBody.setResult(pageInfos);
+        return returnResposeBody;
     }
-
 
 }

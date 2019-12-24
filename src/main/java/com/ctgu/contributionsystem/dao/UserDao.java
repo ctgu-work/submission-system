@@ -21,4 +21,8 @@ public interface UserDao extends JpaRepository<User, Integer>{
 //    @Modifying
     @Query(nativeQuery = true,value = "select money from user where user_id = :userId")
     int countUserMoney(@Param("userId")Integer userId);
+
+    @Modifying
+    @Query(value = "update user set name = :name1,nick_name = :nickName,phone_number = :phoneNumber WHERE user_id = :userId",nativeQuery = true)
+    Integer UpdateUser(@Param("userId") Integer userId,@Param("name1") String name,@Param("nickName") String nickName,@Param("phoneNumber") String phoneNumber);
 }
