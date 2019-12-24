@@ -64,6 +64,11 @@ public class SpecialServiceImpI implements SpecialService {
     }
 
     @Override
+    public List<Paper> findAllById(Integer specialistId){
+        return paperDao.findAllPaperById(specialistId);
+    }
+
+    @Override
     public ReviewPaper addReviewPaper1(ReviewPaper reviewPaper) {
         return paperReviewDao.save(reviewPaper);
     }

@@ -28,7 +28,7 @@ public class SuperAdminController {
     @Autowired
     private SuperAdminService superAdminService;
 
-    //所有用户
+    //所有管理
     @RequestMapping("/findall")
     public List<Admin> FindAll(HttpRequest request){
         try {

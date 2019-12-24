@@ -23,4 +23,8 @@ public interface SpecialService {
     Integer Updatestatus(@Param("paperId") Integer paperId,@Param("status") Integer status);
 
     Paper findByPaperId(@Param("paperId") Integer paperId);
+
+    List<Paper> findAllById(@Param("specialistId") Integer specialistId);
+
+
 }
