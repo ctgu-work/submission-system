@@ -2,7 +2,6 @@ package com.ctgu.contributionsystem.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
