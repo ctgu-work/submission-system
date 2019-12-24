@@ -1,9 +1,7 @@
 package com.ctgu.contributionsystem.service.impl;
 
 import com.ctgu.contributionsystem.dao.AdminDao;
-import com.ctgu.contributionsystem.dao.DtoDao;
 import com.ctgu.contributionsystem.dao.SpecialistDao;
-import com.ctgu.contributionsystem.dto.SpecialCount;
 import com.ctgu.contributionsystem.model.Admin;
 import com.ctgu.contributionsystem.model.Specialist;
 import com.ctgu.contributionsystem.service.AdminService;

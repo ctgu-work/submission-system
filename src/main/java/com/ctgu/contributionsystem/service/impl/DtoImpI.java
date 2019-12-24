@@ -1,10 +1,6 @@
 package com.ctgu.contributionsystem.service.impl;
 
-import com.ctgu.contributionsystem.dao.DtoDao;
-import com.ctgu.contributionsystem.dto.SpecialCount;
-import com.ctgu.contributionsystem.service.DtoService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+
 
 import java.io.Serializable;
 import java.math.BigDecimal;
