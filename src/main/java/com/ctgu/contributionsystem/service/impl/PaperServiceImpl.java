@@ -39,8 +39,8 @@ public class PaperServiceImpl implements PaperService {
     private EntityManager entityManager;
 
     @Override
-    public Page<Paper> findAllByUserId(Pageable pageable, Integer userId) {
-        return paperDao.findAllByUserId(pageable, userId);
+    public List<Paper> findAllByUserId( Integer userId) {
+        return paperDao.findAllByUserId( userId);
     }
 
     @Override

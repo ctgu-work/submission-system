@@ -23,7 +23,7 @@ import java.util.List;
  */
 @Transactional
 public interface PaperDao extends JpaRepository<Paper, Integer> {
-    Page<Paper> findAllByUserId(Pageable pageable,@Param("userId")Integer userId);
+    List<Paper> findAllByUserId(@Param("userId")Integer userId);
 
     //用户点击量
 //    @Modifying

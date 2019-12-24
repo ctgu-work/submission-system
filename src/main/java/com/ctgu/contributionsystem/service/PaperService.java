@@ -24,7 +24,7 @@ public interface PaperService {
      */
     int addPaper(Paper paper);
 
-    Page<Paper> findAllByUserId(Pageable pageable, @Param("userId") Integer userId);
+    List<Paper> findAllByUserId(@Param("userId") Integer userId);
     //用户点击量
     int countUserClickRate(@Param("userId")Integer userId);
     //用户喜欢数量
