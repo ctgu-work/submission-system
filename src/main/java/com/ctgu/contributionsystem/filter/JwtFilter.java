@@ -70,6 +70,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter implements Filter {
             // 如果没有抛出异常则代表登入成功，返回true
             return true;
         } catch (AuthenticationException e) {
+            e.getMessage();
             return false;
         }
     }

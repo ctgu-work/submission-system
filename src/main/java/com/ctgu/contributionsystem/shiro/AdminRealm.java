@@ -1,6 +1,7 @@
 package com.ctgu.contributionsystem.shiro;
 
 
+import com.ctgu.contributionsystem.dto.JwtToken;
 import com.ctgu.contributionsystem.model.Admin;
 import com.ctgu.contributionsystem.model.User;
 import com.ctgu.contributionsystem.service.AdminService;
@@ -27,6 +28,11 @@ public class AdminRealm extends AuthorizingRealm {
     AdminService adminService;
 
     @Override
+    public boolean supports(AuthenticationToken token) {
+        return token instanceof JwtToken;
+    }
+
+    @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         return null;
     }
@@ -47,6 +53,6 @@ public class AdminRealm extends AuthorizingRealm {
             throw new AuthenticationException("用户名或密码错误");
         }
 
-        return new SimpleAuthenticationInfo(token, token, "my_realm");
+        return new SimpleAuthenticationInfo(token, token, getName());
     }
 }
