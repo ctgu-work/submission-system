@@ -6,10 +6,7 @@ import com.ctgu.contributionsystem.service.PaperTagService;
 import com.ctgu.contributionsystem.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Iterator;
 import java.util.List;
@@ -34,43 +31,28 @@ public class AddPaperController {
 
     @ResponseBody
     @PostMapping("/add")
-    public String addPaper(@RequestParam("editorContent") String content,
-                           @RequestParam("title") String title,
-                           @RequestParam("category") Integer category,
-                           @RequestParam("userId") Integer userId,
-                           @RequestParam("author") String author,
+    public Integer addPaper(Paper paper,
                            @RequestParam(required = false,value = "tags") List<String> tags) {
         /**
          * 稿子为空时直接返回false,
          *
          */
-        if (content == null || title == null || category == null || author == null) {
-            return "false";
+        if(paper == null){
+            return 0;
         }
         /**
          * 将稿子加入到数据库中
          */
-        Paper paper = new Paper();
-        paper.setTitle(title);
-        paper.setCategory(category);
-        paper.setAuthor(author);
-        paper.setContent(content);
         paper.setStatus(1);
-        paper.setUserId(userId);
         int paperId = paperService.addPaper(paper);
         /**
-         * 将标签添加到
+         * 将标签添加到关联表中
          */
-        Iterator<String> iterator = tags.iterator();
-        while (iterator.hasNext()) {
-            String tag = iterator.next();
-            System.out.println(tag);
+        for (String tag : tags){
             int tagId = tagService.getTagId(tag);
             Integer paperTagId = paperTagService.addPaperTag(paperId, tagId);
-            System.out.println(paperTagId);
         }
-        return "true";
+        return 1;
     }
-
 
 }

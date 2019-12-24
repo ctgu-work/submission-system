@@ -25,4 +25,9 @@ public class PaperTagServiceImpl implements PaperTagService {
         pt.setTagId(tagId);
         return paperTagDao.save(pt).getPaperTagId();
     }
+
+    @Override
+    public void deleteAllPaperTagByPaperId(int paperId) {
+        paperTagDao.deleteByPaperId(paperId);
+    }
 }

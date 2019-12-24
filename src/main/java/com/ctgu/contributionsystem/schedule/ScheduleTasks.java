@@ -29,7 +29,7 @@ public class ScheduleTasks {
     private PaperDao paperDao;
 
     //秒 分 小时 月份中的日期 月份 星期中的日期 年份
-    @Scheduled(cron = "0 0/20 * * * ?")
+    @Scheduled(cron = "0 0/19 * * * ?")
     public void syncClick(){
         log.info("======================开始 同步文章访问量======================");
         Long startTime = System.nanoTime();
@@ -47,7 +47,7 @@ public class ScheduleTasks {
         log.info("======================结束 文章访问量结束======================");
     }
 
-    @Scheduled(cron = "0 0/5 * * * ?")
+    @Scheduled(cron = "0 0/19 * * * ?")
     public void syncLikeCount(){
         log.info("======================开始 同步文章点赞数======================");
         Long startTime = System.nanoTime();

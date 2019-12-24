@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.sql.Timestamp;
 import java.util.Iterator;
 import java.util.List;
 
@@ -34,36 +35,32 @@ public class UpdatePaperController {
 
     @ResponseBody
     @RequestMapping("/update")
-    public String updatePaper(
-            @RequestParam("paperId") Integer paperId,
-            @RequestParam("editorContent") String content,
-            @RequestParam("title") String title,
-            @RequestParam("category") Integer category,
-            @RequestParam("userId") Integer userId,
-            @RequestParam("author") String author,
-            @RequestParam("tags") List<String> tags) {
+    public Integer updatePaper(Paper paper,
+                              @RequestParam(required = false,value = "tags") List<String> tags) {
 
-        if (paperId == null) {
-            return "false";
+        /**
+         * 如果paper为空，返回错误
+         */
+        if(paper == null){
+            return 0;
         }
-        Paper paper = new Paper();
-        paper.setPaperId(paperId);
-        paper.setContent(content);
-        paper.setAuthor(author);
-        paper.setCategory(category);
-        paper.setTitle(title);
-        paper.setUserId(userId);
-        paper.setStatus(1);
-        int pId = paperService.updatePaper(paper);
+        /**
+         * 获取paperId
+         */
+        int paperId = paper.getPaperId();
+        /**
+         *
+         */
+        Paper p2 = paperService.getPaper(paperId);
+        p2.setUserId(paper.getUserId());p2.setAuthor(paper.getAuthor());p2.setContent(paper.getContent());
+        p2.setCategory(paper.getCategory());p2.setTitle(paper.getTitle());p2.setSubmitTime(new Timestamp(System.currentTimeMillis()));
 
-        Iterator<String> iterator = tags.iterator();
-        while (iterator.hasNext()) {
-            String tag = iterator.next();
-            System.out.println(tag);
+        paperTagService.deleteAllPaperTagByPaperId(paperId);
+
+        for (String tag : tags){
             int tagId = tagService.getTagId(tag);
             Integer paperTagId = paperTagService.addPaperTag(paperId, tagId);
-            System.out.println(paperTagId);
         }
-        return "true";
+        return 1;
     }
 }

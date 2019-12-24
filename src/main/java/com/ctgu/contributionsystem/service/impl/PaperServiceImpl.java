@@ -4,11 +4,16 @@ import com.ctgu.contributionsystem.dao.PaperDao;
 import com.ctgu.contributionsystem.model.Paper;
 import com.ctgu.contributionsystem.service.PaperService;
 import com.ctgu.contributionsystem.utils.RedisUtils;
+import org.hibernate.Hibernate;
+import org.hibernate.Session;
+import org.hibernate.ejb.HibernateEntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 /**
@@ -27,6 +32,9 @@ public class PaperServiceImpl implements PaperService {
 
     @Autowired
     private RedisUtils redisUtils;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
     public Page<Paper> findAllByUserId(Pageable pageable, Integer userId) {
@@ -92,6 +100,8 @@ public class PaperServiceImpl implements PaperService {
             cnt++;
         }
         paper.setClickRate(cnt);
+        Session session = entityManager.unwrap(org.hibernate.Session.class);
+        session.evict(paper);
         return paper;
     }
 
@@ -104,14 +114,6 @@ public class PaperServiceImpl implements PaperService {
          * 检查redis中是否存储了hash
          */
         if (redisUtils.hasKey(key)) {
-            /**
-             * 有hash的话直接取entry
-             *  再判断entry是否为空
-             *  空 ：往hash里插入
-             *  非空 ：值+1
-             * 没有hahs
-             *  重新建立，并设置时间。
-             */
             Integer redisCnt = (Integer) redisUtils.hashGet(key, field);
             if (redisCnt == null) {
                 redisCnt = 0;

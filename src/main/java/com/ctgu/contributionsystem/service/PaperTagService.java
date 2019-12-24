@@ -15,4 +15,10 @@ public interface PaperTagService {
      * @return
      */
     int addPaperTag(int paperId, int tagId);
+
+    /**
+     * 删除关联表中的数据
+     * @param paperId
+     */
+    void deleteAllPaperTagByPaperId(int paperId);
 }

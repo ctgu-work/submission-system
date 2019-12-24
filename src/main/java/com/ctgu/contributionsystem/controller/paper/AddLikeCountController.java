@@ -28,12 +28,12 @@ public class AddLikeCountController {
 
     @ResponseBody
     @GetMapping("/addLikeCount")
-    public String addLikeCount(@RequestParam("paperId") Integer paperId){
+    public Integer addLikeCount(@RequestParam("paperId") Integer paperId){
         if(paperId == null){
-            return "null";
+            return null;
         }else {
             Integer likeCount = paperService.addLikeCountByPaperId(paperId);
-            return String.valueOf(likeCount);
+            return likeCount;
         }
     }
 }
