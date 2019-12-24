@@ -62,5 +62,8 @@ public interface PaperDao extends JpaRepository<Paper, Integer> {
     List<Paper> findAllByName(@Param("name") String name);
 
     List<Paper> findTop10ByOrderByClickRateDesc();
+
+    @Query(value = "select * from paper where paper_id = :paperId",nativeQuery = true)
+    Paper findByPaperId(@Param("paperId") Integer paperId);
 }
 

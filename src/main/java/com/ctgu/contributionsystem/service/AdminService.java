@@ -11,7 +11,7 @@ import java.util.List;
 public interface AdminService {
 
 
-    List<Specialist> findAll();
+    List<Specialist> findAllByStatus();
 
     Integer updateSpecialitProhibit(@Param("specialistId") Integer specialistId);
 
@@ -24,4 +24,6 @@ public interface AdminService {
     Integer Updatestatus(@Param("specialistId") Integer specialistId,@Param("status") Integer status);
 
     Integer UpdateCategory(@Param("specialistId") Integer specialistId,@Param("category") Integer category);
+
+    Specialist findSpecialistById(@Param("specialistId") Integer specialistId);
 }

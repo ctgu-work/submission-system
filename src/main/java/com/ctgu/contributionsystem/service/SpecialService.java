@@ -21,4 +21,6 @@ public interface SpecialService {
     String findNameBySpecialistId(@Param("specialistId") Integer specialistId);
 
     Integer Updatestatus(@Param("paperId") Integer paperId,@Param("status") Integer status);
+
+    Paper findByPaperId(@Param("paperId") Integer paperId);
 }
