@@ -40,8 +40,6 @@ public class ScheduleConfig{
          List<Paper> papers  =  scheduleService.findAll();
          for(Paper p : papers){
              Date now = new Date();
-             System.out.println(p.getSubmitTime() + "1");
-             System.out.println(now + "3");
              try {
                  long stateTimeLong = now.getTime();
                  long endTimeLong = p.getSubmitTime().getTime();
@@ -50,7 +48,6 @@ public class ScheduleConfig{
                  if(day >= 30){
                      try {
                          Integer s = scheduleService.UpdateById(p.getPaperId());
-                         System.out.println(s);
                      } catch(Exception e){
 
                      }

@@ -17,6 +17,6 @@ import java.util.List;
 public interface SpecialistAllDao extends JpaRepository<Paper, Integer> {
 
 
-    @Query(value = "select * from paper where paper.category  = :category ORDER BY paper.click_rate DESC",nativeQuery=true)
+    @Query(value = "select * from paper where paper.category  = :category and status = 1 ORDER BY paper.click_rate DESC",nativeQuery=true)
     List<Paper> findAllByCategory(@Param("category") Integer Category);
 }

@@ -76,6 +76,8 @@ public class SpecialistController {
                         return returnResposeBody2;
                     }
                 } else {
+                    returnResposeBody1.setMsg("未审核");
+                    returnResposeBody1.setStatus("200");
                     return returnResposeBody1;
                 }
             }catch (Exception e) {
@@ -110,7 +112,7 @@ public class SpecialistController {
     //全部稿件
     @GetMapping("/paperlist")
     @ResponseBody
-    public List<PageInfo> SpecialistFindAll(HttpServletRequest request, @RequestParam(defaultValue = "1",name = "pageNum") Integer pageNum, @RequestParam(defaultValue = "1",name = "size") Integer size){
+    public List<PageInfo> SpecialistFindAll(HttpServletRequest request, @RequestParam(defaultValue = "1",name = "pageNum") Integer pageNum, @RequestParam(defaultValue = "10",name = "size") Integer size){
         //从请求头中获取token
         String token = request.getHeader("token");
         //中介储存
@@ -123,6 +125,8 @@ public class SpecialistController {
              try {
                  Specialist specialist = specialService.findByUserId(user.getUserId());
                  List<Paper> allPicturesPage = specialService.findAll(specialist.getCategory());
+                 System.out.println(specialist.getCategory());
+                 System.out.println(allPicturesPage);
                  JpaPageHelper jpaPageHelper = new JpaPageHelper();
                  List<PageInfo> pageInfos = jpaPageHelper.SetStartPage(allPicturesPage,pageNum,size);
 //            List<Paper> list = specialService.findAll();
