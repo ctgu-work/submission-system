@@ -17,10 +17,21 @@ import org.apache.shiro.authc.AuthenticationToken;
 @ToString
 public class JwtToken implements AuthenticationToken {
 
+    private String loginType = "MyRealm";
+
     private String token;
 
     public JwtToken(String token) {
         this.token = token;
+    }
+
+    public JwtToken(String token, String loginType) {
+        this.token = token;
+        this.loginType = loginType;
+    }
+
+    public String getLoginType() {
+        return loginType;
     }
 
     @Override
