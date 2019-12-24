@@ -4,9 +4,7 @@ import com.ctgu.contributionsystem.dto.SpecialCount;
 import com.ctgu.contributionsystem.model.Admin;
 import com.ctgu.contributionsystem.model.Specialist;
 import com.ctgu.contributionsystem.model.User;
-import com.ctgu.contributionsystem.service.AdminService;
-import com.ctgu.contributionsystem.service.UserService;
-import com.ctgu.contributionsystem.service.VoService;
+import com.ctgu.contributionsystem.service.*;
 import com.ctgu.contributionsystem.utils.*;
 import org.apache.http.HttpRequest;
 import org.apache.shiro.SecurityUtils;
@@ -43,7 +41,7 @@ public class AdminController {
 
     @Autowired
     private UserService userService;
-
+    @Autowired
     private PaperService paperService;
 
     @Autowired
