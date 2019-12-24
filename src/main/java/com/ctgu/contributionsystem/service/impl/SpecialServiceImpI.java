@@ -72,4 +72,9 @@ public class SpecialServiceImpI implements SpecialService {
     public String findNameBySpecialistId(Integer specialistId) {
         return specialistDao.findNameBySpecialistId(specialistId);
     }
+
+    @Override
+    public Paper findByPaperId(Integer paperId){
+           return paperDao.findByPaperId(paperId);
+    }
 }

@@ -9,8 +9,6 @@ import com.ctgu.contributionsystem.model.Tag;
 import com.ctgu.contributionsystem.service.PaperService;
 import com.ctgu.contributionsystem.service.TagService;
 import com.ctgu.contributionsystem.service.UserService;
-import com.ctgu.contributionsystem.utils.NativeResultProcessUtils;
-import com.ctgu.contributionsystem.utils.RedisUtils;
 import org.apache.http.HttpRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

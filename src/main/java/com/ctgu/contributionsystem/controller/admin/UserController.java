@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  * @author : kun
  * @date ： 2019/12/20
@@ -25,11 +27,22 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    //所有用户
+    @RequestMapping("/findall")
+    public List<User> FindAll(HttpRequest request){
+        try {
+            List<User> list = userService.findAll();
+            return list;
+        }catch (Exception e){
+            return null;
+        }
+    }
+
+    //添加用户
     @RequestMapping("/addUser")
     public String addUser(@RequestBody User user, HttpRequest request){
         try {
             User user1 = new User();
-            user1.setUserId(user.getUserId());
             user1.setName(user.getName());
             user1.setNickName(user.getNickName());
             user1.setIdCard(user.getIdCard());
@@ -49,6 +62,7 @@ public class UserController {
         }
     }
 
+    //更新用户
     @RequestMapping("/updateUser")
     public String updateUser(@RequestBody User user ,HttpRequest request){
         try{
@@ -59,6 +73,7 @@ public class UserController {
         }
     }
 
+    //删除用户
     @RequestMapping("/deleteUser")
     public String deleteUser(@Param("userId") Integer userId){
         try{
