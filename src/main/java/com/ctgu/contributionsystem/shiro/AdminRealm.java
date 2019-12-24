@@ -1,6 +1,7 @@
 package com.ctgu.contributionsystem.shiro;
 
 
+import com.ctgu.contributionsystem.dto.JwtToken;
 import com.ctgu.contributionsystem.model.Admin;
 import com.ctgu.contributionsystem.model.User;
 import com.ctgu.contributionsystem.service.AdminService;
@@ -25,6 +26,11 @@ public class AdminRealm extends AuthorizingRealm {
 
     @Autowired
     AdminService adminService;
+
+    @Override
+    public boolean supports(AuthenticationToken token) {
+        return token instanceof JwtToken;
+    }
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
