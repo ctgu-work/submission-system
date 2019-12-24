@@ -80,7 +80,8 @@ public interface PaperService {
     List<Object[]> findIndexArticles();
     List<Object[]> findIndexArticlesByCategory(@Param("Category")Integer Category);
     List<Object[]> findIndexArticlesByTagId(@Param("tagId")Integer tagId);
-
+    
     Integer countAllPaper();
+    List<Object[]> findIndexArticlesIn(@Param("name") String name);
 }
 

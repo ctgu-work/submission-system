@@ -1,9 +1,12 @@
 package com.ctgu.contributionsystem.controller.admin;
+import com.ctgu.contributionsystem.dao.SpecialistDao;
 import com.ctgu.contributionsystem.dto.ReturnResposeBody;
 import com.ctgu.contributionsystem.dto.SpecialCount;
 import com.ctgu.contributionsystem.model.Admin;
 import com.ctgu.contributionsystem.model.Specialist;
 import com.ctgu.contributionsystem.model.User;
+import com.ctgu.contributionsystem.dto.Vo;
+import com.ctgu.contributionsystem.model.*;
 import com.ctgu.contributionsystem.service.*;
 import com.ctgu.contributionsystem.utils.*;
 import org.apache.http.HttpRequest;
@@ -35,9 +38,8 @@ public class AdminController {
     @Autowired
     private RedisUtils redisUtils;
 
-
     @Autowired
-    private VoService voService;
+    private TagService tagService;
 
     @Autowired
     private UserService userService;
@@ -47,7 +49,16 @@ public class AdminController {
     @Autowired
     private MessageService messageService;
 
-    //管理员毒登录
+    @Autowired
+    private SpecialService specialService;
+
+    @Autowired
+    private SpecialistCategoryService specialistCategoryService;
+
+    @Autowired
+    private ReviewPaperService reviewPaperService;
+
+    //管理员登录
     @PostMapping("/login")
     @ResponseBody
     public ReturnResposeBody userLogin(@RequestParam("phoneNumber")String phoneNumber ,
@@ -81,10 +92,8 @@ public class AdminController {
         Subject subject1 = SecurityUtils.getSubject();
         String phoneNumber = JwtUtil.getPhoneNumber(token1);
         //shiro登录判断
-        System.out.println(phoneNumber);
         if(subject1.isAuthenticated() && redisUtils.get(phoneNumber).equals(token1)){
             //删除token
-            System.out.println(phoneNumber);
             redisUtils.del(phoneNumber);
             return "1";
         }
@@ -93,109 +102,213 @@ public class AdminController {
         }
     }
 
-//    //统计申稿
-//    @GetMapping("/user/categoryo")
-//    @ResponseBody
-//    public List<SpecialCount> CategoryCount(HttpRequest request){
-//
-////        //从请求头中获取token
-////        String token = request.getHeader("token");
-////        //中介储存
-////        Subject subject = SecurityUtils.getSubject();
-////
-////        if(subject.isAuthenticated() && redisUtils.get("token").equals(token)) {
-////
-////        }
-////        List<SpecialCount> countn = dtoService.FindCount();
-////        return countn;
-//    }
+    //获取所有分类
+    @GetMapping("/get/category")
+    @ResponseBody
+    public ReturnResposeBody GetCategory(HttpServletRequest request){
+        ReturnResposeBody returnResposeBody = new ReturnResposeBody();
+        //从请求头中获取token
+        String token1 = request.getHeader("token");
+        //中介储存
+        Subject subject1 = SecurityUtils.getSubject();
+        String phoneNumber = JwtUtil.getPhoneNumber(token1);
+        //shiro登录判断
+        if(subject1.isAuthenticated() && redisUtils.get(phoneNumber).equals(token1)){
+            try{
+                List<SpecialistCategory> list =  specialistCategoryService.findAll();
+                returnResposeBody.setMsg("success");
+                returnResposeBody.setResult(list);
+                returnResposeBody.setStatus("200");
+                return returnResposeBody;
+            }catch(Exception e){
+                returnResposeBody.setMsg("error");
+                returnResposeBody.setStatus("200");
+                return returnResposeBody;
+            }
+        }
+        returnResposeBody.setMsg("error");
+        returnResposeBody.setStatus("200");
+        return returnResposeBody;
+    }
+
+    //统计申稿
+    @GetMapping("/user/categoryo")
+    @ResponseBody
+    public ReturnResposeBody CategoryCount(HttpServletRequest request){
+        ReturnResposeBody returnResposeBody = new ReturnResposeBody();
+        //从请求头中获取token
+        String token1 = request.getHeader("token");
+        //中介储存
+        Subject subject1 = SecurityUtils.getSubject();
+        String phoneNumber = JwtUtil.getPhoneNumber(token1);
+        //shiro登录判断
+        if(subject1.isAuthenticated() && redisUtils.get(phoneNumber).equals(token1)){
+        try {
+            List<Specialist> specialist = specialService.findAll();
+            List<Vo> list = new LinkedList<>();
+            for (Specialist s : specialist) {
+                Integer in = reviewPaperService.findBySpecailistIdCount(s.getSpecialistId());
+                User user = userService.findByUserId(s.getUserId());
+                Vo vo = new Vo();
+                vo.setUserId(user.getUserId());
+                vo.setStatus(s.getStatus());
+                vo.setPhoneNumber(user.getPhoneNumber());
+                vo.setCategory(s.getCategory());
+                vo.setName(user.getName());
+                vo.setSpecialistId(s.getSpecialistId());
+                vo.setCount(in);
+                list.add(vo);
+            }
+            returnResposeBody.setStatus("200");
+            returnResposeBody.setMsg("success");
+            returnResposeBody.setResult(list);
+            return returnResposeBody;
+        }catch (Exception e){
+            returnResposeBody.setStatus("200");
+            returnResposeBody.setMsg("error");
+            return returnResposeBody;
+        }
+        }
+        returnResposeBody.setStatus("200");
+        returnResposeBody.setMsg("error");
+        return returnResposeBody;
+
+    }
     //统计投稿数
     @GetMapping("/user/categorcout")
     @ResponseBody
-    public List<SpecialCount> CategoryCountVo(HttpRequest request){
+    public ReturnResposeBody CategoryCountVo(HttpServletRequest request){
 
-//        //从请求头中获取token
-//        String token = request.getHeader("token");
-//        //中介储存
-//        Subject subject = SecurityUtils.getSubject();
-//
-//        if(subject.isAuthenticated() && redisUtils.get("token").equals(token)) {
-//
-//        }
-        List<User> user  = userService.findAll();
-        List<SpecialCount> list = new LinkedList<>();
-        for(User u : user){
-            Integer in = userService.findByUserIdCount(u.getUserId());
-            SpecialCount specialCount = new SpecialCount();
-            specialCount.setUserId(u.getUserId());
-            specialCount.setMoney(u.getMoney());
-            specialCount.setEmail(u.getEmail());
-            specialCount.setPassWord(u.getPassword());
-            specialCount.setPhoneNumber(u.getPhoneNumber());
-            specialCount.setIdCard(u.getIdCard());
-            specialCount.setName(u.getName());
-            specialCount.setCount(in);
-            list.add(specialCount);
+        ReturnResposeBody returnResposeBody = new ReturnResposeBody();
+        //从请求头中获取token
+        String token1 = request.getHeader("token");
+        //中介储存
+        Subject subject1 = SecurityUtils.getSubject();
+        String phoneNumber = JwtUtil.getPhoneNumber(token1);
+        //shiro登录判断
+        if(subject1.isAuthenticated() && redisUtils.get(phoneNumber).equals(token1)) {
+            try {
+                List<User> user = userService.findAll();
+                List<SpecialCount> list = new LinkedList<>();
+                for (User u : user) {
+                    Integer in = userService.findByUserIdCount(u.getUserId());
+                    SpecialCount specialCount = new SpecialCount();
+                    specialCount.setUserId(u.getUserId());
+                    specialCount.setMoney(u.getMoney());
+                    specialCount.setEmail(u.getEmail());
+                    specialCount.setPassWord(u.getPassword());
+                    specialCount.setPhoneNumber(u.getPhoneNumber());
+                    specialCount.setIdCard(u.getIdCard());
+                    specialCount.setName(u.getName());
+                    specialCount.setCount(in);
+                    list.add(specialCount);
+                }
+                returnResposeBody.setStatus("200");
+                returnResposeBody.setMsg("success");
+                returnResposeBody.setResult(list);
+                return returnResposeBody;
+            }catch (Exception e){
+                returnResposeBody.setStatus("200");
+                returnResposeBody.setMsg("error");
+                return returnResposeBody;
+            }
         }
-
-        return list;
+        returnResposeBody.setStatus("200");
+        returnResposeBody.setMsg("error");
+        return returnResposeBody;
     }
 
     //专家审稿列表
     @GetMapping("/specialist")
     @ResponseBody
-    public List<Specialist> SpecialistFindAll(HttpServletRequest request, @RequestParam(defaultValue = "1",name = "pageNum") Integer pageNum, @RequestParam(defaultValue = "1",name = "size") Integer size){
-
-        try{
-            List<Specialist> allSpecialistPage = adminService.findAllByStatus();
-//            JpaPageHelper jpaPageHelper = new JpaPageHelper();
-//            List<PageInfo> pageInfos = jpaPageHelper.SetStartPage(allSpecialistPage,pageNum,size);
-            return allSpecialistPage;
-        } catch (Exception e){
-            return null;
+    public ReturnResposeBody SpecialistFindAll(HttpServletRequest request, @RequestParam(defaultValue = "1",name = "pageNum") Integer pageNum, @RequestParam(defaultValue = "1",name = "size") Integer size){
+        ReturnResposeBody returnResposeBody = new ReturnResposeBody();
+        //从请求头中获取token
+        String token1 = request.getHeader("token");
+        //中介储存
+        Subject subject1 = SecurityUtils.getSubject();
+        String phoneNumber = JwtUtil.getPhoneNumber(token1);
+        //shiro登录判断
+        if(subject1.isAuthenticated() && redisUtils.get(phoneNumber).equals(token1)) {
+            try {
+                List<Specialist> allSpecialistPage = adminService.findAllByStatus();
+                returnResposeBody.setStatus("200");
+                returnResposeBody.setMsg("success");
+                returnResposeBody.setResult(allSpecialistPage);
+                return returnResposeBody;
+            } catch (Exception e) {
+                returnResposeBody.setStatus("200");
+                returnResposeBody.setMsg("error");
+                return returnResposeBody;
+            }
         }
+        returnResposeBody.setStatus("200");
+        returnResposeBody.setMsg("error");
+        return returnResposeBody;
     }
 
     //查看某个专家
     @GetMapping("/specialist/findSpecialit")
     @ResponseBody
-    public ReturnResposeBody FindSpecialist(@RequestBody Specialist specialist){
+    public ReturnResposeBody FindSpecialist(@RequestBody Specialist specialist,HttpServletRequest request){
         ReturnResposeBody returnResposeBody = new ReturnResposeBody();
-        try{
-            Specialist specialist1 = adminService.findSpecialistById(specialist.getSpecialistId());
-            returnResposeBody.setMsg("success");
-            returnResposeBody.setResult(specialist1);
-            returnResposeBody.setStatus("200");
-            return returnResposeBody;
-        }catch (Exception e){
-            returnResposeBody.setStatus("200");
-            returnResposeBody.setMsg("error");
-            return returnResposeBody;
+        //从请求头中获取token
+        String token1 = request.getHeader("token");
+        //中介储存
+        Subject subject1 = SecurityUtils.getSubject();
+        String phoneNumber = JwtUtil.getPhoneNumber(token1);
+        //shiro登录判断
+        if(subject1.isAuthenticated() && redisUtils.get(phoneNumber).equals(token1)) {
+            try {
+                Specialist specialist1 = adminService.findSpecialistById(specialist.getSpecialistId());
+                returnResposeBody.setMsg("success");
+                returnResposeBody.setResult(specialist1);
+                returnResposeBody.setStatus("200");
+                return returnResposeBody;
+            } catch (Exception e) {
+                returnResposeBody.setStatus("200");
+                returnResposeBody.setMsg("error");
+                return returnResposeBody;
+            }
         }
+        returnResposeBody.setStatus("200");
+        returnResposeBody.setMsg("error");
+        return returnResposeBody;
     }
+
     //专家禁用
     @GetMapping("/specialist/prohibit")
     @ResponseBody
     public ReturnResposeBody SpecialistStatus(HttpServletRequest request,@RequestParam("specialist_id") Integer specialistId){
         ReturnResposeBody returnResposeBody = new ReturnResposeBody();
-        try{
-            Integer s = adminService.updateSpecialitProhibit(specialistId);
-            if(s != null) {
-                returnResposeBody.setMsg("success");
-                returnResposeBody.setStatus("200");
-                return returnResposeBody;
-            }
-            else{
+
+        //从请求头中获取token
+        String token1 = request.getHeader("token");
+        //中介储存
+        Subject subject1 = SecurityUtils.getSubject();
+        String phoneNumber = JwtUtil.getPhoneNumber(token1);
+        //shiro登录判断
+        if(subject1.isAuthenticated() && redisUtils.get(phoneNumber).equals(token1)) {
+            try {
+                Integer s = adminService.updateSpecialitProhibit(specialistId);
+                if (s != null) {
+                    returnResposeBody.setMsg("success");
+                    returnResposeBody.setStatus("200");
+                    return returnResposeBody;
+                } else {
+                    returnResposeBody.setStatus("200");
+                    returnResposeBody.setMsg("error");
+                    return returnResposeBody;
+                }
+            } catch (Exception e) {
                 returnResposeBody.setStatus("200");
                 returnResposeBody.setMsg("error");
                 return returnResposeBody;
             }
-        }catch (Exception e){
-            returnResposeBody.setStatus("200");
-            returnResposeBody.setMsg("error");
-            return returnResposeBody;
         }
-
+        returnResposeBody.setStatus("200");
+        returnResposeBody.setMsg("error");
+        return returnResposeBody;
     }
 
     //专家取消禁用
@@ -203,81 +316,105 @@ public class AdminController {
     @ResponseBody
     public ReturnResposeBody SpecialistStatusCancel(HttpServletRequest request,@RequestParam("specialist_id") Integer specialistId){
         ReturnResposeBody returnResposeBody = new ReturnResposeBody();
-        try{
-            Integer s = adminService.updateSpecialitProhibit1(specialistId);
-            System.out.println(s);
-            if(s != null) {
-                returnResposeBody.setMsg("success");
-                returnResposeBody.setStatus("200");
-                return returnResposeBody;
-            }
-            else{
+        //从请求头中获取token
+        String token1 = request.getHeader("token");
+        //中介储存
+        Subject subject1 = SecurityUtils.getSubject();
+        String phoneNumber = JwtUtil.getPhoneNumber(token1);
+        //shiro登录判断
+        if(subject1.isAuthenticated() && redisUtils.get(phoneNumber).equals(token1)) {
+
+            try {
+                Integer s = adminService.updateSpecialitProhibit1(specialistId);
+                System.out.println(s);
+                if (s != null) {
+                    returnResposeBody.setMsg("success");
+                    returnResposeBody.setStatus("200");
+                    return returnResposeBody;
+                } else {
+                    returnResposeBody.setStatus("200");
+                    returnResposeBody.setMsg("error");
+                    return returnResposeBody;
+                }
+            } catch (Exception e) {
                 returnResposeBody.setStatus("200");
                 returnResposeBody.setMsg("error");
                 return returnResposeBody;
             }
-        }catch (Exception e){
-            returnResposeBody.setStatus("200");
-            returnResposeBody.setMsg("error");
-            return returnResposeBody;
         }
-
+        returnResposeBody.setStatus("200");
+        returnResposeBody.setMsg("error");
+        return returnResposeBody;
     }
 
-    //专家修改分类
+    //专家修改
     @GetMapping("/specialist/category")
     @ResponseBody
-    public String UpdateCategory(@RequestParam("specialist_Id") Integer specialistId,@RequestParam("category") Integer category){
-        try{
-            if (adminService.UpdateCategory(specialistId,category) != null) {
-                return "1";
-            }
-            else{
-                return "0";
-            }
-        }catch (Exception e){
-            return "0";
-        }
-    }
-
-    //修改专家状态
-    @GetMapping("/specialist/status")
-    @ResponseBody
-    public ReturnResposeBody UpdateStatus(@RequestParam("specialist_Id") Integer specialistId,@RequestParam("status") Integer status){
+    public ReturnResposeBody UpdateCategory(@RequestParam("specialist_Id") Integer specialistId,@RequestParam("category") Integer category,@RequestParam("status") Integer status,@RequestParam("name") String name,
+                                 @RequestParam("nickName") String nickName,@RequestParam("phoneNumber") String phoneNumber,HttpServletRequest request){
         ReturnResposeBody returnResposeBody = new ReturnResposeBody();
-        try{
-            if (adminService.Updatestatus(specialistId,status) != null) {
-                returnResposeBody.setMsg("success");
-                returnResposeBody.setStatus("200");
-                return returnResposeBody;
-            }
-            else{
+
+        //从请求头中获取token
+        String token1 = request.getHeader("token");
+        //中介储存
+        Subject subject1 = SecurityUtils.getSubject();
+        String phoneNumber1 = JwtUtil.getPhoneNumber(token1);
+        //shiro登录判断
+        if(subject1.isAuthenticated() && redisUtils.get(phoneNumber1).equals(token1)) {
+            try {
+                adminService.UpdateCategory(specialistId, category);
+                adminService.Updatestatus(specialistId, status);
+                Specialist specialist = adminService.findSpecialistById(specialistId);
+                User user = userService.findByUserId(specialist.getUserId());
+                Integer i = adminService.UpdateUser(user.getUserId(), name, nickName, phoneNumber);
+                if (i != null) {
+                    returnResposeBody.setMsg("success");
+                    returnResposeBody.setStatus("200");
+                    return returnResposeBody;
+                } else {
+                    returnResposeBody.setMsg("error");
+                    returnResposeBody.setStatus("200");
+                    return returnResposeBody;
+                }
+            } catch (Exception e) {
                 returnResposeBody.setMsg("error");
                 returnResposeBody.setStatus("200");
                 return returnResposeBody;
             }
-        }catch (Exception e){
-            returnResposeBody.setMsg("error");
-            returnResposeBody.setStatus("200");
-            return returnResposeBody;
         }
+        returnResposeBody.setStatus("200");
+        returnResposeBody.setMsg("error");
+        return returnResposeBody;
     }
+
 
     //专家删除
     @GetMapping("/specialist/delete")
     @ResponseBody
-    public ReturnResposeBody SpecialistDelete(@RequestParam("specialist_id") Integer specialistId){
+    public ReturnResposeBody SpecialistDelete(@RequestParam("specialist_id") Integer specialistId,HttpServletRequest request) {
         ReturnResposeBody returnResposeBody = new ReturnResposeBody();
-        try{
-            adminService.delete(specialistId);
-            returnResposeBody.setMsg("success");
-            returnResposeBody.setStatus("200");
-            return returnResposeBody;
-        }catch (Exception e){
-            returnResposeBody.setMsg("error");
-            returnResposeBody.setStatus("200");
-            return returnResposeBody;
+
+        //从请求头中获取token
+        String token1 = request.getHeader("token");
+        //中介储存
+        Subject subject1 = SecurityUtils.getSubject();
+        String phoneNumber1 = JwtUtil.getPhoneNumber(token1);
+        //shiro登录判断
+        if (subject1.isAuthenticated() && redisUtils.get(phoneNumber1).equals(token1)) {
+            try {
+                adminService.delete(specialistId);
+                returnResposeBody.setMsg("success");
+                returnResposeBody.setStatus("200");
+                return returnResposeBody;
+            } catch (Exception e) {
+                returnResposeBody.setMsg("error");
+                returnResposeBody.setStatus("200");
+                return returnResposeBody;
+            }
         }
+        returnResposeBody.setStatus("200");
+        returnResposeBody.setMsg("error");
+        return returnResposeBody;
     }
 
     @GetMapping("/paper/countAllPaper")

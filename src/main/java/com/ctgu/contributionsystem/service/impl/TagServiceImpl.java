@@ -35,5 +35,10 @@ public class TagServiceImpl implements TagService {
             return t.getTagId();
         }
     }
+
+    @Override
+    public List<Tag> findAll(){
+        return tagDao.findAll();
+    }
 }
 

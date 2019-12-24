@@ -18,7 +18,7 @@ public class Vo {
     private Integer category;
     private String phoneNumber;
     private Integer userId;
-    private Long count;
+    private Integer count;
     private Integer status;
 
     public Vo() {

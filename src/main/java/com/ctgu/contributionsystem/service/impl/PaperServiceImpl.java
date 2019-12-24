@@ -225,6 +225,11 @@ public class PaperServiceImpl implements PaperService {
     }
 
     @Override
+    public List<Object[]> findIndexArticlesIn(String name) {
+        return paperDao.findIndexArticlesIn(name);
+    }
+
+    @Override
     public List<Object[]> findIndexArticles() {
         return paperDao.findIndexArticles();
     }

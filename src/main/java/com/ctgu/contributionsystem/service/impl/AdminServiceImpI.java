@@ -1,16 +1,14 @@
 package com.ctgu.contributionsystem.service.impl;
 
 import com.ctgu.contributionsystem.dao.AdminDao;
-import com.ctgu.contributionsystem.dao.DtoDao;
 import com.ctgu.contributionsystem.dao.SpecialistDao;
-import com.ctgu.contributionsystem.dto.SpecialCount;
+import com.ctgu.contributionsystem.dao.UserDao;
 import com.ctgu.contributionsystem.model.Admin;
 import com.ctgu.contributionsystem.model.Specialist;
 import com.ctgu.contributionsystem.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,6 +25,9 @@ public class AdminServiceImpI implements AdminService {
 
     @Autowired
     private SpecialistDao specialistDao;
+
+    @Autowired
+    private UserDao userDao;
 
 
     @Override
@@ -67,5 +68,10 @@ public class AdminServiceImpI implements AdminService {
     @Override
     public Specialist findSpecialistById(Integer specialistId){
         return specialistDao.findSpecialistById(specialistId);
+    }
+
+    @Override
+    public Integer UpdateUser(Integer userId,String name,String nickName,String phoneNumber){
+        return userDao.UpdateUser(userId,name,nickName,phoneNumber);
     }
 }

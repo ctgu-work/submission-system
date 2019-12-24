@@ -82,6 +82,10 @@ public class SpecialServiceImpI implements SpecialService {
     }
 
     @Override
+    public List<Specialist> findAll(){
+        return specialistDao.findAll();
+    }
+    @Override
     public PaperVo findByPaperId(Integer paperId){
            PaperVo paperVo = new PaperVo();
 //           Object row = paperVoDao.findByPaperId(paperId);

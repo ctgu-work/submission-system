@@ -124,5 +124,8 @@ public interface PaperDao extends JpaRepository<Paper, Integer> {
 
     @Query(value = "select count(*) from paper where user_id = :userId",nativeQuery = true)
     Integer findByUserIdCount(@Param("userId") Integer userId);
+
+    @Query(value = "SELECT DISTINCT a.paper_id as id , a.title as title , a.content as content ,b.avatar_url as avatarUrl ,a.author , a.submit_time as submitTime , c.category_detail as classify , a.click_rate as click , a.like_count as likeCount FROM paper a , user b , paper_category c , paper_status d , review_paper e where a.user_id = b.user_id and a.category = c.category_id and a.paper_id = e.paper_id and e.status = 1  and CONCAT(IFNULL(title,''),IFNULL(content,''),IFNULL(category_detail,'')) LIKE CONCAT('%',:name,'%') order by a.submit_time desc",nativeQuery = true)
+    List<Object[]> findIndexArticlesIn(@Param("name") String name);
 }
 
