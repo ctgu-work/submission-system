@@ -76,5 +76,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public Integer findByUserIdCount(Integer userId){
         return paperDao.findByUserIdCount(userId);
+	}
+	@Override
+    public Integer countAllUser() {
+        return (int)userDao.count();
     }
 }

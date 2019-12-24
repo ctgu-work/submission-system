@@ -1,21 +1,20 @@
 package com.ctgu.contributionsystem.service.impl;
 
 import com.ctgu.contributionsystem.dao.PaperDao;
-import com.ctgu.contributionsystem.dto.ArticleTemp;
+import com.ctgu.contributionsystem.dao.TagDao;
+import com.ctgu.contributionsystem.dto.Article;
 import com.ctgu.contributionsystem.model.Paper;
+import com.ctgu.contributionsystem.model.Tag;
 import com.ctgu.contributionsystem.service.PaperService;
 import com.ctgu.contributionsystem.utils.RedisUtils;
-import org.hibernate.Hibernate;
-import org.hibernate.Session;
-import org.hibernate.ejb.HibernateEntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.Tuple;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,8 +34,9 @@ public class PaperServiceImpl implements PaperService {
     @Autowired
     private RedisUtils redisUtils;
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    @Autowired
+    private TagDao tagDao;
+
 
     @Override
     public List<Paper> findAllByUserId( Integer userId) {
@@ -79,12 +79,38 @@ public class PaperServiceImpl implements PaperService {
     }
 
     @Override
-    public Paper getPaperByPaperId(Integer paperId) {
+    public Article getPaperByPaperId(Integer paperId) {
         /**
          * 先取出paper，获取paper未更新的访问量
          */
-        Paper paper = paperDao.getOne(paperId);
-        Integer cnt = paper.getClickRate();
+        List<Object[]> articleTemps = paperDao.findPaperBySomeCondition(paperId);
+        Integer cnt = 0;
+        Article article = new Article();
+        if(articleTemps == null){
+            return null;
+        }
+        for( Object[] object:articleTemps ){
+
+            try {
+                article.setId((Integer)object[0]);
+                article.setTitle((String)object[1]);
+                article.setContent((String)object[2]);
+                article.setAvatarUrl((String)object[3]);
+                article.setAuthor((String)object[4]);
+                SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String sd = sdf.format((Timestamp)object[5]);
+                article.setDate(sd);
+                article.setClassify((String) object[6]);
+                article.setClick((Integer)object[7]);
+                cnt = article.getClick();
+                article.setLikeCount((Integer)object[8]);
+                List<Tag>tags = tagDao.findByPaperId(article.getId());
+                article.setTags(tags);
+            }
+            catch (Exception e){
+                return null;
+            }
+        }
         String key = "click_rate";
         String field = key + "_id_" + paperId;
         if (redisUtils.hasKey(key)) {
@@ -101,10 +127,8 @@ public class PaperServiceImpl implements PaperService {
             redisUtils.expire(key, 60 * 20);
             cnt++;
         }
-        paper.setClickRate(cnt);
-        Session session = entityManager.unwrap(org.hibernate.Session.class);
-        session.evict(paper);
-        return paper;
+        article.setClick(cnt);
+        return article;
     }
 
     @Override
@@ -213,6 +237,11 @@ public class PaperServiceImpl implements PaperService {
     @Override
     public List<Object[]> findIndexArticlesByTagId(Integer tagId) {
         return paperDao.findIndexArticlesByTagId(tagId);
+	}
+	@Override
+    public Integer countAllPaper() {
+        return (int) paperDao.count();
+
     }
 
 }

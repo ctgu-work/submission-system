@@ -56,4 +56,9 @@ public class MessageServiceImpl implements MessageService {
             return false;
         }
     }
+
+    @Override
+    public Integer countAllMessage() {
+        return (int) messageDao.count();
+    }
 }

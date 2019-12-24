@@ -44,6 +44,11 @@ public class AdminController {
     @Autowired
     private UserService userService;
 
+    private PaperService paperService;
+
+    @Autowired
+    private MessageService messageService;
+
     //管理员毒登录
     @PostMapping("/login")
     @ResponseBody
@@ -274,6 +279,28 @@ public class AdminController {
             returnResposeBody.setMsg("error");
             returnResposeBody.setStatus("200");
             return returnResposeBody;
+        }
+    }
+
+    @GetMapping("/paper/countAllPaper")
+    @ResponseBody
+    public Integer countAllPaper(){
+        try {
+            return paperService.countAllPaper();
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @GetMapping("/message/countAllMessage")
+    @ResponseBody
+    public Integer countAllMessage(){
+        try {
+            return messageService.countAllMessage();
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
         }
     }
 }

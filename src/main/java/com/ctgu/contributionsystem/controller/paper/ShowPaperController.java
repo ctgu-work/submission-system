@@ -1,5 +1,6 @@
 package com.ctgu.contributionsystem.controller.paper;
 
+import com.ctgu.contributionsystem.dto.Article;
 import com.ctgu.contributionsystem.model.Paper;
 import com.ctgu.contributionsystem.service.PaperService;
 import com.ctgu.contributionsystem.utils.RedisUtils;
@@ -29,19 +30,19 @@ public class ShowPaperController {
 
     @ResponseBody
     @RequestMapping("/get")
-    public Paper getPaperById(@RequestParam("paperId") Integer paperId){
-        Paper paper = null;
+    public Article getPaperById(@RequestParam("paperId") Integer paperId){
+        Article article = null;
         /**
          * 如果paperId不存在
          */
         if(paperId == null){
-            return paper;
+            return article;
         }else {
-            paper = paperService.getPaperByPaperId(paperId);
+            article = paperService.getPaperByPaperId(paperId);
             Integer likeCount = paperService.getLikeCountByPaperId(paperId);
-            paper.setLikeCount(likeCount);
+            article.setLikeCount(likeCount);
         }
-        return paper;
+        return article;
     }
 
 }
