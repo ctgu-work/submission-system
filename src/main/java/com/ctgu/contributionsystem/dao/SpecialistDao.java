@@ -33,8 +33,8 @@ public interface SpecialistDao extends JpaRepository<Specialist, Integer>{
 
     //全部专家
 
-    @Override
-    List<Specialist> findAll();
+    @Query(value = "select * from specialist where status = 1",nativeQuery = true)
+    List<Specialist> findAllByStatus();
 
     //禁用
 
@@ -55,4 +55,7 @@ public interface SpecialistDao extends JpaRepository<Specialist, Integer>{
     @Modifying
     @Query(value = "UPDATE specialist SET specialist.category = :category WHERE specialist_id = :specialistId",nativeQuery = true)
     Integer UpdateCategory(Integer specialistId, Integer category);
+
+    @Query(value = "select * from specialist where specialist_id = :specialistId",nativeQuery = true)
+    Specialist findSpecialistById(@Param("specialistId") Integer specialistId);
 }

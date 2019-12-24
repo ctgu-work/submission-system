@@ -17,6 +17,13 @@ import java.util.List;
  * @Version 1.0.0
  */
 public interface PaperService {
+    /**
+     * 增加新文章
+     * @param paper
+     * @return
+     */
+    int addPaper(Paper paper);
+
     Page<Paper> findAllByUserId(Pageable pageable, @Param("userId") Integer userId);
     //用户点击量
     int countUserClickRate(@Param("userId")Integer userId);
@@ -31,11 +38,50 @@ public interface PaperService {
     //用户热门标签
     List<String> getUserHotTagsName(@Param("userId")Integer userId);
     List<Integer> getUserHotTagsId(@Param("userId")Integer userId);
+
+    /**
+     * 通过paperId得到paper
+     * @param paperId
+     * @return
+     */
+    Paper getPaperByPaperId(Integer paperId);
+
+    /**
+     * 返回点赞数
+     * @param paperId
+     * @return
+     */
+    Integer getLikeCountByPaperId(Integer paperId);
+
+    /**
+     * 增加点赞数
+     * @param paperId
+     * @return
+     */
+    Integer addLikeCountByPaperId(Integer paperId);
+
+    /**
+     * 修改稿件
+     * @param paper
+     * @return
+     */
+    int updatePaper(Paper paper);
+
+    /**
+     * 得到Paper
+     * @return
+     */
+    Paper getPaper(Integer paperId);
+
     //首页热门标签
     List<String> getHotTagsName();
     List<Integer> getHotTagsId();
 
     List<Paper> findAllByName(@Param("name") String name);
     List<Paper> findTop10ByOrderByClickRateDesc();
+
     List<Object[]> findIndexArticles();
+
+
 }
+

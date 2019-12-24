@@ -13,6 +13,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 @SpringBootApplication
 public class ContributionSystemApplication {
 
+
     public static void main(String[] args) {
         SpringApplication.run(ContributionSystemApplication.class, args);
     }

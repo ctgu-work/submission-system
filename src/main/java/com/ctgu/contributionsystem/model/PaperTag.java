@@ -23,7 +23,7 @@ import javax.persistence.*;
 @Table(name = "paper_tag")
 public class PaperTag {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer paperTagId;
     @Column(name = "paper_id")
     private Integer paperId;

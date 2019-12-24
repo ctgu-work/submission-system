@@ -16,7 +16,14 @@ import java.util.List;
  **/
 @Transactional
 public interface TagDao extends JpaRepository <Tag,Integer>{
+
     @Query(nativeQuery = true,value = "SELECT a.tag_id , a.tag_detail from tag a , paper_tag b where a.tag_id = b.tag_id and b.paper_id = :PaperId")
     List<Tag> findByPaperId(@Param("PaperId")Integer PaperId);
+    /**
+     * 通过标签内容查询
+     * @param tagDetail
+     * @return
+     */
+    Tag findBytagDetail(String tagDetail);
 
 }

@@ -6,6 +6,8 @@ import com.ctgu.contributionsystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @Description TODO
  * @Author wh_lan
@@ -59,5 +61,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updateUserById(User user) {
         return userDao.save(user);
+    }
+
+    @Override
+    public List<User> findAll(){
+        return userDao.findAll();
     }
 }

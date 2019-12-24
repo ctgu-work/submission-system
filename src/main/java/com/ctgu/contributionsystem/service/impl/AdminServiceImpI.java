@@ -30,8 +30,8 @@ public class AdminServiceImpI implements AdminService {
 
 
     @Override
-    public List<Specialist> findAll(){
-        return specialistDao.findAll();
+    public List<Specialist> findAllByStatus(){
+        return specialistDao.findAllByStatus();
     }
 
     @Override
@@ -62,5 +62,10 @@ public class AdminServiceImpI implements AdminService {
     @Override
     public Admin findByPhoneNumber(String phoneNumber) {
         return adminDao.findByPhoneNumber(phoneNumber);
+    }
+
+    @Override
+    public Specialist findSpecialistById(Integer specialistId){
+        return specialistDao.findSpecialistById(specialistId);
     }
 }

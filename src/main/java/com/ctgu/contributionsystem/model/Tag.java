@@ -24,7 +24,7 @@ import java.io.Serializable;
 @Table(name = "tag")
 public class Tag implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer tagId;
     @Column(name = "tag_detail")
     private String tagDetail;

@@ -14,6 +14,7 @@ import org.apache.http.HttpRequest;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -122,13 +123,13 @@ public class AdminController {
         return countVO;
     }
 
-    //专家列表
+    //专家审稿列表
     @GetMapping("/specialist")
     @ResponseBody
     public List<Specialist> SpecialistFindAll(HttpServletRequest request, @RequestParam(defaultValue = "1",name = "pageNum") Integer pageNum, @RequestParam(defaultValue = "1",name = "size") Integer size){
 
         try{
-            List<Specialist> allSpecialistPage = adminService.findAll();
+            List<Specialist> allSpecialistPage = adminService.findAllByStatus();
 //            JpaPageHelper jpaPageHelper = new JpaPageHelper();
 //            List<PageInfo> pageInfos = jpaPageHelper.SetStartPage(allSpecialistPage,pageNum,size);
             return allSpecialistPage;
@@ -137,6 +138,23 @@ public class AdminController {
         }
     }
 
+    //查看某个专家
+    @GetMapping("/specialist/findSpecialit")
+    @ResponseBody
+    public ReturnResposeBody FindSpecialist(@RequestBody Specialist specialist){
+        ReturnResposeBody returnResposeBody = new ReturnResposeBody();
+        try{
+            Specialist specialist1 = adminService.findSpecialistById(specialist.getSpecialistId());
+            returnResposeBody.setMsg("success");
+            returnResposeBody.setResult(specialist1);
+            returnResposeBody.setStatus("200");
+            return returnResposeBody;
+        }catch (Exception e){
+            returnResposeBody.setStatus("200");
+            returnResposeBody.setMsg("error");
+            return returnResposeBody;
+        }
+    }
     //专家禁用
     @GetMapping("/specialist/prohibit")
     @ResponseBody

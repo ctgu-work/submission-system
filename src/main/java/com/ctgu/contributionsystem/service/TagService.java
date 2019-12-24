@@ -13,5 +13,14 @@ import java.util.List;
  **/
 
 public interface TagService {
+
     List<Tag> findByPaperId(@Param("PaperId")Integer PaperId);
+
+    /**
+     * 返回TagID
+     * @param tag
+     * @return
+     */
+    int getTagId(String tag);
+
 }

@@ -21,5 +21,19 @@ public class TagServiceImpl implements TagService {
     @Override
     public List<Tag> findByPaperId(Integer PaperId) {
         return tagDao.findByPaperId(PaperId);
+	}
+	
+    @Override
+    public int getTagId(String tag) {
+        Tag t = tagDao.findBytagDetail(tag);
+        if(t == null){
+            t = new Tag();
+            t.setTagDetail(tag);
+            t = tagDao.save(t);
+            return t.getTagId();
+        }else {
+            return t.getTagId();
+        }
     }
 }
+

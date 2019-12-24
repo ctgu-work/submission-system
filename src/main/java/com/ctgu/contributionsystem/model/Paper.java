@@ -3,6 +3,7 @@ package com.ctgu.contributionsystem.model;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -46,5 +47,6 @@ public class Paper implements Serializable {
     @Column(name = "user_id")
     private Integer userId;
     @Column(name = "submit_time")
+    @CreationTimestamp
     private Timestamp submitTime;
 }
