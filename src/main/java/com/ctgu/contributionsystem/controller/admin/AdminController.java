@@ -1,13 +1,11 @@
 package com.ctgu.contributionsystem.controller.admin;
 import com.ctgu.contributionsystem.dto.ReturnResposeBody;
 import com.ctgu.contributionsystem.dto.SpecialCount;
-import com.ctgu.contributionsystem.dto.Vo;
 import com.ctgu.contributionsystem.model.Admin;
 import com.ctgu.contributionsystem.model.Specialist;
-import com.ctgu.contributionsystem.model.SpecialistStatus;
 import com.ctgu.contributionsystem.model.User;
 import com.ctgu.contributionsystem.service.AdminService;
-import com.ctgu.contributionsystem.service.DtoService;
+import com.ctgu.contributionsystem.service.UserService;
 import com.ctgu.contributionsystem.service.VoService;
 import com.ctgu.contributionsystem.utils.*;
 import org.apache.http.HttpRequest;
@@ -19,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -38,11 +37,12 @@ public class AdminController {
     @Autowired
     private RedisUtils redisUtils;
 
-    @Autowired
-    private DtoService dtoService;
 
     @Autowired
     private VoService voService;
+
+    @Autowired
+    private UserService userService;
 
     //管理员毒登录
     @PostMapping("/login")
@@ -90,10 +90,26 @@ public class AdminController {
         }
     }
 
-    //统计投稿
-    @GetMapping("/user/categorycout")
+//    //统计申稿
+//    @GetMapping("/user/categoryo")
+//    @ResponseBody
+//    public List<SpecialCount> CategoryCount(HttpRequest request){
+//
+////        //从请求头中获取token
+////        String token = request.getHeader("token");
+////        //中介储存
+////        Subject subject = SecurityUtils.getSubject();
+////
+////        if(subject.isAuthenticated() && redisUtils.get("token").equals(token)) {
+////
+////        }
+////        List<SpecialCount> countn = dtoService.FindCount();
+////        return countn;
+//    }
+    //统计投稿数
+    @GetMapping("/user/categorcout")
     @ResponseBody
-    public List<SpecialCount> CategoryCount(HttpRequest request){
+    public List<SpecialCount> CategoryCountVo(HttpRequest request){
 
 //        //从请求头中获取token
 //        String token = request.getHeader("token");
@@ -103,24 +119,23 @@ public class AdminController {
 //        if(subject.isAuthenticated() && redisUtils.get("token").equals(token)) {
 //
 //        }
-        List<SpecialCount> countn = dtoService.FindCount();
-        return countn;
-    }
-    //统计审稿数
-    @GetMapping("/user/categoryo")
-    @ResponseBody
-    public List<Vo> CategoryCountVo(HttpRequest request){
+        List<User> user  = userService.findAll();
+        List<SpecialCount> list = new LinkedList<>();
+        for(User u : user){
+            Integer in = userService.findByUserIdCount(u.getUserId());
+            SpecialCount specialCount = new SpecialCount();
+            specialCount.setUserId(u.getUserId());
+            specialCount.setMoney(u.getMoney());
+            specialCount.setEmail(u.getEmail());
+            specialCount.setPassWord(u.getPassword());
+            specialCount.setPhoneNumber(u.getPhoneNumber());
+            specialCount.setIdCard(u.getIdCard());
+            specialCount.setName(u.getName());
+            specialCount.setCount(in);
+            list.add(specialCount);
+        }
 
-//        //从请求头中获取token
-//        String token = request.getHeader("token");
-//        //中介储存
-//        Subject subject = SecurityUtils.getSubject();
-//
-//        if(subject.isAuthenticated() && redisUtils.get("token").equals(token)) {
-//
-//        }
-        List<Vo> countVO = voService.FindCountVo();
-        return countVO;
+        return list;
     }
 
     //专家审稿列表

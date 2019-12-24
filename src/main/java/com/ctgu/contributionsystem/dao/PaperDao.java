@@ -108,5 +108,7 @@ public interface PaperDao extends JpaRepository<Paper, Integer> {
     @Query(value = "SELECT paper.* FROM paper,review_paper where paper.paper_id = review_paper.paper_id and review_paper.specialist_id = 1",nativeQuery = true)
     List<Paper> findAllPaperById(Integer specialistId);
 
+    @Query(value = "select count(*) from paper where user_id = :userId",nativeQuery = true)
+    Integer findByUserIdCount(@Param("userId") Integer userId);
 }
 
