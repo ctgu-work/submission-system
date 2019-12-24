@@ -27,5 +27,6 @@ public interface SpecialService {
 
     List<Paper> findAllById(@Param("specialistId") Integer specialistId);
 
+    List<Specialist> findAll();
 
 }

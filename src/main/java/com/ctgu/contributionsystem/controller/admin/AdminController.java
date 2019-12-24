@@ -1,12 +1,13 @@
 package com.ctgu.contributionsystem.controller.admin;
+import com.ctgu.contributionsystem.dao.SpecialistDao;
 import com.ctgu.contributionsystem.dto.ReturnResposeBody;
 import com.ctgu.contributionsystem.dto.SpecialCount;
+import com.ctgu.contributionsystem.dto.Vo;
 import com.ctgu.contributionsystem.model.Admin;
+import com.ctgu.contributionsystem.model.ReviewPaper;
 import com.ctgu.contributionsystem.model.Specialist;
 import com.ctgu.contributionsystem.model.User;
-import com.ctgu.contributionsystem.service.AdminService;
-import com.ctgu.contributionsystem.service.UserService;
-import com.ctgu.contributionsystem.service.VoService;
+import com.ctgu.contributionsystem.service.*;
 import com.ctgu.contributionsystem.utils.*;
 import org.apache.http.HttpRequest;
 import org.apache.shiro.SecurityUtils;
@@ -38,11 +39,15 @@ public class AdminController {
     private RedisUtils redisUtils;
 
 
-    @Autowired
-    private VoService voService;
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private SpecialService specialService;
+
+    @Autowired
+    private ReviewPaperService reviewPaperService;
 
     //管理员毒登录
     @PostMapping("/login")
@@ -90,22 +95,29 @@ public class AdminController {
         }
     }
 
-//    //统计申稿
-//    @GetMapping("/user/categoryo")
-//    @ResponseBody
-//    public List<SpecialCount> CategoryCount(HttpRequest request){
-//
-////        //从请求头中获取token
-////        String token = request.getHeader("token");
-////        //中介储存
-////        Subject subject = SecurityUtils.getSubject();
-////
-////        if(subject.isAuthenticated() && redisUtils.get("token").equals(token)) {
-////
-////        }
-////        List<SpecialCount> countn = dtoService.FindCount();
-////        return countn;
-//    }
+    //统计申稿
+    @GetMapping("/user/categoryo")
+    @ResponseBody
+    public List<Vo> CategoryCount(HttpRequest request){
+
+        List<Specialist> specialist = specialService.findAll();
+        List<Vo> list = new LinkedList<>();
+        for(Specialist s : specialist){
+            Integer in = reviewPaperService.findBySpecailistIdCount(s.getSpecialistId());
+            User user = userService.findByUserId(s.getUserId());
+            Vo vo = new Vo();
+            vo.setUserId(user.getUserId());
+            vo.setStatus(s.getStatus());
+            vo.setPhoneNumber(user.getPhoneNumber());
+            vo.setCategory(s.getCategory());
+            vo.setName(user.getName());
+            vo.setSpecialistId(s.getSpecialistId());
+            vo.setCount(in);
+            list.add(vo);
+        }
+//        List<SpecialCount> countn = dtoService.FindCount();
+        return list;
+    }
     //统计投稿数
     @GetMapping("/user/categorcout")
     @ResponseBody
@@ -221,44 +233,35 @@ public class AdminController {
 
     }
 
-    //专家修改分类
+    //专家修改
     @GetMapping("/specialist/category")
     @ResponseBody
-    public String UpdateCategory(@RequestParam("specialist_Id") Integer specialistId,@RequestParam("category") Integer category){
-        try{
-            if (adminService.UpdateCategory(specialistId,category) != null) {
-                return "1";
-            }
-            else{
-                return "0";
-            }
-        }catch (Exception e){
-            return "0";
-        }
-    }
-
-    //修改专家状态
-    @GetMapping("/specialist/status")
-    @ResponseBody
-    public ReturnResposeBody UpdateStatus(@RequestParam("specialist_Id") Integer specialistId,@RequestParam("status") Integer status){
+    public ReturnResposeBody UpdateCategory(@RequestParam("specialist_Id") Integer specialistId,@RequestParam("category") Integer category,@RequestParam("status") Integer status,@RequestParam("name") String name,
+                                 @RequestParam("nickName") String nickName,@RequestParam("phoneNumber") String phoneNumber){
         ReturnResposeBody returnResposeBody = new ReturnResposeBody();
         try{
-            if (adminService.Updatestatus(specialistId,status) != null) {
-                returnResposeBody.setMsg("success");
-                returnResposeBody.setStatus("200");
-                return returnResposeBody;
-            }
-            else{
-                returnResposeBody.setMsg("error");
-                returnResposeBody.setStatus("200");
-                return returnResposeBody;
-            }
+          adminService.UpdateCategory(specialistId,category);
+          adminService.Updatestatus(specialistId,status);
+          Specialist specialist = adminService.findSpecialistById(specialistId);
+          User user = userService.findByUserId(specialist.getUserId());
+          Integer i = adminService.UpdateUser(user.getUserId(),name,nickName,phoneNumber);
+          if(i != null) {
+              returnResposeBody.setMsg("success");
+              returnResposeBody.setStatus("200");
+              return returnResposeBody;
+          }
+          else{
+              returnResposeBody.setMsg("error");
+              returnResposeBody.setStatus("200");
+              return returnResposeBody;
+          }
         }catch (Exception e){
             returnResposeBody.setMsg("error");
             returnResposeBody.setStatus("200");
             return returnResposeBody;
         }
     }
+
 
     //专家删除
     @GetMapping("/specialist/delete")

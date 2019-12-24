@@ -26,4 +26,6 @@ public interface AdminService {
     Integer UpdateCategory(@Param("specialistId") Integer specialistId,@Param("category") Integer category);
 
     Specialist findSpecialistById(@Param("specialistId") Integer specialistId);
+
+    Integer UpdateUser(@Param("userId") Integer userId,@Param("name1") String name,@Param("nickName") String nickName,@Param("phoneNumber") String phoneNumber);
 }

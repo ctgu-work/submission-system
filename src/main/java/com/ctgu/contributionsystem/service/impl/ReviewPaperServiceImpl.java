@@ -26,4 +26,9 @@ public class ReviewPaperServiceImpl implements ReviewPaperService {
     public ReviewPaper findByPaperId(Integer paperId) {
         return reviewPaperDao.findByPaperId(paperId);
     }
+
+    @Override
+    public Integer findBySpecailistIdCount(Integer specialistId){
+        return reviewPaperDao.findBySpecailistIdCount(specialistId);
+    }
 }
