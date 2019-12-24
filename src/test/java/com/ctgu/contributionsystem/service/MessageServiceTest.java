@@ -27,11 +27,8 @@ public class MessageServiceTest {
     @Test
     @Transactional
     public void test(){
-
-        Paper paper = paperService.getPaper(5);
-        paper.setTitle("linux");
-        paper.setContent("linux大全");
-        paper.setAuthor("大傻昆");
-        paperService.updatePaper(paper);
+        Object[] objects = {2,"linux","content"};
+        Integer s = (Integer) objects[0];
+        System.out.println(s);
     }
 }

@@ -1,12 +1,9 @@
 package com.ctgu.contributionsystem.service;
 
-import com.ctgu.contributionsystem.dto.ArticleTemp;
+import com.ctgu.contributionsystem.dto.Article;
 import com.ctgu.contributionsystem.model.Paper;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 
-import javax.persistence.Tuple;
 import java.util.List;
 
 /**
@@ -44,7 +41,7 @@ public interface PaperService {
      * @param paperId
      * @return
      */
-    Paper getPaperByPaperId(Integer paperId);
+    Article getPaperByPaperId(Integer paperId);
 
     /**
      * 返回点赞数
@@ -83,5 +80,6 @@ public interface PaperService {
     List<Object[]> findIndexArticles();
 
 
+    Integer countAllPaper();
 }
 

@@ -25,4 +25,5 @@ public interface MessageService {
     boolean sendMessageToUserByUserId(Integer senderId, Integer acceptId, String message);
 
 
+    Integer countAllMessage();
 }

@@ -6,9 +6,7 @@ import com.ctgu.contributionsystem.model.Admin;
 import com.ctgu.contributionsystem.model.Specialist;
 import com.ctgu.contributionsystem.model.SpecialistStatus;
 import com.ctgu.contributionsystem.model.User;
-import com.ctgu.contributionsystem.service.AdminService;
-import com.ctgu.contributionsystem.service.DtoService;
-import com.ctgu.contributionsystem.service.VoService;
+import com.ctgu.contributionsystem.service.*;
 import com.ctgu.contributionsystem.utils.*;
 import org.apache.http.HttpRequest;
 import org.apache.shiro.SecurityUtils;
@@ -44,6 +42,11 @@ public class AdminController {
     @Autowired
     private VoService voService;
 
+    @Autowired
+    private PaperService paperService;
+
+    @Autowired
+    private MessageService messageService;
     //管理员毒登录
     @PostMapping("/login")
     @ResponseBody
@@ -238,6 +241,28 @@ public class AdminController {
             return "1";
         }catch (Exception e){
            return "0";
+        }
+    }
+
+    @GetMapping("/paper/countAllPaper")
+    @ResponseBody
+    public Integer countAllPaper(){
+        try {
+            return paperService.countAllPaper();
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @GetMapping("/message/countAllMessage")
+    @ResponseBody
+    public Integer countAllMessage(){
+        try {
+            return messageService.countAllMessage();
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
         }
     }
 }
