@@ -109,6 +109,7 @@ public class RedisUtils {
         try {
             if (time > 0) {
                 redisTemplate.opsForValue().set(key, value, time, TimeUnit.SECONDS);
+                redisTemplate.opsForSet();
             } else {
                 set(key, value);
             }
@@ -119,5 +120,43 @@ public class RedisUtils {
         }
     }
 
+    /**
+     * 实现命令：HSET key field value，将哈希表 key中的域 field的值设为 value
+     *
+     * @param key
+     * @param field
+     * @param value
+     */
+    public void hashSet(String key, String field, Object value) {
+        redisTemplate.opsForHash().put(key, field, value);
+    }
+    /**
+     * 实现命令：HGET key field，返回哈希表 key中给定域 field的值
+     *
+     * @param key
+     * @param field
+     * @return
+     */
+    public Object hashGet(String key, String field) {
+        return redisTemplate.opsForHash().get(key, field);
+    }
+    /**
+     * 实现命令：HDEL key field [field ...]，删除哈希表 key 中的一个或多个指定域，不存在的域将被忽略。
+     *
+     * @param key
+     * @param fields
+     */
+    public void hashDel(String key, Object... fields) {
+        redisTemplate.opsForHash().delete(key, fields);
+    }
+    /**
+     * 实现命令：HGETALL key，返回哈希表 key中，所有的域和值。
+     *
+     * @param key
+     * @return
+     */
+    public Map<Object, Object> hashGetAll(String key) {
+        return redisTemplate.opsForHash().entries(key);
+    }
 
 }

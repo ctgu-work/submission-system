@@ -11,7 +11,9 @@ import com.ctgu.contributionsystem.service.PaperService;
 import com.ctgu.contributionsystem.service.ReviewPaperService;
 import com.ctgu.contributionsystem.service.SpecialService;
 import com.ctgu.contributionsystem.service.UserService;
+import com.ctgu.contributionsystem.utils.JpaPageHelper;
 import com.ctgu.contributionsystem.utils.JwtUtil;
+import com.ctgu.contributionsystem.utils.PageInfo;
 import com.ctgu.contributionsystem.utils.RedisUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -21,6 +23,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -216,7 +219,7 @@ public class UserIndexController {
     public ReturnResposeBody showArticleStatus(HttpServletRequest request,
                 @RequestParam(value = "startPage", required = false, defaultValue = "1") Integer startPage,
                 @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize){
-        List<ArticleStatus>articleStatuses = new LinkedList<ArticleStatus>();
+        List<ArticleStatus>articleStatuses = new ArrayList<>();
         ReturnResposeBody returnResposeBody = new ReturnResposeBody();
         try{
             String token = request.getHeader("token");//从请求头中获取token
@@ -225,9 +228,8 @@ public class UserIndexController {
             if( subject.isAuthenticated() && redisUtils.get(phoneNumber).equals(token)){
                 User user = userService.findByPhoneNumber(phoneNumber);
                 Integer userId = user.getUserId();
-                Page<Paper> papers = paperService.findAllByUserId(PageRequest.of(startPage - 1, pageSize) , userId);
-                List<Paper> paperList = papers.getContent();
-                for( Paper paper : paperList ){
+                List<Paper> papers = paperService.findAllByUserId(userId);
+                for( Paper paper : papers ){
                     ArticleStatus articleStatus = new ArticleStatus();
                     articleStatus.setTitle(paper.getTitle());
                     if( paper.getStatus() == 1 ){
@@ -245,7 +247,9 @@ public class UserIndexController {
                     }
                     articleStatuses.add(articleStatus);
                 }
-                returnResposeBody.setResult(articleStatuses);
+                JpaPageHelper jpaPageHelper = new JpaPageHelper();
+                List<PageInfo> pageInfos = jpaPageHelper.SetStartPage(articleStatuses,startPage,pageSize);
+                returnResposeBody.setResult(pageInfos);
                 returnResposeBody.setStatus("200");
                 returnResposeBody.setMsg("success");
                 returnResposeBody.setJwtToken(token);
