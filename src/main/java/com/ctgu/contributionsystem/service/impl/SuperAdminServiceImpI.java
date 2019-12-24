@@ -37,4 +37,14 @@ public class SuperAdminServiceImpI implements SuperAdminService {
     public Admin addAdmin(Admin admin) {
         return superAdminDao.save(admin);
     }
+
+    @Override
+    public Admin updateAdmin(Admin admin) {
+        return superAdminDao.save(admin);
+    }
+
+    @Override
+    public void delete(Integer userId){
+        superAdminDao.deleteById(userId);
+    }
 }

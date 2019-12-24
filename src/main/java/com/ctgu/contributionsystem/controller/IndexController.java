@@ -115,12 +115,110 @@ public class IndexController {
     }
 
 
+    /**
+     * @Author wh
+     * @Description 首页文章列表
+     * @Date 2019/12/24 16:04
+     * @Param [request, startPage, pageSize]
+     * @return com.ctgu.contributionsystem.dto.ReturnResposeBody
+     **/
     @GetMapping("/articlelist")
     public ReturnResposeBody articlelist(HttpServletRequest request,
                                          @RequestParam(value = "startPage", required = false, defaultValue = "1") Integer startPage,
                                          @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize) {
         ReturnResposeBody returnResposeBody = new ReturnResposeBody();
         List<Object[]> articleTemps = paperService.findIndexArticles();
+        List<Article>articles = new ArrayList<>();
+        for( Object[] object:articleTemps ){
+            Article article = new Article();
+            try {
+                article.setId((Integer)object[0]);
+                article.setTitle((String)object[1]);
+                article.setContent((String)object[2]);
+                article.setAvatarUrl((String)object[3]);
+                article.setAuthor((String)object[4]);
+                SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String sd = sdf.format((Timestamp)object[5]);
+                article.setDate(sd);
+                article.setClassify((String) object[6]);
+                article.setClick((Integer)object[7]);
+                article.setLikeCount((Integer)object[8]);
+                List<Tag>tags = tagService.findByPaperId(article.getId());
+                article.setTags(tags);
+                articles.add(article);
+            }
+            catch (Exception e){
+                returnResposeBody.setMsg("error");
+                return returnResposeBody;
+            }
+        }
+        JpaPageHelper jpaPageHelper = new JpaPageHelper();
+        List<PageInfo> pageInfos = jpaPageHelper.SetStartPage(articles,startPage,pageSize);
+        returnResposeBody.setResult(pageInfos);
+        returnResposeBody.setStatus("200");
+        returnResposeBody.setMsg("success");
+        return returnResposeBody;
+    }
+
+    /**
+     * @Author wh
+     * @Description 根据分类查询文章
+     * @Date 2019/12/24 16:12
+     * @Param [request, category, startPage, pageSize]
+     * @return com.ctgu.contributionsystem.dto.ReturnResposeBody
+     **/
+    @GetMapping("/categoryArticlelist")
+    public ReturnResposeBody getArticlelistByCategory(HttpServletRequest request,@RequestParam("category")Integer category,
+                                         @RequestParam(value = "startPage", required = false, defaultValue = "1") Integer startPage,
+                                         @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize) {
+        ReturnResposeBody returnResposeBody = new ReturnResposeBody();
+        List<Object[]> articleTemps = paperService.findIndexArticlesByCategory(category);
+        List<Article>articles = new ArrayList<>();
+        for( Object[] object:articleTemps ){
+            Article article = new Article();
+            try {
+                article.setId((Integer)object[0]);
+                article.setTitle((String)object[1]);
+                article.setContent((String)object[2]);
+                article.setAvatarUrl((String)object[3]);
+                article.setAuthor((String)object[4]);
+                SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String sd = sdf.format((Timestamp)object[5]);
+                article.setDate(sd);
+                article.setClassify((String) object[6]);
+                article.setClick((Integer)object[7]);
+                article.setLikeCount((Integer)object[8]);
+                List<Tag>tags = tagService.findByPaperId(article.getId());
+                article.setTags(tags);
+                articles.add(article);
+            }
+            catch (Exception e){
+                returnResposeBody.setMsg("error");
+                return returnResposeBody;
+            }
+        }
+        JpaPageHelper jpaPageHelper = new JpaPageHelper();
+        List<PageInfo> pageInfos = jpaPageHelper.SetStartPage(articles,startPage,pageSize);
+        returnResposeBody.setResult(pageInfos);
+        returnResposeBody.setStatus("200");
+        returnResposeBody.setMsg("success");
+        return returnResposeBody;
+    }
+
+
+    /**
+     * @Author wh
+     * @Description 根据标签查看文章
+     * @Date 2019/12/24 16:24
+     * @Param [request, tagId, startPage, pageSize]
+     * @return com.ctgu.contributionsystem.dto.ReturnResposeBody
+     **/
+    @GetMapping("/tagArticlelist")
+    public ReturnResposeBody getArticlelistByTagId(HttpServletRequest request,@RequestParam("tagId")Integer tagId,
+                                                      @RequestParam(value = "startPage", required = false, defaultValue = "1") Integer startPage,
+                                                      @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize) {
+        ReturnResposeBody returnResposeBody = new ReturnResposeBody();
+        List<Object[]> articleTemps = paperService.findIndexArticlesByTagId(tagId);
         List<Article>articles = new ArrayList<>();
         for( Object[] object:articleTemps ){
             Article article = new Article();

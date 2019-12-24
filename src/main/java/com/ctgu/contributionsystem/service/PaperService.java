@@ -81,7 +81,8 @@ public interface PaperService {
     List<Paper> findTop10ByOrderByClickRateDesc();
 
     List<Object[]> findIndexArticles();
-
+    List<Object[]> findIndexArticlesByCategory(@Param("Category")Integer Category);
+    List<Object[]> findIndexArticlesByTagId(@Param("tagId")Integer tagId);
 
 }
 

@@ -1,9 +1,11 @@
 package com.ctgu.contributionsystem.service.impl;
 
+import com.ctgu.contributionsystem.dao.PaperDao;
 import com.ctgu.contributionsystem.dao.UserDao;
 import com.ctgu.contributionsystem.model.User;
 import com.ctgu.contributionsystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +22,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private PaperDao paperDao;
 
     @Override
     public User findByPhoneNumber(String phoneNumber) {
@@ -66,5 +71,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> findAll(){
         return userDao.findAll();
+    }
+
+    @Override
+    public Integer findByUserIdCount(Integer userId){
+        return paperDao.findByUserIdCount(userId);
     }
 }
