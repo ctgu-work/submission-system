@@ -108,7 +108,7 @@ public interface PaperDao extends JpaRepository<Paper, Integer> {
     List<Object[]> findIndexArticlesByTagId(@Param("tagId")Integer tagId);
 
     @Query(value = "SELECT DISTINCT \n" +
-            "a.paper_id as id , a.title as title , a.content as content ,b.avatar_url as avatarUrl ,a.author , a.submit_time as submitTime , c.category_detail as classify , a.click_rate as click , a.like_count as likeCount \n" +
+            "a.paper_id as id , a.title as title , a.content as content ,b.avatar_url as avatarUrl ,a.author , a.submit_time as submitTime , c.category_detail as classify , a.click_rate as click , a.like_count as likeCount,b.email as email \n" +
             "FROM \n" +
             "paper a , user b , paper_category c , paper_status d , review_paper e \n" +
             "where \n" +

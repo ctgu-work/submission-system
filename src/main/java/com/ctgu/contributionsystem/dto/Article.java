@@ -28,6 +28,7 @@ public class Article {
     private String classify;
     private Integer click;
     private Integer likeCount;
+    private String email;
     public Article(){
 
     }

@@ -104,6 +104,7 @@ public class PaperServiceImpl implements PaperService {
                 article.setClick((Integer)object[7]);
                 cnt = article.getClick();
                 article.setLikeCount((Integer)object[8]);
+                article.setEmail((String) object[9]);
                 List<Tag>tags = tagDao.findByPaperId(article.getId());
                 article.setTags(tags);
             }
