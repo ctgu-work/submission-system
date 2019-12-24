@@ -49,7 +49,7 @@ public class AdminController {
     @Autowired
     private ReviewPaperService reviewPaperService;
 
-    //管理员毒登录
+    //管理员登录
     @PostMapping("/login")
     @ResponseBody
     public ReturnResposeBody userLogin(@RequestParam("phoneNumber")String phoneNumber ,
@@ -83,10 +83,8 @@ public class AdminController {
         Subject subject1 = SecurityUtils.getSubject();
         String phoneNumber = JwtUtil.getPhoneNumber(token1);
         //shiro登录判断
-        System.out.println(phoneNumber);
         if(subject1.isAuthenticated() && redisUtils.get(phoneNumber).equals(token1)){
             //删除token
-            System.out.println(phoneNumber);
             redisUtils.del(phoneNumber);
             return "1";
         }
