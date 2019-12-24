@@ -205,4 +205,14 @@ public class PaperServiceImpl implements PaperService {
         return paperDao.findIndexArticles();
     }
 
+    @Override
+    public List<Object[]> findIndexArticlesByCategory(Integer Category) {
+        return paperDao.findIndexArticlesByCategory(Category);
+    }
+
+    @Override
+    public List<Object[]> findIndexArticlesByTagId(Integer tagId) {
+        return paperDao.findIndexArticlesByTagId(tagId);
+    }
+
 }
