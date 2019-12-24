@@ -250,7 +250,7 @@ public class AdminController {
     //查看某个专家
     @GetMapping("/specialist/findSpecialit")
     @ResponseBody
-    public ReturnResposeBody FindSpecialist(@RequestBody Specialist specialist,HttpServletRequest request){
+    public ReturnResposeBody FindSpecialist(@RequestParam("specialistId") Integer specialistId,HttpServletRequest request){
         ReturnResposeBody returnResposeBody = new ReturnResposeBody();
         //从请求头中获取token
         String token1 = request.getHeader("token");
@@ -260,9 +260,17 @@ public class AdminController {
         //shiro登录判断
         if(subject1.isAuthenticated() && redisUtils.get(phoneNumber).equals(token1)) {
             try {
-                Specialist specialist1 = adminService.findSpecialistById(specialist.getSpecialistId());
+                Specialist specialist1 = adminService.findSpecialistById(specialistId);
+                User user = userService.findByUserId(specialist1.getUserId());
+                Vo vo = new Vo();
+                vo.setSpecialistId(specialist1.getSpecialistId());
+                vo.setName(user.getName());
+                vo.setCategory(specialist1.getCategory());
+                vo.setUserId(specialist1.getUserId());
+                vo.setPhoneNumber(user.getPhoneNumber());
+                vo.setStatus(specialist1.getStatus());
                 returnResposeBody.setMsg("success");
-                returnResposeBody.setResult(specialist1);
+                returnResposeBody.setResult(vo);
                 returnResposeBody.setStatus("200");
                 return returnResposeBody;
             } catch (Exception e) {
