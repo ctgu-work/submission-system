@@ -85,8 +85,8 @@ public class PaperServiceImpl implements PaperService {
     }
 
     @Override
-    public Page<ArticleTemp> findIndexArticles(Pageable pageable) {
-        return paperDao.findIndexArticles(pageable);
+    public List<Object[]> findIndexArticles() {
+        return paperDao.findIndexArticles();
     }
 
 }

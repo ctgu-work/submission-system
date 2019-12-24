@@ -9,8 +9,8 @@ import com.ctgu.contributionsystem.model.Tag;
 import com.ctgu.contributionsystem.service.PaperService;
 import com.ctgu.contributionsystem.service.TagService;
 import com.ctgu.contributionsystem.service.UserService;
-import com.ctgu.contributionsystem.utils.NativeResultProcessUtils;
-import com.ctgu.contributionsystem.utils.RedisUtils;
+import com.ctgu.contributionsystem.utils.JpaPageHelper;
+import com.ctgu.contributionsystem.utils.PageInfo;
 import org.apache.http.HttpRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,11 +21,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 
 import javax.persistence.Tuple;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -116,30 +120,36 @@ public class IndexController {
                                          @RequestParam(value = "startPage", required = false, defaultValue = "1") Integer startPage,
                                          @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize) {
         ReturnResposeBody returnResposeBody = new ReturnResposeBody();
-        Page<ArticleTemp> articleTemps = paperService.findIndexArticles(PageRequest.of(startPage - 1, pageSize));
-        List<ArticleTemp> articleTempList = articleTemps.getContent();
-        List<Article>articles = new LinkedList<Article>();
-        for( ArticleTemp articleTemp : articleTempList ){
+        List<Object[]> articleTemps = paperService.findIndexArticles();
+        List<Article>articles = new ArrayList<>();
+        for( Object[] object:articleTemps ){
             Article article = new Article();
-            article.setId(article.getId());
-            article.setTitle(article.getContent());
-            article.setAuthor(article.getAuthor());
-            article.setAvatarUrl(article.getAvatarUrl());
-            article.setContent(article.getContent());
-            article.setClassify(article.getClassify());
-            article.setClick(article.getClick());
-            article.setLikeCount(article.getLikeCount());
-            SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String sd = sdf.format(article.getDate());
-            article.setDate(sd);
-            List<Tag>tags = tagService.findByPaperId(article.getId());
-            article.setTags(tags);
-            articles.add(article);
+            try {
+                article.setId((Integer)object[0]);
+                article.setTitle((String)object[1]);
+                article.setContent((String)object[2]);
+                article.setAvatarUrl((String)object[3]);
+                article.setAuthor((String)object[4]);
+                SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String sd = sdf.format((Timestamp)object[5]);
+                article.setDate(sd);
+                article.setClassify((String) object[6]);
+                article.setClick((Integer)object[7]);
+                article.setLikeCount((Integer)object[8]);
+                List<Tag>tags = tagService.findByPaperId(article.getId());
+                article.setTags(tags);
+                articles.add(article);
+            }
+            catch (Exception e){
+                returnResposeBody.setMsg("error");
+                return returnResposeBody;
+            }
         }
-        returnResposeBody.setResult(articles);
+        JpaPageHelper jpaPageHelper = new JpaPageHelper();
+        List<PageInfo> pageInfos = jpaPageHelper.SetStartPage(articles,startPage,pageSize);
+        returnResposeBody.setResult(pageInfos);
         returnResposeBody.setStatus("200");
         returnResposeBody.setMsg("success");
-
         return returnResposeBody;
     }
 

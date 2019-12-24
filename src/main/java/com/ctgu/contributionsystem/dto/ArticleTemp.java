@@ -8,6 +8,7 @@ import lombok.ToString;
 import javax.persistence.ColumnResult;
 import javax.persistence.ConstructorResult;
 import javax.persistence.SqlResultSetMapping;
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -21,24 +22,26 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class ArticleTemp {
+public class ArticleTemp implements Serializable {
     private Integer id;
     private String title;
     private String content;
     private String avatarUrl;
     private String author;
-    private Timestamp date;
+    private Timestamp submitTime;
     private String classify;
     private Integer click;
     private Integer likeCount;
+    public ArticleTemp(){
 
-    public ArticleTemp(Integer id, String title, String content, String avatarUrl, String author, Timestamp date, String classify, Integer click, Integer likeCount) {
+    }
+    public ArticleTemp(Integer id, String title, String content, String avatarUrl, String author, Timestamp submitTime, String classify, Integer click, Integer likeCount) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.avatarUrl = avatarUrl;
         this.author = author;
-        this.date = date;
+        this.submitTime = submitTime;
         this.classify = classify;
         this.click = click;
         this.likeCount = likeCount;

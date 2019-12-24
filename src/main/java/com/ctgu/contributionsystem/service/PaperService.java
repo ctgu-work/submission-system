@@ -37,5 +37,5 @@ public interface PaperService {
 
     List<Paper> findAllByName(@Param("name") String name);
     List<Paper> findTop10ByOrderByClickRateDesc();
-    Page<ArticleTemp> findIndexArticles(Pageable pageable);
+    List<Object[]> findIndexArticles();
 }
