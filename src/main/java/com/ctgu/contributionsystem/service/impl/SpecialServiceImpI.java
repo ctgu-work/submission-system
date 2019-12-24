@@ -1,9 +1,7 @@
 package com.ctgu.contributionsystem.service.impl;
 
-import com.ctgu.contributionsystem.dao.PaperDao;
-import com.ctgu.contributionsystem.dao.PaperReviewDao;
-import com.ctgu.contributionsystem.dao.SpecialistAllDao;
-import com.ctgu.contributionsystem.dao.SpecialistDao;
+import com.ctgu.contributionsystem.dao.*;
+import com.ctgu.contributionsystem.dto.PaperVo;
 import com.ctgu.contributionsystem.model.Paper;
 import com.ctgu.contributionsystem.model.ReviewPaper;
 import com.ctgu.contributionsystem.model.Specialist;
@@ -14,6 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -35,6 +35,9 @@ public class SpecialServiceImpI implements SpecialService {
 
     @Autowired
     private PaperDao paperDao;
+
+    @Autowired
+    private PaperVoDao paperVoDao;
 
     @Override
     public Specialist findByUserId(Integer userId) {
@@ -79,7 +82,26 @@ public class SpecialServiceImpI implements SpecialService {
     }
 
     @Override
-    public Paper findByPaperId(Integer paperId){
-           return paperDao.findByPaperId(paperId);
+    public PaperVo findByPaperId(Integer paperId){
+           PaperVo paperVo = new PaperVo();
+//           Object row = paperVoDao.findByPaperId(paperId);
+            List _list = paperVoDao.findByPaperId(paperId);
+           for (Object row : _list) {
+               Object[] cells = (Object[]) row;
+               paperVo.setPaperId((Integer) cells[0]);
+               paperVo.setTitle((String) cells[1]);
+               paperVo.setContent((String) cells[2]);
+               paperVo.setAuthor((String) cells[3]);
+               paperVo.setCategory((Integer) cells[4]);
+               paperVo.setClickRate((Integer) cells[5]);
+               paperVo.setLikeCount((Integer) cells[6]);
+               paperVo.setStatus((Integer) cells[7]);
+               paperVo.setUserId((Integer) cells[8]);
+               paperVo.setSubmitTime((Timestamp) cells[9]);
+               paperVo.setDescription((String) cells[10]);
+               paperVo.setAvatar_url((String) cells[11]);
+
+           }
+           return paperVo;
     }
 }

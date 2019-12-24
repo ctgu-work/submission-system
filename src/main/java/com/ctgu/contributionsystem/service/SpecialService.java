@@ -1,5 +1,6 @@
 package com.ctgu.contributionsystem.service;
 
+import com.ctgu.contributionsystem.dto.PaperVo;
 import com.ctgu.contributionsystem.model.Paper;
 import com.ctgu.contributionsystem.model.PaperCategory;
 import com.ctgu.contributionsystem.model.ReviewPaper;
@@ -22,7 +23,7 @@ public interface SpecialService {
 
     Integer Updatestatus(@Param("paperId") Integer paperId,@Param("status") Integer status);
 
-    Paper findByPaperId(@Param("paperId") Integer paperId);
+    PaperVo findByPaperId(@Param("paperId") Integer paperId);
 
     List<Paper> findAllById(@Param("specialistId") Integer specialistId);
 
