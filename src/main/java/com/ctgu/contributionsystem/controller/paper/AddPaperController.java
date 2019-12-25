@@ -32,11 +32,12 @@ public class AddPaperController {
     @ResponseBody
     @PostMapping("/add")
     public Integer addPaper(Paper paper,
-                           @RequestParam(required = false,value = "tags") List<String> tags) {
+                           String tag ) {
         /**
          * 稿子为空时直接返回false,
          *
          */
+        List<String> tags = null;
         if(paper == null){
             return 0;
         }
@@ -48,8 +49,8 @@ public class AddPaperController {
         /**
          * 将标签添加到关联表中
          */
-        for (String tag : tags){
-            int tagId = tagService.getTagId(tag);
+        for (String item : tags){
+            int tagId = tagService.getTagId(item);
             Integer paperTagId = paperTagService.addPaperTag(paperId, tagId);
         }
         return 1;

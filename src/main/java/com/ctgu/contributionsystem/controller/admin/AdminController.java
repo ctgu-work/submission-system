@@ -131,7 +131,7 @@ public class AdminController {
         return returnResposeBody;
     }
 
-    //统计申稿
+    //专家管理
     @GetMapping("/user/categoryo")
     @ResponseBody
     public ReturnResposeBody CategoryCount(HttpServletRequest request){
@@ -174,7 +174,7 @@ public class AdminController {
         return returnResposeBody;
 
     }
-    //统计投稿数
+    // 用户管理
     @GetMapping("/user/categorcout")
     @ResponseBody
     public ReturnResposeBody CategoryCountVo(HttpServletRequest request){
@@ -218,7 +218,7 @@ public class AdminController {
         return returnResposeBody;
     }
 
-    //专家审稿列表
+    //专家审核列表
     @GetMapping("/specialist")
     @ResponseBody
     public ReturnResposeBody SpecialistFindAll(HttpServletRequest request, @RequestParam(defaultValue = "1",name = "pageNum") Integer pageNum, @RequestParam(defaultValue = "1",name = "size") Integer size){
@@ -247,7 +247,7 @@ public class AdminController {
         return returnResposeBody;
     }
 
-    //查看某个专家
+    //专家审核
     @GetMapping("/specialist/findSpecialit")
     @ResponseBody
     public ReturnResposeBody FindSpecialist(@RequestParam("specialistId") Integer specialistId,HttpServletRequest request){
