@@ -58,10 +58,12 @@ public class SpecialistController {
 
         User user = userService.findByPhoneNumber(phoneNumber);
 
+        System.out.println(user);
         String token = JwtUtil.sign(phoneNumber, Md5Salt.Md5SaltCrypt(password));
         if(user.getPassword().equals(Md5Salt.Md5SaltCrypt(password))){
             try {
                 Specialist specialist = specialService.findByUserId(user.getUserId());
+                System.out.println(specialist);
                 if (specialist.getStatus() == 2) {
                     System.out.println(specialist);
                     if(specialist.getProhibit() == 1){

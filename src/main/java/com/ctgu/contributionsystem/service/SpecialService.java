@@ -13,7 +13,7 @@ import java.util.List;
 
 public interface SpecialService {
 
-    Specialist findByUserId(Integer userid);
+    Specialist findByUserId(@Param("userId") Integer userId);
     List<Paper> findAll(Integer Category);
 
     ReviewPaper addReviewPaper1(ReviewPaper reviewPaper);
