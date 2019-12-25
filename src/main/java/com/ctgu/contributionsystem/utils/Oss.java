@@ -88,12 +88,12 @@ public class Oss {
         }
     }
 
-    /*
+
     public static String testUpLoadFile(String fileName, File file) {
         getPro();
         OSSClient ossClient = new OSSClient(endpoint, accessKeyId,accessKeySecret);
         // 上传内容到指定的存储空间（bucketName）并保存为指定的文件名称（objectName）。
-        String objectName = oss_filedir + Md5SaltCrypt(fileName) + ".jpg";
+        String objectName = oss_filedir + Md5SaltCrypt(fileName) + ".png";
         System.out.println(bucketName);
         System.out.println(objectName);
         System.out.println(file.getName());
@@ -113,8 +113,9 @@ public class Oss {
         }
 
     }
-    public static void main(String[] args) {
-        System.out.println(testUpLoadFile("122.jpg" , new File("C:\\Users\\17259\\Desktop\\jyj.jpg")));
-    }
-    */
+
+//    public static void main(String[] args) {
+//        System.out.println(testUpLoadFile("9.png" , new File("src\\main\\resources\\9.png")));
+//    }
+
 }

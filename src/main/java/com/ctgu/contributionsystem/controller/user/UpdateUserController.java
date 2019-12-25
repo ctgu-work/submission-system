@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 
 /**
  * @Description TODO
@@ -65,6 +66,7 @@ public class UpdateUserController {
                         return returnResposeBody;
                     }
                 }
+                user.setAvatarUrl(Oss.testUpLoadFile("9.png" , new File("src\\main\\resources\\9.png")));
                 User user1 = userService.findByPhoneNumber(user.getPhoneNumber());
                 User updateUser = userService.updateUser(user1);
                 returnResposeBody.setMsg("success");
