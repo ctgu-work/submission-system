@@ -24,7 +24,8 @@ public interface SpecialistDao extends JpaRepository<Specialist, Integer>{
 
     //通过user查找专家
 
-    Specialist findByuserId(Integer userId);
+    @Query(value = "select * from specialist where user_id = :userId",nativeQuery = true)
+    Specialist findByuserId(@Param("userId") Integer userId);
 
 
 

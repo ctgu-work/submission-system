@@ -56,9 +56,9 @@ public class Md5Salt {
     }
 //
 
-
+//
 //    public static void main(String[] args){
-//        String s = "1234";
+//        String s = "987654321";
 //        System.out.println(Md5SaltCrypt(s));
 //    }
 }

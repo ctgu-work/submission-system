@@ -38,8 +38,6 @@ public class AdminController {
     @Autowired
     private RedisUtils redisUtils;
 
-    @Autowired
-    private TagService tagService;
 
     @Autowired
     private UserService userService;
@@ -102,7 +100,7 @@ public class AdminController {
         }
     }
 
-    //获取所有分类
+    //专家管理 获取所有分类
     @GetMapping("/get/category")
     @ResponseBody
     public ReturnResposeBody GetCategory(HttpServletRequest request){
@@ -131,7 +129,7 @@ public class AdminController {
         return returnResposeBody;
     }
 
-    //专家管理
+    //专家管理 统计审稿数表格
     @GetMapping("/user/categoryo")
     @ResponseBody
     public ReturnResposeBody CategoryCount(HttpServletRequest request){
@@ -174,7 +172,8 @@ public class AdminController {
         return returnResposeBody;
 
     }
-    // 用户管理
+
+    //用户管理 统计投稿表
     @GetMapping("/user/categorcout")
     @ResponseBody
     public ReturnResposeBody CategoryCountVo(HttpServletRequest request){
@@ -221,7 +220,9 @@ public class AdminController {
     //专家审核列表
     @GetMapping("/specialist")
     @ResponseBody
-    public ReturnResposeBody SpecialistFindAll(HttpServletRequest request, @RequestParam(defaultValue = "1",name = "pageNum") Integer pageNum, @RequestParam(defaultValue = "1",name = "size") Integer size){
+    public ReturnResposeBody SpecialistFindAll(HttpServletRequest request,
+                                               @RequestParam(defaultValue = "1",name = "pageNum") Integer pageNum,
+                                               @RequestParam(defaultValue = "1",name = "size") Integer size){
         ReturnResposeBody returnResposeBody = new ReturnResposeBody();
         //从请求头中获取token
         String token1 = request.getHeader("token");
@@ -247,7 +248,7 @@ public class AdminController {
         return returnResposeBody;
     }
 
-    //专家审核
+    //专家审核 查看某个专家
     @GetMapping("/specialist/findSpecialit")
     @ResponseBody
     public ReturnResposeBody FindSpecialist(@RequestParam("specialistId") Integer specialistId,HttpServletRequest request){
@@ -284,7 +285,42 @@ public class AdminController {
         return returnResposeBody;
     }
 
-    //专家禁用
+    //专家审核 修改状态
+    @GetMapping("/specialist/updatestatus")
+    @ResponseBody
+    public ReturnResposeBody UpdateStatus(HttpServletRequest request,@RequestParam("specialistId") Integer specialistId,
+                                          @RequestParam("status") Integer status){
+        ReturnResposeBody returnResposeBody = new ReturnResposeBody();
+        //从请求头中获取token
+        String token1 = request.getHeader("token");
+        //中介储存
+        Subject subject1 = SecurityUtils.getSubject();
+        String phoneNumber = JwtUtil.getPhoneNumber(token1);
+        //shiro登录判断
+        if(subject1.isAuthenticated() && redisUtils.get(phoneNumber).equals(token1)) {
+            try {
+                Integer s = adminService.Updatestatus(specialistId,status);
+                if (s != null) {
+                    returnResposeBody.setMsg("success");
+                    returnResposeBody.setStatus("200");
+                    return returnResposeBody;
+                } else {
+                    returnResposeBody.setStatus("200");
+                    returnResposeBody.setMsg("error");
+                    return returnResposeBody;
+                }
+            } catch (Exception e) {
+                returnResposeBody.setStatus("200");
+                returnResposeBody.setMsg("error");
+                return returnResposeBody;
+            }
+        }
+        returnResposeBody.setStatus("200");
+        returnResposeBody.setMsg("error");
+        return returnResposeBody;
+    }
+
+    //专家管理 专家禁用
     @GetMapping("/specialist/prohibit")
     @ResponseBody
     public ReturnResposeBody SpecialistStatus(HttpServletRequest request,@RequestParam("specialist_id") Integer specialistId){
@@ -319,7 +355,7 @@ public class AdminController {
         return returnResposeBody;
     }
 
-    //专家取消禁用
+    //专家管理 取消禁用
     @GetMapping("/specialist/cancelprohibit")
     @ResponseBody
     public ReturnResposeBody SpecialistStatusCancel(HttpServletRequest request,@RequestParam("specialist_id") Integer specialistId){
@@ -355,10 +391,11 @@ public class AdminController {
         return returnResposeBody;
     }
 
-    //专家修改
-    @GetMapping("/specialist/category")
+    //专家管理 专家修改
+    @GetMapping("/specialist/update")
     @ResponseBody
-    public ReturnResposeBody UpdateCategory(@RequestParam("specialist_Id") Integer specialistId,@RequestParam("category") Integer category,@RequestParam("status") Integer status,@RequestParam("name") String name,
+    public ReturnResposeBody UpdateSpecailist(@RequestParam("specialist_Id") Integer specialistId,@RequestParam("category") Integer category,
+                                              @RequestParam("status") Integer status,@RequestParam("name") String name,
                                  @RequestParam("nickName") String nickName,@RequestParam("phoneNumber") String phoneNumber,HttpServletRequest request){
         ReturnResposeBody returnResposeBody = new ReturnResposeBody();
 
@@ -396,7 +433,7 @@ public class AdminController {
     }
 
 
-    //专家删除
+    //专家管理 专家删除
     @GetMapping("/specialist/delete")
     @ResponseBody
     public ReturnResposeBody SpecialistDelete(@RequestParam("specialist_id") Integer specialistId,HttpServletRequest request) {
